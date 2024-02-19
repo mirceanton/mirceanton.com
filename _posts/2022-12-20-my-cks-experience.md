@@ -63,7 +63,7 @@ Another thing worth mentioning is that I challenged myself to get all 3 Kubernet
 
 ## 💻 Technical Aspects
 
-On the technical side, everything went smoothly this time. Unlike my [terrible CKAD experience](http://mirceanton.com/posts/2022-12-13-my-ckad-experience/), I did not have any issues with the PSI system and the check-in process was relatively quick and efficient. The connection was stable throughout the exam with no dropouts, so I had no complaints in this regard.
+On the technical side, everything went smoothly this time. Unlike my [terrible CKAD experience](https://mirceanton.com/posts/2022-12-13-my-ckad-experience/), I did not have any issues with the PSI system and the check-in process was relatively quick and efficient. The connection was stable throughout the exam with no dropouts, so I had no complaints in this regard.
 
 I would go as far as to say it was almost a flawless experience, but since it is the first and only time things went so well, I am reluctant to make any bold claims. If I were to take another exam with PSI tomorrow, I wouldn't expect it to go this well again, so take that with a grain of salt.
 
