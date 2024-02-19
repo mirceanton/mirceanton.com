@@ -54,13 +54,14 @@ comments:
   active: giscus
   giscus:
     repo: mirceanton/website
-    repo_id:
-    category:
-    category_id:
-    mapping: # optional, default to 'pathname'
-    input_position: # optional, default to 'bottom'
-    lang: # optional, default to the value of `site.lang`
-    reactions_enabled: # optional, default to the value of `1`
+    repo_id: R_kgDOLUY-RA
+    category: Announcements
+    category_id: DIC_kwDOLUY-RM4CdWUH
+    mapping: title
+    input_position: bottom
+    lang: en
+    reactions_enabled: 1
+    theme: noborder_gray  # noborder_dark
 
 pwa:
   enabled: false
