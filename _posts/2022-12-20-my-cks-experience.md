@@ -21,14 +21,14 @@ I have previously taken the CKA and CKAD exams, and I personally found the CKS t
 
 In terms of a difficulty ranking, I would place the various topics on a tier list as follows:
 
-**Very easy**:
+### Very Easy
 
 These tasks usually just require one or two basic commands which can be easily found using the `--help` flag even if you forget them
 
 - using `kubesec` to scan and fix manifest files
 - using `trivy` to scan images
 
-**Easy**:
+### Easy
 
 These are not particularly difficult, but they do require some knowledge and understanding of how Kubernetes works. I think that, especially if you took the CKA and/or CKAD before the CKS, these should be second nature at this point:
 
@@ -37,7 +37,7 @@ These are not particularly difficult, but they do require some knowledge and und
 - creating `network policies`
 - managing `service accounts` with the appropriate `roles` and `rolebindings`
 
-**Moderate**:
+### Moderate
 
 These tasks are not necessarily difficult, but they can be time-consuming and require a fair understanding of how Kubernetes works:
 
@@ -46,7 +46,7 @@ These tasks are not necessarily difficult, but they can be time-consuming and re
 
 I placed these tasks in this category since validating your work can be quite time-consuming since you are editing the static pod manifests on the master node and it can take a bit for the pods to be recreated.
 
-**Difficult**:
+### Difficult
 
 In my opinion, this was the most difficult and time-consuming part of the exam. I had not used Falco before and I felt that the amount of practice I was able to get before the exam was insufficient to properly "master" it.
 
