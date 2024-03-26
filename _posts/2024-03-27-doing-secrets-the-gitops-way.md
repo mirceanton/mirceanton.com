@@ -21,13 +21,15 @@ image:
 date: 2024-03-27
 ---
 
-Alrighty then, let's talk GitOps. I think it's pretty neat that you can push all your manifests to Git, and just like that, your cluster auto-magically syncs up seamlessly. I also think it's a bit of a pain to push **all** manifests to git, since among those manifests lurk some secrets that definitely shouldn't be out there for the world to see.
+Alrighty then, let's talk GitOps. 
 
-So, in this blog post, alongside the video I've put together, I'm delving into one of the solutions that allows us to simply push those secret files to git without worrying about them.
+I think it's pretty neat that you can push all your manifests to Git, and just like that, your cluster auto-magically syncs up seamlessly. I also think it's a bit of a pain to push **all** manifests to git, since among those manifests lurk some secrets that definitely shouldn't be out there for the world to see.
+
+So, in this blog post, alongside the video I've put together, I'm going over one of the solutions that allows me to simply push those secret files to git without worrying about them.
 
 ## Context
 
-So, the reason I'm writing this blog post and making the video right now and not later is because in one of my previous blogs/videos I left you on a bit of a cliffhanger. Remember that deep dive we took into Talos Linux in one of my previous videos? If not, no worries, I've got you covered. You can catch up on it [here](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes).
+So, the reason I'm writing this blog post and making the video right now instead of later is because in one of my previous blogs/videos I left you on a bit of a cliffhanger. Remember that deep dive we took into Talos Linux in the last video? If not, no worries, I've got you covered. You can catch up on it [here](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes).
 
 Now, one of the key highlights I kept rambling on about was the fact that we can store the entire OS config in a YAML file and then simply push it to Git. While that does sound great, here's the catch: by the end of that video, those files weren't really ready for the `git push`.
 
@@ -37,11 +39,11 @@ Thus, today we're taking a look at what we need to do in order to finally get th
 
 Okay then, here's the game plan:
 
-- First up, we're installing `age` and generting our encryption key-pair,
-- Then, it's all about encrypting our Talos secrets file using the public key, and decrypting it using the private key,
-- Next, we're bringing in the big guns with `sops` to see how it swoops in to make our lives easier,
-- Finally, we're going to encrypt and decrypt our Talos secrets file again, but this time using `sops` and we're going to look over the differences.
-- And finally, I'll sprinkle in a couple of my own tried-and-tested tips and tricks from my GitOps repository to keep those secrets snug as a bug in a rug. 😉
+1. First up, we're installing `age` and generting our encryption key-pair,
+2. Then, we're going to encrypt our Talos secrets file using the public key, and decrypt it using the private key,
+3. Next, we're bringing in `sops` to see how it works together with age to make our lives easier,
+4. We're going to encrypt and decrypt our Talos secrets file again, but this time using `sops` and we're going to look over the differences.
+5. Finally, I'll sprinkle in a couple of my own tried-and-tested tips and tricks from my GitOps repository to keep those secrets snug as a bug in a rug. 😉
 
 Alrighty, with all that preamble out of the way, let's dive right in, shall we?
 
@@ -115,7 +117,7 @@ _`age-keygen` command output redirection to `keys.txt`_
 ![AGE Encryption and Decryption Diagram](age_encryption_diagram.png)
 _AGE Encryption and Decryption Diagram_
 
-With the keys sorted, let's encrypt a file. For this demo, I'll be using our `secrets.yaml` file from the [Talos Linux blog post](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes)/.
+With the keys sorted, let's encrypt a file. For this demo, I'll be using our `secrets.yaml` file from the [Talos Linux blog post](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes).
 
 
 Just run the `age --encrypt` command, toss in the public key we generated earlier as the `--recipient`, point `age` to the file we want to encrypt (`secrets.yaml`), and redirect the encrypted version away in `secrets.age`.
@@ -132,7 +134,9 @@ _Sample of file encrypted using `age`_
 
 Now, let's try and decrypt the file and see what we get.
 
-Similarly, we're now running the `age --decrypt` command, we tell it where your private key file is located (`keys.txt`), we point it to the encrypted file (`secrets.age`), and voilà! Your secrets are back in the open! By default it will all be dumped in your `stdout`, but you can easily redirect that output to a file, say `secrets-decrypted.yaml`
+Similarly, we're now running the `age --decrypt` command, we tell it where your private key file is located (`keys.txt`), we point it to the encrypted file (`secrets.age`), and voilà! Your secrets are back in the open!
+
+By default it will all be dumped in your `stdout`, but you can easily redirect that output to a file, say `secrets-decrypted.yaml`
 
 ```bash
 age --decrypt --identity=keys.txt secrets.age > secrets-decrypted.yaml
@@ -161,11 +165,11 @@ _Mozilla SOPS Logo_
 
 Before we go ahead with the installation process, let's clarify what `SOPS` is all about.
 
-SOPS, or "Secrets OPerationS", is as a valuable tool for managing sensitive data within files. While it by itself is **not** an encryption tool, `SOPS` excels at selectively encrypting specific values within files, ensuring that your sensitive information remains secure while leaving the rest untouched.
+SOPS, or "Secrets OPerationS", is a tool for managing sensitive data within files. While it by itself is **not** an encryption tool, `SOPS` excels at selectively encrypting specific values within files, ensuring that your sensitive information remains secure while leaving the rest untouched.
 
-Fundamentally, all YAML is just a bunch of key-value pairs nicely formatted in a file. What `SOPS` can do (that `age` can't) is that it is aware of these keys and values and it can encrypt the values only, leaving the keys untouched so that the file is still somewhat readable, all while exposing no secret information. Even more, it can encrypt only the values associated to keys matching a given regex, so it's not even required to encrypt an entire file if all you need is a single entry.
+Fundamentally, all YAML is just a bunch of key-value pairs nicely formatted in a file. What `SOPS` can do (that `age` can't) is that it is aware of these keys and values and it can encrypt the values only, leaving the keys untouched. This way the file is still somewhat readable so we can still work with it, all while exposing no secret information. Even more, it can encrypt only the values associated to keys matching a given regex, so it's not even required to encrypt an entire file if all you need is a single entry.
 
-Given that `SOPS` cannot encrypt files by itself, it can make use of various encryption backends, inc.luding AWS or GCP KMS, Azure Key Vault, PGP and - drum roll, please 🥁 -  `age`! Can you guess which one we're going to use? 😆
+Given that `SOPS` cannot encrypt files by itself, it can make use of various encryption backends, including AWS or GCP KMS, Azure Key Vault, PGP and - drum roll, please 🥁 -  `age`! Can you guess which one we're going to use? 😆
 
 ### Installing SOPS
 
@@ -197,7 +201,7 @@ Now that SOPS is up and running, let's actually use it.
 
 ### The `.sops.yaml` config file
 
-To simplify our workflow and avoid having to run very long commands, we'll create a configuration file for SOPS. Essentially, this file will define parameters that would otherwise clutter our command line with numerous arguments, arguments we'd have to specify for each and every command based on the target file. 😅
+To simplify our workflow and avoid having to run very long commands, we'll create a configuration file for SOPS. Essentially, this file will define parameters that would otherwise clutter our command line with numerous arguments - arguments we'd have to specify for each and every command based on the target file. 😅
 
 ![The `sops` config file](sops_config.png)
 _The `sops` config file_
@@ -215,7 +219,7 @@ With our configuration file in place, executing SOPS commands becomes a breeze a
 
 ### Encrypting and Decrypting Files
 
-Encrypting our file is a simp[le process now that we have our config file in place. SOPS will automatically look for a `.sops.yaml` file in our current directory, so all we really need to do is to simply utilize the `sops --encrypt` command and specify the file we want to encrypt. This command will dump the encrypted content in our `stdout`, so we can either:
+Encrypting our file is a simple process now that we have our config file in place. SOPS will automatically look for a `.sops.yaml` file in our current directory, so all we really need to do is to simply utilize the `sops --encrypt` command and specify the file we want to encrypt. This command will dump the encrypted content in our `stdout`, so we can either:
 
 - redirect the output to another file using the `-o`/`--output` flag,
 - redirect the output using "standard" output redirection `>`,
@@ -269,14 +273,14 @@ And with all this, we can now confidently push our SOPS-encrypted secrets file t
 
 ## Tips and Tricks
 
-Managing secrets effectively in a GitOps setup takes more than just encryption and decryption. Here are some tips and tricks I've picked up along the way to streamline the process and keep our secrets safe and sound.
+Managing secrets effectively in a GitOps setup takes more than just encryption and decryption. Here are some tips and tricks I've picked up along the way to streamline the process and keep my secrets safe and sound.
 
 ### Naming Conventions
 
 ![Naming convention diagram](naming_convention.png)
 _Naming convention diagram_
 
-Keeping your secrets safe is the name of the game, and it starts with a solid naming convention and Git configuration.
+Keeping your secrets safe is the name of the game, and it starts with a solid name-ing (see what I did there? 😉) convention and Git configuration.
 
 In my GitOps repository, I adhere to a fairly strict naming convention for my Kubernetes manifest files. Each file follows the `<resource-name>.<resource-type>.yaml` format. For example, a `ConfigMap` named `foo` is stored in a file called `foo.configmap.yaml`.
 
@@ -284,7 +288,7 @@ In my GitOps repository, I adhere to a fairly strict naming convention for my Ku
 
 Oh, I thought you'd never ask!
 
-Starting with the "*why are you doing this*" part, it's fairly simple. Before setting this all up I was encrypting and decrypting secrets in place. Initially by hand and after a while using some scripts. The problem here is that I have, on multiple occasions even 😅, accidentally pushed unencrypted secret files to git without realizing.
+Starting with the "*why are you doing this*" part, it's fairly simple. Before setting this all up I was encrypting and decrypting secrets in place. Initially by hand and after a while using some scripts. The problem here is that I have (on multiple occasions even 😅) accidentally pushed unencrypted secret files to git without realizing. I even accidentally pushed my private age key once, but we don't speak of that 😆
 
 As for the "*why is it relevant*" bit - well, this essentially means that all files containing secrets end with `.secret.yaml`. I know ahead of time what is the naming format for any file that needs to be encrypted and **should not make it to git**.
 
@@ -423,8 +427,11 @@ Note that the script will **not** overwrite the plain secret file unless the `-f
 
 If I am to change the encrypted file, I need to change the plain file first and then re-encrypt.
 
-
 ### Taskfile to the Rescue!
+
+![Taskfile Logo](taskfile_logo.png)
+_Taskfile Logo_
+
 
 Finally, my last gripes with this setup are quite trivial and minor, but while I was at it I decided to solve everything.
 
@@ -432,7 +439,7 @@ First off, I wanted to be able to run those two scripts without having to be min
 
 Secondly, I am lazy and even having to type `bash scripts/sops-encrypt-all.sh` is quite a lot. I'd need an alias or something for this.
 
-Well, thankfully I was already using `Taskfile` in my HomeOps repository for other things, so it will also nicely handle all of my complaints.
+Well, thankfully I was already using `Taskfile` in my HomeOps repository for other things, so it will also nicely handle all these my complaints.
 
 I will not cover what Taskfile is, how to use it or how to set it up in this post, as it is outside of the scope. Think of this as a teaser, an "exercise left for the reader" if you will 😉
 
@@ -451,6 +458,7 @@ includes:
 
 Which includes this sub-taskfile from my `.taskfiles` directory under the `sops` namespace:
 
+{% raw %}
 ```yaml
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
@@ -472,6 +480,7 @@ tasks:
       - bash {{.ROOT_DIR}}/scripts/sops-decrypt-all.sh {{.CLI_ARGS}}
 ```
 {: file='.taskfiles/sops.yaml}
+{% endraw %}
 
 This essentially allows me to run:
 
@@ -481,6 +490,9 @@ This essentially allows me to run:
 It all depends on how lazy I'm feeling, really 😆
 
 ## Conclusion
+
+![That's all Folks](thats_all_folks.jpg)
+_image from [wallpapers.net](http://wallpapers.net/thats-all-folks-hd-wallpaper/1500x500)_
 
 And that's a wrap, folks! We can *finally* push our secrets in git without losing sleep over it!
 
