@@ -5,7 +5,7 @@ description: In this blog post, I go over the upgrades and changes I have planne
 categories: ""
 tags: Homelab Kubernetes Hardware
 
-img_path: assets/img/posts/2023-03-27-homelab-goals/
+img_path: /assets/img/posts/2023-03-27-homelab-goals/
 image:
   path: featured.webp
   lqip: ""  # TODO

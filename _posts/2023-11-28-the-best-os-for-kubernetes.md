@@ -9,7 +9,7 @@ tags:
   - Kubernetes
   - Talos Linux
 
-img_path: assets/img/posts/2023-11-28-the-best-os-for-kubernetes/
+img_path: /assets/img/posts/2023-11-28-the-best-os-for-kubernetes/
 image:
   path: featured.webp
   lqip: ""  # TODO

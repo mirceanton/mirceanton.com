@@ -5,7 +5,7 @@ description: My first ever blog post!
 categories: ""
 tags: ""
 
-img_path: assets/img/posts/2022-09-17-hello-world/
+img_path: /assets/img/posts/2022-09-17-hello-world/
 image:
   path: featured.webp
   lqip: ""  # TODO
