@@ -13,12 +13,12 @@ tags:
   - sops
   - age
 
-img_path: assets/img/posts/2024-03-27-doing-secrets-the-gitops-way
+img_path: assets/img/posts/2024-03-26-doing-secrets-the-gitops-way
 image:
   path: featured.png
   lqip: ""  # TODO
 
-date: 2024-03-27
+date: 2024-03-26
 ---
 
 Alrighty then, let's talk GitOps. 
