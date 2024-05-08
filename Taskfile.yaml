@@ -13,12 +13,4 @@ tasks:
 
   img:convert:
     desc: Convert all png images to webp and remove the originals.
-    vars:
-      PNG_FILES:
-        sh: find assets/img/posts -type f -name *.png | tr '\n' ' '
-    cmds:
-      - for: { var: PNG_FILES }
-        cmd: |
-          file={{.ITEM}}
-          cwebp -q 100 "$file" -o "${file%.png}.webp"
-          rm $file
+    cmd: bash scripts/png_convert_to_webp.sh
