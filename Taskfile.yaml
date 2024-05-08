@@ -9,6 +9,7 @@ tasks:
 
   dev:
     desc: Start a development server that also builds future posts.
+    dir: website
     cmd: bundle exec jekyll serve --future
 
   img:convert:
