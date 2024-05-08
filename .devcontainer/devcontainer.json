@@ -7,5 +7,5 @@
 		"ghcr.io/devcontainers-contrib/features/go-task:1": {}
 	},
 	"forwardPorts": [4000, 35729],
-	"postCreateCommand": "sudo apt update && sudo apt install -y webp"
+	"postCreateCommand": "sudo apt update && sudo apt install -y webp && bundle install --gemfile=website/Gemfile"
 }
