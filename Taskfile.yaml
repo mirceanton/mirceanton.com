@@ -6,3 +6,7 @@ tasks:
   default:
     silent: true
     cmd: task -l
+
+  dev:
+    desc: Start a development server that also builds future posts.
+    cmd: bundle exec jekyll serve --future
