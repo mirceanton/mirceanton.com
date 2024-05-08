@@ -21,4 +21,6 @@ jobs:
         run: sudo bundle install --gemfile=website/Gemfile
       
       - name: Run jekyll build
-        run: bundle exec jekyll build --trace --source=website/
+        run: |
+          cd website/
+          bundle exec jekyll build --trace
