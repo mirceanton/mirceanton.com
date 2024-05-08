@@ -16,3 +16,7 @@ tasks:
     desc: Build the website.
     dir: website
     cmd: bundle exec jekyll build
+
+  img:convert:
+    desc: Convert all png images to webp and remove the originals.
+    cmd: bash scripts/png_convert_to_webp.sh
