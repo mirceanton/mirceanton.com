@@ -7,10 +7,15 @@ tasks:
     silent: true
     cmd: task -l
 
-  dev:
+  jekyll:dev:
     desc: Start a development server that also builds future posts.
     dir: website
-    cmd: bundle exec jekyll serve --future
+    cmd: bundle exec jekyll serve --incremental --future --drafts --livereload --force_polling
+
+  jekyll:build:
+    desc: Build the website.
+    dir: website
+    cmd: bundle exec jekyll build
 
   img:convert:
     desc: Convert all png images to webp and remove the originals.
