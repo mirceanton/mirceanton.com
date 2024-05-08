@@ -20,6 +20,9 @@ on:
         type: string
         required: false
 
+env:
+  DOCKER_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
+  GITHUB_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 jobs:
   generate-tag:
@@ -85,8 +88,8 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: |
-            docker.io/${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+            ${{ env.GITHUB_IMAGE }}
+            ${{ env.DOCKER_IMAGE }}
 
       - name: Build and push by digest
         id: build
@@ -95,7 +98,7 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=${{ env.GITHUB_IMAGE }},push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
         run: |
@@ -145,8 +148,8 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: |
-            docker.io/${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+            ${{ env.GITHUB_IMAGE }}
+            ${{ env.DOCKER_IMAGE }}
           tags: |
             ${{ needs.generate-tag.outputs.tags }}
             ${{ github.event.inputs.custom-tag }}
@@ -157,8 +160,8 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}@sha256:%s ' *)
+            $(printf '${{ env.GITHUB_IMAGE }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ${{ env.GITHUB_IMAGE }}:${{ steps.meta.outputs.version }}
