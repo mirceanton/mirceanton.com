@@ -24,4 +24,3 @@ RUN mkdir /website && \
 # =================================================================================================
 FROM nginx:1.25.5-alpine3.19-slim
 COPY --from=builder /website /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf.d/site.conf
