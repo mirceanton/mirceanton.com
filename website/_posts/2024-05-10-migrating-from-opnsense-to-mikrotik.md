@@ -12,7 +12,7 @@ tags:
 
 img_path: assets/img/posts/2024-05-10-migrating-from-opnsense-to-mikrotik/
 image:
-  path: featured.png
+  path: featured.webp
   lqip: ""  # TODO
 
 date: 2024-05-10
