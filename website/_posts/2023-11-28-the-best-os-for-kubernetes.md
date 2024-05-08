@@ -26,7 +26,7 @@ How quickly can you tear down and redeploy your Kubernetes cluster? What if I to
 
 ## The Relic of the Past
 
-![Old Ubuntu being old](ubuntu-old.png)
+![Old Ubuntu being old](ubuntu-old.webp)
 _"Old Ubuntu Being Old" by [bomkii](https://bomkii.com)_
 
 When setting up an on-prem Kubernetes cluster, the usual process involves installing, configuring and hardening a base OS like Ubuntu or RHEL, installing a 3rd party tool to deploy kubernetes and then - *finally* - deploying Kubernetes. While this approach is not wrong per-se, it has plenty of drawbacks.
@@ -40,7 +40,7 @@ Another aspect to consider is that when it comes to our container images, the ge
 In short, Talos Linux is simply Linux, but designed for Kubernetes. It is a minimal distro, built specifically to run containers and not much else. Essentially, Talos is an OS managed by a collection of services running within containers, similar to Kubernetes itself.
 
 
-![Talos Linux Logo Banner](talos-banner.png)
+![Talos Linux Logo Banner](talos-banner.webp)
 _Talos Linux Logo Banner from [talos.dev](https://talos.dev)_
 
 It is secure by default. There is no shell or SSH access. Talos is an API-driven OS, and this means that all configuration and OS management is done via an API that is extremely similar to that of Kubernetes. To interact with the API, we have a command-line utility called `talosctl`, which, as you might have guessed, is very similar to `kubectl` in terms of user experience.
@@ -61,7 +61,7 @@ For this demo, we will:
 4. Configure our local machine to talk to the Kubernetes API
 5. Deploy an NGINX web server to our cluster and expose it
 
-![Demo Architecture](demo-architecture.png)
+![Demo Architecture](demo-architecture.webp)
 _Demo Architecture_
 
 ### Preparing the environment
@@ -355,7 +355,7 @@ With all that being said, we now have a fully functional `talosconfig` so we can
 
 We can monitor the progress of the installation on our nodes by taking a look at the talos dashboard. What we're looking for is for the `kubelet` to be reported as healthy in the top section and for a log entry along the lines of `etcd is waiting to join the cluster, if this node is the first node in the cluster, please run 'talosctl bootstrap'`
 
-![`talosctl dashboard -n talos-demo-01`](talos-logs-etcd-waiting.png)
+![`talosctl dashboard -n talos-demo-01`](talos-logs-etcd-waiting.webp)
 _`talosctl dashboard -n talos-demo-01`_
 
 To check that all of the nodes have joined the cluster we can issue a `talosctl get members` command against either of the controlplane nodes, or without specifying the node if you set a default one previously.
@@ -386,7 +386,7 @@ talosctl bootstrap -n talos-demo-01
 
 You should now see more activity in the bottom section of the window, which shows us the logs of what is happening. What we're waiting for here is for all of the components to be reported as `Healthy` in the top part of the screen, and for the VIP IP to show up as well:
 
-![`talosctl dashboard -n talos-demo-01` output](kubernetes-bootstrap-healthy.png)
+![`talosctl dashboard -n talos-demo-01` output](kubernetes-bootstrap-healthy.webp)
 _`talosctl dashboard -n talos-demo-01` output_
 
 Once that's done, we can go ahead and fetch the `kubeconfig` for our cluster by running the `talosctl kubeconfig` command against any one of the control-plane nodes:
@@ -461,7 +461,7 @@ nginx-demo      NodePort    10.111.4.12     <none>          80:31552/TCP    6s
 
 Now we should now be able to access our NGINX web server by going to the IP address of the node on which the pod was scheduled, followed by the port number that was associated with the service:
 
-![The NGINX web server on node talos-demo-01](nginx-webpage.png)
+![The NGINX web server on node talos-demo-01](nginx-webpage.webp)
 
 ## Conclusion
 

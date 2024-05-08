@@ -15,7 +15,7 @@ tags:
 
 img_path: /assets/img/posts/2024-03-26-doing-secrets-the-gitops-way
 image:
-  path: featured.png
+  path: featured.webp
   lqip: ""  # TODO
 
 date: 2024-03-26
@@ -49,7 +49,7 @@ Alrighty, with all that preamble out of the way, let's dive right in, shall we?
 
 ## Age
 
-![AGE](age_logo.png)
+![AGE](age_logo.webp)
 _AGE Encryption Tool Logo_
 
 Before diving into the installation process, let's briefly discuss what `age` is.
@@ -98,7 +98,7 @@ Just like we need to generate our `ssh` key via `ssh-keygen` prior to `ssh`-ing 
 
 If we run the `age-keygen` command all by itself, it will simply dump both the private and the public key into the terminal, which is not ideal.
 
-![age-keygen command output](terminal_age_keygen.png)
+![age-keygen command output](terminal_age_keygen.webp)
 _`age-keygen` command output_
 
 You want to keep your private key somewhere safe, since you need it to decrypt anything the public key encrypts. If you're like me and prefer things tidy, you can put that private key straight into a file with the `-o`/`--output` flag:
@@ -109,12 +109,12 @@ age-keygen --output=keys.txt
 
 This command will only print the public key to your standard output and redirect a similar output to the one we've seen earlier to the `keys.txt` file. The same thing can be achieved using regular output redirection, but I personally prefer the CLI flag.
 
-![age-keygen command output to file](terminal_age_keygen_file.png)
+![age-keygen command output to file](terminal_age_keygen_file.webp)
 _`age-keygen` command output redirection to `keys.txt`_
 
 ### Encrypting and Decrypting Files
 
-![AGE Encryption and Decryption Diagram](age_encryption_diagram.png)
+![AGE Encryption and Decryption Diagram](age_encryption_diagram.webp)
 _AGE Encryption and Decryption Diagram_
 
 With the keys sorted, let's encrypt a file. For this demo, I'll be using our `secrets.yaml` file from the [Talos Linux blog post](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes).
@@ -128,7 +128,7 @@ age --encrypt --recipient=<key> secrets.yaml > secrets.age
 
 If you try to view the contents of `secrets.age`, you'll notice that it's in binary format. The content is not human-readable and we can't get to our secrets that are stored inside it. This encrypted file is now secure and can only be decrypted with the corresponding secret key - the one we put in `keys.txt`.
 
-![AGE-encrypted File](age_file_encrypted.png)
+![AGE-encrypted File](age_file_encrypted.webp)
 _Sample of file encrypted using `age`_
 
 
@@ -160,7 +160,7 @@ Functionally speaking, it works, but practically speaking it will be a pain and 
 
 ## Mozilla SOPS
 
-![Mozilla SOPS](sops_logo.png)
+![Mozilla SOPS](sops_logo.webp)
 _Mozilla SOPS Logo_
 
 Before we go ahead with the installation process, let's clarify what `SOPS` is all about.
@@ -203,7 +203,7 @@ Now that SOPS is up and running, let's actually use it.
 
 To simplify our workflow and avoid having to run very long commands, we'll create a configuration file for SOPS. Essentially, this file will define parameters that would otherwise clutter our command line with numerous arguments - arguments we'd have to specify for each and every command based on the target file. 😅
 
-![The `sops` config file](sops_config.png)
+![The `sops` config file](sops_config.webp)
 _The `sops` config file_
 
 This config file defines a list of "creation rules". These rules instruct SOPS on how to handle the various files we will process with it, based on a regex matches with their names/paths.
@@ -239,7 +239,7 @@ Moving on to decryption, it's a bit more complicated than encrypting the file si
 
 By default, SOPS is not aware of our private `age` key file and where to find it in order to decrypt our files. Thus, if we try now to decrypt our encrytped file, SOPS will simply fail:
 
-![The `sops --decrypt` command failing due to missing age key](sops_decrypt_fail.png)
+![The `sops --decrypt` command failing due to missing age key](sops_decrypt_fail.webp)
 _The `sops --decrypt` command failing due to missing age key_
 
 To fix this, we have a couple of options:
@@ -277,7 +277,7 @@ Managing secrets effectively in a GitOps setup takes more than just encryption a
 
 ### Naming Conventions
 
-![Naming convention diagram](naming_convention.png)
+![Naming convention diagram](naming_convention.webp)
 _Naming convention diagram_
 
 Keeping your secrets safe is the name of the game, and it starts with a solid name-ing (see what I did there? 😉) convention and Git configuration.
@@ -296,7 +296,7 @@ This allows me to easily identify and exclude them from version control using `.
 
 ### Bulk Processing Bash Scripts
 
-![The `sops` wrapper bash scripts](bash_scripts.png)
+![The `sops` wrapper bash scripts](bash_scripts.webp)
 _The `sops` wrapper bash scripts_
 
 Since I, as many other people in DevOps, share the mindset that manually doing something that takes 10-30 seconds is stupid but spending 5-7 business days trying (failing) to automate it sounds like a hell of a plan, I ended up writing some bash scripts to automate my secret encryption and decryption.
@@ -429,7 +429,7 @@ If I am to change the encrypted file, I need to change the plain file first and 
 
 ### Taskfile to the Rescue!
 
-![Taskfile Logo](taskfile_logo.png)
+![Taskfile Logo](taskfile_logo.webp)
 _Taskfile Logo_
 
 
