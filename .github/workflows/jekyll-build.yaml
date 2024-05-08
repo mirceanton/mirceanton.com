@@ -13,7 +13,7 @@ jobs:
       
       - name: Install jekyll and bundler
         run: |
-          gem install bundler jekyll
+          sudo gem install bundler jekyll
           bundler --version
           jekyll --version
 
