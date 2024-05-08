@@ -10,12 +10,12 @@ tags:
   - Terraform
   - Hardware
 
-img_path: assets/img/posts/2024-03-02-migrating-from-opnsense-to-mikrotik/
+img_path: assets/img/posts/2024-05-10-migrating-from-opnsense-to-mikrotik/
 image:
   path: featured.png
   lqip: ""  # TODO
 
-date: 2024-03-02
+date: 2024-05-10
 ---
 
 Today, I'm excited to share with you a little tale from my Homelab adventures. You see, I recently made a decision—a decision to bid farewell to my trusty DIY firewall setup and embark on a journey with a new companion: the Mikrotik RB 5009UG+S+IN.
