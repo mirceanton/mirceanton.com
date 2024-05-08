@@ -23,7 +23,6 @@ jobs:
       - name: Login to Dockerhub Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
