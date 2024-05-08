@@ -18,7 +18,7 @@ jobs:
           jekyll --version
 
       - name: Install gems
-        run: bundle install --gemfile=website/Gemfile
+        run: sudo bundle install --gemfile=website/Gemfile
       
       - name: Run jekyll build
         run: bundle exec jekyll build --trace --source=website/
