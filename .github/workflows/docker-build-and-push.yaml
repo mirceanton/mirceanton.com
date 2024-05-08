@@ -41,7 +41,7 @@ jobs:
         id: generator
         env:
           REGISTRY_USER: "${{ github.repository_owner }}"
-          REGISTRY_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          REGISTRY_TOKEN: "${{ secrets.GHCR_RW_TOKEN }}"
           REGISTRY_URL: ghcr.io
           IMAGE_NAME: ${{ github.event.repository.name }}
         run: echo "tags=$(bash scripts/generate_calver_tag.sh)" >> "$GITHUB_OUTPUT"
@@ -81,7 +81,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_RW_TOKEN }}
 
       - name: Docker meta
         id: meta
@@ -141,7 +141,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_RW_TOKEN }}
 
       - name: Docker meta
         id: meta
