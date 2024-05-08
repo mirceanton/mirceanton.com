@@ -13,7 +13,7 @@ image:
 # This permalink is needed for backwards compatibility 
 # due to the migration from my previous Hugo theme.
 # The hugo site used this format for the blog post links.
-permalink: /posts/:year-:month-:day-:title
+permalink: /posts/:year-:month-:day-:title/
 
 date: 2022-12-06
 ---
