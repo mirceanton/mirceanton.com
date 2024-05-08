@@ -43,7 +43,7 @@ jobs:
           REGISTRY_TOKEN: "${{ secrets.GHCR_RW_TOKEN }}"
           REGISTRY_URL: ghcr.io
           IMAGE_NAME: ${{ github.event.repository.name }}
-        run: echo "tags=$(bash scripts/generate_calver_tag.sh)" >> "$GITHUB_OUTPUT"
+        run: echo "tags=$(bash scripts/generate_calver_tag.sh)" | tee "$GITHUB_OUTPUT"
 
   build:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
       - name: Prepare
         run: |
           platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+          echo "PLATFORM_PAIR=${platform//\//-}" | tee $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v4
