@@ -1,6 +1,8 @@
 ---
 title: Migrating From OPNsense to Mikrotik
-description: ""
+description: |
+  In this blog post I go over the reasons behind my latest upgrade - my new Mikrotik RB5009 - as well as the considerations for moving away from my old OPNsense box.  
+  We'll talk about the old server, the new router, the reasons for the upgrade and the out-of-the-box experience with the Mikrotik RB5009.
 
 categories: ""
 tags:
