@@ -243,5 +243,5 @@ Thanks for hanging out, and catch you in the next one! Cheers 👋
 
 ***
 
-{% include embed/youtube.html id='wqD7k5iNvqs' %}
-📹 [Watch Video](https://youtu.be/wqD7k5iNvqs)
+{% include embed/youtube.html id='k5eShv6l1ts' %}
+📹 [Watch Video](https://youtu.be/k5eShv6l1ts)
