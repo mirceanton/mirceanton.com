@@ -89,7 +89,7 @@ _Mikrotik RB5009, seen from the back-right, showcasing the passive heatsink_
 
 Other than that, we have a pretty beefy heatsink that is visible on the back of the device, heatsink that is used to cool the internals, keeping the device fanless and quiet.
 
-![Mikrotik K-79 on top of the RB5009](mikrotik_k79.webp)
+![Mikrotik K-79 on top of the RB5009](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_k79.webp)
 _Mikrotik K-79 on top of the RB5009_
 
 If you're feeling fancy, Mikrotik offers a rack mount kit called the K-79, letting you stack up to 4 of these babies in a single rack unit. Of course, I don't need 4 routers in my homelab, but I still got one so I can nicely mount this one in my rack.
