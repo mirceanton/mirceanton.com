@@ -5,9 +5,9 @@ description: My first ever blog post!
 categories: ""
 tags: ""
 
-img_path: /assets/img/posts/2022-09-17-hello-world/
+# img_path: /assets/img/posts/2022-09-17-hello-world/
 image:
-  path: featured.webp
+  path: /assets/img/posts/2022-09-17-hello-world/featured.webp
   lqip: ""  # TODO
 
 # This permalink is needed for backwards compatibility 

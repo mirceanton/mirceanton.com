@@ -5,9 +5,9 @@ description: "PSA on PSI: A Terrible Experience"
 categories: ""
 tags: Kubernetes Certification
 
-img_path: /assets/img/posts/2022-12-13-my-ckad-experience/
+# img_path: /assets/img/posts/2022-12-13-my-ckad-experience/
 image:
-  path: featured.webp
+  path: /assets/img/posts/2022-12-13-my-ckad-experience/featured.webp
   lqip: ""  # TODO
 
 # This permalink is needed for backwards compatibility 

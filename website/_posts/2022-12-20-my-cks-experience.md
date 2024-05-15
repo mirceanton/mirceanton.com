@@ -5,9 +5,9 @@ description: Secure your cluster and your career with the CKS exam
 categories: ""
 tags: Kubernetes Certification Security
 
-img_path: /assets/img/posts/2022-12-20-my-cks-experience/
+# img_path: /assets/img/posts/2022-12-20-my-cks-experience/
 image:
-  path: featured.webp
+  path: /assets/img/posts/2022-12-20-my-cks-experience/featured.webp
   lqip: ""  # TODO
 
 # This permalink is needed for backwards compatibility 
