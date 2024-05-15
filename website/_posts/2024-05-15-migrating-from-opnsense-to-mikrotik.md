@@ -11,9 +11,9 @@ tags:
   - OPNsense
   - Hardware
 
-img_path: /assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/
+# img_path: /assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/
 image:
-  path: featured.webp
+  path: /assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/featured.webp
   lqip: ""  # TODO
 
 date: 2024-05-15
@@ -25,29 +25,29 @@ Now, why the switch, you ask? Well, grab a seat, and let me walk you through the
 
 ## 🔩 Server Specs
 
-![OPNsense server with the top panel off, showcasing the internals](opnsense_internals.webp)
+![OPNsense server with the top panel off, showcasing the internals](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_internals.webp)
 _OPNsense server with the top panel off, showcasing the internals_
 
 
 So, let me give you the rundown of my current setup. It's a DIY rig rocking an i5 6500 processor, cooled by the trusty Intel stock cooler. We're talking 8 gigs of RAM in the most performance-optimized single-stick configuration, with a pair of 256 GB NVMe SSDs in a ZFS mirror for the OS.
 
-![OPNsense server, front view showing the 80mm Noctua fans](opnsense_server_front.webp)
+![OPNsense server, front view showing the 80mm Noctua fans](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_front.webp)
 _OPNsense server, front view showing the 80mm Noctua fans_
 
 The whole shebang is housed in an InterTech 2U-20248 case, with a couple of 80mm Noctua fans keeping things cool and quiet.  
 The case is the middle child in the 2U InterTech lineup. They also make the 2U-20255 which is the bigger, longer case, featuring a bank of 4x hot-swappable 80mm fans in the middle, as well as the 2U-20240 which is basically just like this 20248 I have right here but a bit shorter.
 
-![OPNsense server, power supply top view](opnsense_server_psu_top.webp)
+![OPNsense server, power supply top view](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_psu_top.webp)
 _OPNsense server, power supply top view_
 
 And let's not forget the power supply. It's all being powered by the BeQuiet 300W PSU. Initially, it was double-sided velcro-taped to the side of the case, and you can still see what remains of that as I apparently never peeled the tape off the case.
 
-![OPNsense server, 3d-printed power supply bracket](opnsense_server_psu_front.webp)
+![OPNsense server, 3d-printed power supply bracket](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_psu_front.webp)
 _OPNsense server, 3d-printed power supply bracket_
 
 Nowadays, it is securely bolted in with a 3D-printed bracket thanks to one of my buddies that has a 3D printer. You can find the link to the TFX to 2U adapter on [here](https://www.thingiverse.com/thing:4317040).
 
-![OPNsense server, rear-io showcasing the network interfaces](opnsense_server_network_interfaces.webp)
+![OPNsense server, rear-io showcasing the network interfaces](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_network_interfaces.webp)
 _OPNsense server, read-io showcasing the network interfaces_
 
 Finally, onto networking. We've got the onboard Intel NIC as our WAN port and a dual-port Intel add-in NIC configured as a LAGG for my LAN. All of my other networks are VLANs attached to this LAGG.
@@ -66,7 +66,7 @@ Unfortunately, the motherboard in the original system died, but the CPU (and mem
 
 Enter the Mikrotik RB5009UG+S+IN – a slick, low-power RouterOS device with a nifty array of ports, including some 10-gig and 2.5 gig connectivity!
 
-![Mikrotik RB5009, seen from the front, showcasing the connectivity](mikrotik_front.webp)
+![Mikrotik RB5009, seen from the front, showcasing the connectivity](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_front.webp)
 _Mikrotik RB5009, seen from the front, showcasing the connectivity_
 
 
@@ -79,17 +79,17 @@ First off, starting from the front of the device we've got:
 - **2.5 gigabit RJ45** port, supporting PoE input, configure by default as the WAN port
 - 7x **1 gigabit RJ45** ports, bridged together with the 10g SFP+ port in the LAN network
 
-![Mikrotik RB5009, seen from the side, showcasing the DC power terminal](mikrotik_right_side.webp)
+![Mikrotik RB5009, seen from the side, showcasing the DC power terminal](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_right_side.webp)
 _Mikrotik RB5009, seen from the side, showcasing the DC power terminal_
 
 Moving on to the left side, we have a DC terminal for power input, accepting any voltage in the 24-57 range. If you're paying attention, this makes it the 3rd powering option for this device. We have a DC power jack, a DC terminal, and PoE in on port 1!
 
-![Mikrotik RB5009, seen from the back-right, showcasing the passive heatsink](mikrotik_back_left_side.webp)
+![Mikrotik RB5009, seen from the back-right, showcasing the passive heatsink](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_back_left_side.webp)
 _Mikrotik RB5009, seen from the back-right, showcasing the passive heatsink_
 
 Other than that, we have a pretty beefy heatsink that is visible on the back of the device, heatsink that is used to cool the internals, keeping the device fanless and quiet.
 
-![Mikrotik K-79 on top of the RB5009](mikrotik_k79.webp)
+![Mikrotik K-79 on top of the RB5009](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_k79.webp)
 _Mikrotik K-79 on top of the RB5009_
 
 If you're feeling fancy, Mikrotik offers a rack mount kit called the K-79, letting you stack up to 4 of these babies in a single rack unit. Of course, I don't need 4 routers in my homelab, but I still got one so I can nicely mount this one in my rack.
@@ -138,7 +138,7 @@ Now that we've covered performance, let's talk about Mr. James 🤓
 
 As I already mentioned, I had plans to stress-test both systems and compare their power consumption to highlight Mikrotik's efficiency.
 
-![The OPNsense box, plugged into a Kill-A-Watt meter on the left, and the Mikrotik on the right, showcasing their power draw](power_consumption_comparison.webp)
+![The OPNsense box, plugged into a Kill-A-Watt meter on the left, and the Mikrotik on the right, showcasing their power draw](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/power_consumption_comparison.webp)
 _The OPNsense box, plugged into a Kill-A-Watt meter on the left, and the Mikrotik on the right, showcasing their power draw_
 
 Then, I hooked up my old router to a Kill-A-Watt meter, and boy oh boy, was I in for a surprise. Just by being plugged in (not even turned on), it was slurping up about 5 watts of power. During boot-up, that number skyrocketed to around 50 watts, before settling at a more modest 32-38 watts during idle.
@@ -159,7 +159,7 @@ Some of the config changes would be picked up on the fly, yet most would not. I'
 
 Not to mention that messing with the insides of that XML file feels like performing open-heart surgery — I'm always worried about pulling the wrong lever and breaking the whole setup.
 
-![The Cisco SG350-10 on top of the SG300-52](cisco_switches.webp)
+![The Cisco SG350-10 on top of the SG300-52](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/cisco_switches.webp)
 _The Cisco SG350-10 on top of the SG300-52_
 
 Then there's my Cisco gear... Oh, Cisco... Nobody ever got fired for buying Cisco, am I right?
@@ -168,7 +168,7 @@ I've got these SG300 and SG350 switches, but they're not as automation-friendly 
 
 Now don't get me wrong. If you do shell out for proper Cisco gear, there are actually good modules out there for network automation. I, however, refuse to get an old Catalyst that's both loud and power-hungry to gain access to those features.
 
-![The RouterOS Provider Page on registry.terraform.io](terraform_routeros.webp)
+![The RouterOS Provider Page on registry.terraform.io](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/terraform_routeros.webp)
 _The RouterOS Provider Page on [registry.terraform.io](registry.terraform.io)_
 
 Relatively recently, I stumbled upon something interesting: a [Terraform provider for Mikrotik](https://registry.terraform.io/providers/terraform-routeros/routeros/latest). And since Terraform plays nice with my GitOps setup, I thought, "Why not give it a whirl?". Thus, here I am, testing the waters!
@@ -186,14 +186,14 @@ If I can get this Mikrotik device automated to the extent I want to, I will prob
 
 ## ⚙️ Default Configuration
 
-![The Mikrotik, mounted into the rack](mikrotik_racked.gif)
+![The Mikrotik, mounted into the rack](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_racked.gif)
 _The Mikrotik, mounted into the rack_
 
 In this blog post, we're not diving deep into the nitty-gritty of Terraform code and configuration. Consider it more of an unboxing, overview, and a bit of a venting session. I've already got the ball rolling on the next part of this mini-series, where I'll walk you through the initial setup steps.
 
 To manage our Mikrotik device, we have 3 options available: the WebUI, WinBox and SSH. I am not really knowledgeable enough with the Mikrotik CLI to go for SSH, so I'll just pick WinBox. It is an executable you can download from [Mikrotik's download page](https://mikrotik.com/download).
 
-![The default configuration present on the Mikrotik](mikrotik_default_config.webp)
+![The default configuration present on the Mikrotik](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_default_config.webp)
 _The default configuration present on the Mikrotik_
 
 By default, we don't hhave much configured, but it's just enough to get us online safely. When we first log in to our new Mikrotik router we will be greeted to a message informing us what the default configuration is.
@@ -215,7 +215,7 @@ I have plugged my uplink in the first port, and then I am using all of the other
 
 For now, all devices are in the LAN network, with my AP being plugged in the 2nd port, my HomeAssistant box in the 6th, my Cisco switch in the 7th and my desktop in the last one.
 
-![The default DHCP server configuration](mikrotik_dhcp_server.webp)
+![The default DHCP server configuration](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_dhcp_server.webp)
 _The default DHCP server configuration_
 
 Digging in just a bit deeper in the default config, we can navigate to IP > DHCP Server. Here we will find our default DHCP server configuration. We can see it is bound to the `bridge` network, so that will be our LAN, and that it is serving out addresses from an IP address pool called `default-dhcp`.
@@ -224,17 +224,17 @@ To find out what that IP Address Pool actually is, we need to go to IP > Pool an
 
 However, if I open up a local terminal on my machine and check out what my IP address is, you'll see it's actually closer to that `.254` than to the `.10`. That is because Mikrotik parses this list backwards by default, or at least that is what I understand and what I found online.
 
-![The IP address of my workstation, as served by the DHCP server](terminal_ip.webp)
+![The IP address of my workstation, as served by the DHCP server](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/terminal_ip.webp)
 _The IP address of my workstation, as served by the DHCP server_
 
 To check out the default firewall rules by navigating to IP > Firewall:
 
-![The default firewall rules](mikrotik_firewall_rules.webp)
+![The default firewall rules](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_firewall_rules.webp)
 _The default firewall rules_
 
 To take a look at the entire configuration present on the device, we can run the `export` command:
 
-![The default configuration, exported](mikrotik_export.webp)
+![The default configuration, exported](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_export.webp)
 _The default configuration, exported_
 
 ## ☁️ Final Thoughts

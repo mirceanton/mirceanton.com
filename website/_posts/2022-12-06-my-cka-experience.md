@@ -5,9 +5,9 @@ description: Ready to take on the CKA? Here's how I prepared and passed the exam
 categories: ""
 tags: Kubernetes Certification
 
-img_path: /assets/img/posts/2022-12-06-my-cka-experience/
+# img_path: /assets/img/posts/2022-12-06-my-cka-experience/
 image:
-  path: featured.webp
+  path: /assets/img/posts/2022-12-06-my-cka-experience/featured.webp
   lqip: ""  # TODO
 
 # This permalink is needed for backwards compatibility 
