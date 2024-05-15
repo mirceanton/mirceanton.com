@@ -504,6 +504,5 @@ Until next time, keep safe, keep encrypting! 🛡️🔒
 
 ---
 
-<!-- TODO: FIX the id and url here -->
 {% include embed/youtube.html id='wqD7k5iNvqs' %}
 📹 [Watch Video](https://youtu.be/wqD7k5iNvqs)

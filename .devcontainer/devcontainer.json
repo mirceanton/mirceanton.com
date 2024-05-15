@@ -4,7 +4,13 @@
 	"name": "mirceanton.com-devcontainer",
 	"image": "mcr.microsoft.com/devcontainers/jekyll:2-bookworm",
 	"features": {
-		"ghcr.io/devcontainers-contrib/features/go-task:1": {}
+		"ghcr.io/devcontainers-contrib/features/go-task:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"dockerDashComposeVersion": "latest",
+			"installDockerBuildx": "true",
+			"enableNonRootDocker": "true"
+		}
 	},
 	"forwardPorts": [4000, 35729],
 	"postCreateCommand": "sudo apt update && sudo apt install -y webp && bundle install --gemfile=website/Gemfile"
