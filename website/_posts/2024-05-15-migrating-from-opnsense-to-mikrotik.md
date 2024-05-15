@@ -11,7 +11,7 @@ tags:
   - OPNsense
   - Hardware
 
-img_path: assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/
+img_path: /assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/
 image:
   path: featured.webp
   lqip: ""  # TODO
