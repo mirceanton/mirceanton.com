@@ -7,6 +7,7 @@ on:
     - cron: "0 * * * *"  # hourly
   push:
     branches: [ main ]
+  pull_request: {}
 
 jobs:
   renovate:
