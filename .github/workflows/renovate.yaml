@@ -38,10 +38,8 @@ jobs:
           ${{ secrets.BOT_APP_PRIVATE_KEY }}
           EOF
 
-          npx github-app-installation-token \
-            --appId ${{ secrets.BOT_APP_ID }} \
-            --installationId ${{ secrets.BOT_APP_INSTALLATION_ID }} \
-            --privateKeyLocation ./bot-app-key.pem >> $GITHUB_OUTPUT
+          token=$(npx github-app-installation-token --appId ${{ secrets.BOT_APP_ID }} --installationId ${{ secrets.BOT_APP_INSTALLATION_ID }} --privateKeyLocation ./bot-app-key.pem)
+          echo "token=$token" >> $GITHUB_OUTPUT
 
       - name: Run Renovate
         run: npx renovate
