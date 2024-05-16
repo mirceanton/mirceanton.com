@@ -36,8 +36,10 @@ jobs:
   renovate:
     runs-on: "ubuntu-latest"
     steps:
+      - name: Setup Renovate
+        run: npm install renovate@37.367.0
 
       - name: Run Renovate
         env:
-          GITHUB_COM_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          RENOVATE_GITHUB_COM_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: npx renovate
