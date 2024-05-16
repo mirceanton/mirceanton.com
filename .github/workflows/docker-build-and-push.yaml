@@ -5,6 +5,9 @@ name: Build and Publish Docker Image
 on:
   push:
     branches: [ main ]
+    paths:
+      - website/*
+      - Dockerfile
 
   workflow_dispatch:
     inputs:
@@ -32,7 +35,7 @@ jobs:
         run: sudo apt update && sudo apt install -y curl jq
 
       - name: Checkout the Repository
-        uses: actions/checkout@v4.1.5
+        uses: actions/checkout@v4.1.6
 
       - name: Generate Calver Tag
         id: generator

@@ -1,0 +1,54 @@
+---
+name: Renovate
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: Dry Run
+        default: "false"
+        required: false
+  schedule:
+    - cron: "0 * * * *"  # hourly
+  push:
+    branches: [ main ]
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+
+jobs:
+  renovate:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Renovate
+        run: npm install renovate@37.367.0 github-app-installation-token@1.2.0
+
+      - name: Generate GitHub App Token
+        id: app-token
+        run: |
+          cat << EOF >> ./bot-app-key.pem
+          ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          EOF
+
+          token=$(npx github-app-installation-token --appId ${{ secrets.BOT_APP_ID }} --installationId ${{ secrets.BOT_APP_INSTALLATION_ID }} --privateKeyLocation ./bot-app-key.pem)
+          echo "token=$token" >> $GITHUB_OUTPUT
+
+      - name: Run Renovate
+        run: npx renovate
+        env:
+          LOG_LEVEL: info
+          RENOVATE_PLATFORM: github
+          RENOVATE_PLATFORM_COMMIT: true
+          RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
+          RENOVATE_AUTODISCOVER: true
+          RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
+          RENOVATE_GIT_AUTHOR: 'Mr. Borboto <123456+self-hosted-renovate[bot]@users.noreply.github.com>'
+          # RENOVATE_CONFIG_FILE: ./github/renovate-config.json
+          RENOVATE_TOKEN: "${{ steps.app-token.outputs.token }}"
