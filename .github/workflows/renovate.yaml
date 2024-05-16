@@ -41,5 +41,5 @@ jobs:
 
       - name: Run Renovate
         env:
-          RENOVATE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          RENOVATE_TOKEN: "${{ secrets.RENOVATE_TOKEN }}"
         run: npx renovate
