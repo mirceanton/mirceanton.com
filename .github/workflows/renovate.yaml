@@ -34,10 +34,14 @@ jobs:
       - name: Generate GitHub App Token
         id: app-token
         run: |
+          cat << EOF >> ./bot-app-key.pem
+          ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          EOF
+
           npx github-app-installation-token \
             --appId ${{ secrets.BOT_APP_ID }} \
-            --installationId  ${{ secrets.BOT_APP_INSTALLATION_ID }} \
-            --privateKey ${{ secrets.BOT_APP_PRIVATE_KEY }}
+            --installationId ${{ secrets.BOT_APP_INSTALLATION_ID }} \
+            --privateKeyFile ./bot-app-key.pem
 
       - name: Run Renovate
         run: npx renovate
