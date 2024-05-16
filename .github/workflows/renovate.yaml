@@ -3,7 +3,8 @@ name: Run Renovate
 
 on:
   workflow_dispatch: {}  # manual trigger
-  schedule: "@hourly"
+  schedule:
+    cron: "@hourly"
   push:
     branches: [ main ]
 
