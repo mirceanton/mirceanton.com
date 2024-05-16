@@ -34,13 +34,13 @@ jobs:
       - name: Generate GitHub App Token
         id: app-token
         run: |
-          npm run github-app-installation-token \
+          npx github-app-installation-token \
             --appId ${{ secrets.BOT_APP_ID }} \
             --installationId  ${{ secrets.BOT_APP_INSTALLATION_ID }} \
             --privateKey ${{ secrets.BOT_APP_PRIVATE_KEY }}
 
       - name: Run Renovate
-        run: npm run renovate
+        run: npx renovate
         env:
           LOG_LEVEL: debug
           RENOVATE_PLATFORM: github
