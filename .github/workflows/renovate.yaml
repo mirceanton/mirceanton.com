@@ -41,7 +41,7 @@ jobs:
           npx github-app-installation-token \
             --appId ${{ secrets.BOT_APP_ID }} \
             --installationId ${{ secrets.BOT_APP_INSTALLATION_ID }} \
-            --privateKeyFile ./bot-app-key.pem
+            --privateKeyLocation  ./bot-app-key.pem
 
       - name: Run Renovate
         run: npx renovate
