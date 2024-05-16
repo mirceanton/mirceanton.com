@@ -2,7 +2,9 @@
 name: Jekyll Build site
 
 on:
-  pull_request: {}
+  pull_request:
+    paths:
+      - website/*
 
 jobs:
   jekyll-build:
