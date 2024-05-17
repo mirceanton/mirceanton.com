@@ -1,0 +1,46 @@
+---
+name: Lychee Link Checker
+description: Install and run the lychee link checker.
+
+inputs:
+  input:
+    type: string
+    required: true
+
+outputs:
+  output-file:
+    value: ${{ steps.lychee.outputs.file }}
+
+env:
+  LYCHEE_FILE: lychee.md
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup lychee
+      shell: bash
+      run: |
+        curl -sSf '<https://sh.rustup.rs>' | sh
+        apt install gcc pkg-config libc6-dev libssl-dev
+        cargo install lychee
+
+    - name: Run lychee
+      shell: bash
+      id: lychee
+      run: |
+        true || \
+        lychee ${{ inputs.input }} \
+            --verbose \
+            --no-progress \
+            --format markdown \
+            --output $LYCHEE_FILE \
+            --exclude-all-private \
+            --exclude-mail
+    
+    - name: Show output file
+      shell: bash
+      run: cat $LYCHEE_FILE
+    
+    - name: Export output file name
+      shell: bash
+      run: echo "file=$LYCHEE_FILE" >> $GITHUB_ENV

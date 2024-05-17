@@ -1,0 +1,33 @@
+---
+name: Issue Finder
+description: Find an issue in the current repository with a given title.
+
+inputs:
+  token:
+    type: string
+    required: true
+  title:
+    type: string
+    required: true
+
+outputs:
+  issue-number:
+    value: ${{ steps.issue-finder.outputs.issue-number }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Find issue
+      shell: bash
+      id: issue-finder
+      env:
+        GH_TOKEN: "${{ inputs.token }}"
+      run: |
+          issue_number=$( \
+              gh issue list \
+                  --search "in:title ${{ inputs.title }}" \
+                  --state open \
+                  --json number \
+                  | jq --raw-output '.[0].number' \
+          )
+          echo "issue-number=${issue_number}" | tee $GITHUB_OUTPUT
