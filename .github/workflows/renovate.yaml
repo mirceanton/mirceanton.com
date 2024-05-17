@@ -1,7 +1,6 @@
 ---
 name: Renovate
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +17,6 @@ on:
   push:
     branches: [ main ]
 
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
@@ -31,17 +29,14 @@ jobs:
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Setup Renovate
-        run: npm install renovate@37.367.0 github-app-installation-token@1.2.0
+        run: npm install renovate@37.367.0
 
-      - name: Generate GitHub App Token
+      - name: Generate Token
+        uses: actions/create-github-app-token@v1
         id: app-token
-        run: |
-          cat << EOF >> ./bot-app-key.pem
-          ${{ secrets.BOT_APP_PRIVATE_KEY }}
-          EOF
-
-          token=$(npx github-app-installation-token --appId ${{ secrets.BOT_APP_ID }} --installationId ${{ secrets.BOT_APP_INSTALLATION_ID }} --privateKeyLocation ./bot-app-key.pem)
-          echo "token=$token" >> $GITHUB_OUTPUT
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Run Renovate
         run: npx renovate
@@ -54,4 +49,3 @@ jobs:
           RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
           RENOVATE_GIT_AUTHOR: 'mr-borboto[bot] <170036086+mr-borboto[bot]@users.noreply.github.com>'
           RENOVATE_TOKEN: "${{ steps.app-token.outputs.token }}"
-

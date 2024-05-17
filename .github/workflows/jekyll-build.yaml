@@ -3,8 +3,20 @@ name: Jekyll Build site
 
 on:
   pull_request:
-    paths:
-      - website/*
+    paths: [ "website/*" ]
+
+  workflow_call:
+    inputs:
+      upload-artifact:
+        type: boolean
+        description: Whether or not to upload the built site to GitHub Artifacts.
+        required: false
+        default: false
+      artifact-name:
+        type: string
+        description: The name of the artifact to upload.
+        required: false
+        default: "${{ github.sha }}"
 
 jobs:
   jekyll-build:
@@ -25,3 +37,10 @@ jobs:
         run: |
           cd website/
           bundle exec jekyll build --trace
+      
+      - name: Upload built site to artifacts
+        if: "${{ inputs.upload-artifact == true }}"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ inputs.artifact-name }}"
+          path: website/_site/
