@@ -169,7 +169,7 @@ I've got these SG300 and SG350 switches, but they're not as automation-friendly 
 Now don't get me wrong. If you do shell out for proper Cisco gear, there are actually good modules out there for network automation. I, however, refuse to get an old Catalyst that's both loud and power-hungry to gain access to those features.
 
 ![The RouterOS Provider Page on registry.terraform.io](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/terraform_routeros.webp)
-_The RouterOS Provider Page on [registry.terraform.io](registry.terraform.io)_
+_The RouterOS Provider Page on [https://registry.terraform.io](https://registry.terraform.io)_
 
 Relatively recently, I stumbled upon something interesting: a [Terraform provider for Mikrotik](https://registry.terraform.io/providers/terraform-routeros/routeros/latest). And since Terraform plays nice with my GitOps setup, I thought, "Why not give it a whirl?". Thus, here I am, testing the waters!
 
