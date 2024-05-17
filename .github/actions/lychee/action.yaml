@@ -20,7 +20,8 @@ runs:
     - name: Setup lychee
       shell: bash
       run: |
-        curl -sSf '<https://sh.rustup.rs>' | sh
+        curl -sSf 'https://sh.rustup.rs' > rustup.sh
+        bash rushtup.sh -y
         apt install gcc pkg-config libc6-dev libssl-dev
         cargo install lychee
 
