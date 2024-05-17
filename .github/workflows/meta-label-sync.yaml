@@ -21,6 +21,5 @@ jobs:
       - name: Sync Labels
         uses: EndBug/label-sync@v2
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
           config-file: .github/labels.yaml
           delete-other-labels: true
