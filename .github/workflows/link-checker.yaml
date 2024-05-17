@@ -27,10 +27,10 @@ jobs:
 
       - name: Build Site
         run: |
-          sudo gem install bundler jekyll
+          gem install bundler jekyll
           bundler --version
           jekyll --version
-          sudo bundle install --gemfile=${{ inputs.jekyll-dir }}/Gemfile
+          bundle install --gemfile=${{ inputs.jekyll-dir }}/Gemfile
           cd website
           bundle exec jekyll build --trace
 
