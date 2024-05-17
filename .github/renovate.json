@@ -13,6 +13,7 @@
     ":disableRateLimiting",
     ":semanticCommits",
 
-    "github>mirceanton/mirceanton.com//.github/renovate/autoMerge.json5"
+    "github>mirceanton/mirceanton.com//.github/renovate/autoMerge.json5",
+    "github>mirceanton/mirceanton.com//.github/renovate/labels.json5"
   ]
 }
