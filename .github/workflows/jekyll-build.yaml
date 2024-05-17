@@ -8,10 +8,10 @@ on:
   workflow_call:
     inputs:
       upload-artifact:
-        type: string
+        type: boolean
         description: Whether or not to upload the built site to GitHub Artifacts.
         required: false
-        default: "false"
+        default: false
       artifact-name:
         type: string
         description: The name of the artifact to upload.
