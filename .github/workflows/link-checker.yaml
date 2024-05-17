@@ -22,7 +22,6 @@ env:
 
 jobs:
   build-site:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/jekyll-build.yaml
     with:
       upload-artifact: true
