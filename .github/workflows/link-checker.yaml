@@ -24,11 +24,12 @@ jobs:
   build-site:
     uses: ./.github/workflows/jekyll-build.yaml
     with:
-      upload-artifact: true
+      upload-artifact: "true"
       artifact-name: "${{ github.sha }}"
 
   link-checker:
     runs-on: ubuntu-latest
+    needs: [ build-site ]
     steps:
       - name: Download Site Files
         uses: actions/download-artifact@v4
