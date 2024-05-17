@@ -10,6 +10,9 @@ on:
   schedule:
     - cron: "0 0 * * *" # Every day at midnight
 
+permissions:
+  issues: write
+
 jobs:
   label-sync:
     runs-on: ubuntu-latest
@@ -17,10 +20,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/labels.yml
 
       - name: Sync Labels
         uses: EndBug/label-sync@v2
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
           config-file: .github/labels.yaml
           delete-other-labels: true
