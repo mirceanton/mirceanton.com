@@ -24,7 +24,7 @@ jobs:
   build-site:
     uses: ./.github/workflows/jekyll-build.yaml
     with:
-      upload-artifact: "true"
+      upload-artifact: true
       artifact-name: "${{ github.sha }}"
 
   link-checker:
