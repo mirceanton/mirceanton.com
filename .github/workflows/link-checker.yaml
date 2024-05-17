@@ -33,10 +33,13 @@ jobs:
           jekyll-dir: website/
 
       - name: Check Links
-        uses: mirceanton/mirceanton.com/.github/actions/lychee@feat/link-checker-workflow
         id: link-checker
+        uses: lycheeverse/lychee-action@v1
         with:
-          files: "${{ steps.jekyll-builder.outputs.output-dir }}/**/*.html"
+          args: --config=.github/lychee.toml 'website/_site/**/*.html'
+          format: markdown
+          output: lychee.md
+          fail: false
 
       - name: Generate Token
         uses: actions/create-github-app-token@v1
