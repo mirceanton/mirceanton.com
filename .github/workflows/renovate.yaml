@@ -23,6 +23,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  LOG_LEVEL: "${{ inputs.logLevel || 'debug' }}"
+  RENOVATE_PLATFORM: github
+  RENOVATE_PLATFORM_COMMIT: true
+  RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
+  RENOVATE_AUTODISCOVER: true
+  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
+  RENOVATE_GIT_AUTHOR: 'mr-borboto[bot] <170036086+mr-borboto[bot]@users.noreply.github.com>'
+  RENOVATE_TOKEN: "${{ steps.app-token.outputs.token }}"
 
 jobs:
   renovate:
@@ -46,13 +55,4 @@ jobs:
 
       - name: Run Renovate
         run: npx renovate
-        env:
-          LOG_LEVEL: "${{ inputs.logLevel || 'debug' }}"
-          RENOVATE_PLATFORM: github
-          RENOVATE_PLATFORM_COMMIT: true
-          RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
-          RENOVATE_AUTODISCOVER: true
-          RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
-          RENOVATE_GIT_AUTHOR: 'Mr. Borboto <123456+self-hosted-renovate[bot]@users.noreply.github.com>'
-          # RENOVATE_CONFIG_FILE: ./github/renovate-config.json
-          RENOVATE_TOKEN: "${{ steps.app-token.outputs.token }}"
+
