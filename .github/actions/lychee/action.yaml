@@ -21,7 +21,7 @@ runs:
       shell: bash
       run: |
         curl -sSf 'https://sh.rustup.rs' | bash -s -- -y
-        apt install gcc pkg-config libc6-dev libssl-dev
+        sudo apt install gcc pkg-config libc6-dev libssl-dev
         cargo install lychee
 
     - name: Run lychee
