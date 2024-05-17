@@ -4,6 +4,7 @@
   "extends": [
     ":dependencyDashboard",
     ":timezone(Europe/Bucharest)",
+    "docker:enableMajor",
     "config:best-practices"
   ]
 }
