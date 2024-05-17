@@ -9,6 +9,10 @@ on:
         description: Dry Run
         default: "false"
         required: false
+      logLevel:
+        description: Log Level
+        default: debug
+        required: false
   schedule:
     - cron: "0 * * * *"  # hourly
   push:
@@ -43,7 +47,7 @@ jobs:
       - name: Run Renovate
         run: npx renovate
         env:
-          LOG_LEVEL: info
+          LOG_LEVEL: "${{ inputs.logLevel || 'debug' }}"
           RENOVATE_PLATFORM: github
           RENOVATE_PLATFORM_COMMIT: true
           RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
