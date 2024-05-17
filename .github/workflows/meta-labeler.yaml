@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Labeler
+
+on:
+  workflow_dispatch: {}  # Manual Trigger
+  pull_request_target:
+    branches: [ "main" ]
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Labeler
+        uses: actions/labeler@v5
+        with:
+          repo-token: "${{ github.token }}"
+          configuration-path: .github/labeler.yaml
