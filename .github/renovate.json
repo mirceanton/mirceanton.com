@@ -5,6 +5,7 @@
     ":dependencyDashboard",
     ":timezone(Europe/Bucharest)",
     "docker:enableMajor",
+    ":disableRateLimiting",
     "config:best-practices"
   ]
 }
