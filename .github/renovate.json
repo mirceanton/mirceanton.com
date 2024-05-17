@@ -4,8 +4,9 @@
   "extends": [
     ":dependencyDashboard",
     ":timezone(Europe/Bucharest)",
+    "config:best-practices",
     "docker:enableMajor",
     ":disableRateLimiting",
-    "config:best-practices"
+    ":semanticCommits"
   ]
 }
