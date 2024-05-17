@@ -76,4 +76,4 @@ jobs:
           token: "${{ steps.app-token.outputs.token }}"
           title: "${{ env.WORKFLOW_ISSUE_TITLE }}"
           issue-number: "${{ steps.find-issue.outputs.issue-number || '' }}"
-          content-filepath: ${{ steps.link-checker.outputs.output-file }}
+          content-filepath: lychee.md
