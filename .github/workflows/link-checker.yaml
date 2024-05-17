@@ -23,7 +23,7 @@ env:
 jobs:
   build-site:
     runs-on: ubuntu-latest
-    uses: .github/jekyll-build.yaml
+    uses: .github/jekyll-build.yaml@feat/link-checker-workflow
     with:
       upload-artifact: true
       artifact-name: "${{ github.sha }}"
