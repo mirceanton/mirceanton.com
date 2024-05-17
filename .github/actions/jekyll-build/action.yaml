@@ -34,4 +34,4 @@ runs:
     - name: Export output directory name
       shell: bash
       id: output-dir
-      run: echo "output-dir:${{ inputs.jekyll-dir }}/_site" >> $GITHUB_OUTPUT
+      run: echo "output-dir=${{ inputs.jekyll-dir }}/_site" >> $GITHUB_OUTPUT
