@@ -19,8 +19,7 @@ env:
   WORKFLOW_ISSUE_TITLE: "Link Checker Dashboard 🔗"
 
 jobs:
-  lychee:
-    name: Lychee
+  link-checker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,9 +27,13 @@ jobs:
 
       - name: Build Site
         uses: mirceanton/mirceanton.com/.github/actions/jekyll-build@feat/link-checker-workflow
-        id: jekyll-builder
-        with:
-          jekyll-dir: website/
+        run: |
+          sudo gem install bundler jekyll
+          bundler --version
+          jekyll --version
+          sudo bundle install --gemfile=${{ inputs.jekyll-dir }}/Gemfile
+          cd website
+          bundle exec jekyll build --trace
 
       - name: Check Links
         id: link-checker
@@ -49,11 +52,19 @@ jobs:
           private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Find Link Checker Issue
-        uses: mirceanton/mirceanton.com/.github/actions/issue-finder@feat/link-checker-workflow
         id: find-issue
-        with:
-          title: "${{ env.WORKFLOW_ISSUE_TITLE }}"
-          token: "${{ steps.app-token.outputs.token }}"
+        run: |
+          issue_number=$( \
+              gh issue list \
+                  --search "in:title ${{ env.WORKFLOW_ISSUE_TITLE }}" \
+                  --state open \
+                  --json number \
+                  | jq --raw-output '.[0].number' \
+          )
+          echo "issue-number=${issue_number}" >> $GITHUB_OUTPUT
+          echo "${issue_number}"
+        env:
+          GH_TOKEN: "${{ steps.app-token.outputs.token }}"
 
       - name: Create or Update Issue
         uses: peter-evans/create-issue-from-file@v5
