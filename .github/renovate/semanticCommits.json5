@@ -7,33 +7,16 @@
       {
         "matchDatasources": ["docker"],
         "matchUpdateTypes": ["major"],
-        "commitMessagePrefix": "feat(container)!: ",
+        "commitMessagePrefix": "deps(docker)!: ",
         "commitMessageTopic": "{{depName}}",
         "commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
       },
       {
         "matchDatasources": ["docker"],
         "matchUpdateTypes": ["minor"],
-        "semanticCommitType": "feat",
-        "semanticCommitScope": "container",
+        "commitMessagePrefix": "deps(docker): ",
         "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      },
-      {
-        "matchDatasources": ["docker"],
-        "matchUpdateTypes": ["patch"],
-        "semanticCommitType": "fix",
-        "semanticCommitScope": "container",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      },
-      {
-        "matchDatasources": ["docker"],
-        "matchUpdateTypes": ["digest"],
-        "semanticCommitType": "chore",
-        "semanticCommitScope": "container",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentDigestShort}} → {{newDigestShort}} )"
+        "commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
       },
 
       
@@ -43,23 +26,14 @@
       {
         "matchDatasources": ["rubygems"],
         "matchUpdateTypes": ["major"],
-        "commitMessagePrefix": "feat(rubygems)!: ",
+        "commitMessagePrefix": "deps(ruby)!: ",
         "commitMessageTopic": "{{depName}}",
         "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
       },
       {
         "matchDatasources": ["rubygems"],
-        "matchUpdateTypes": ["minor"],
-        "semanticCommitType": "feat",
-        "semanticCommitScope": "rubygems",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      },
-      {
-        "matchDatasources": ["rubygems"],
-        "matchUpdateTypes": ["patch"],
-        "semanticCommitType": "fix",
-        "semanticCommitScope": "rubygems",
+        "matchUpdateTypes": ["minor", "patch"],
+        "commitMessagePrefix": "deps(ruby): ",
         "commitMessageTopic": "{{depName}}",
         "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
       },
@@ -71,25 +45,16 @@
       {
         "matchManagers": ["github-actions"],
         "matchUpdateTypes": ["major"],
-        "commitMessagePrefix": "feat(github-action)!: ",
+        "commitMessagePrefix": "deps(actions)!: ",
         "commitMessageTopic": "{{depName}}",
         "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
       },
       {
         "matchManagers": ["github-actions"],
-        "matchUpdateTypes": ["minor"],
-        "semanticCommitType": "feat",
-        "semanticCommitScope": "github-action",
+        "matchUpdateTypes": ["minor", "patch"],
+        "commitMessagePrefix": "deps(actions): ",
         "commitMessageTopic": "{{depName}}",
         "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
       },
-      {
-        "matchManagers": ["github-actions"],
-        "matchUpdateTypes": ["patch"],
-        "semanticCommitType": "fix",
-        "semanticCommitScope": "github-action",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      }
     ]
   }
