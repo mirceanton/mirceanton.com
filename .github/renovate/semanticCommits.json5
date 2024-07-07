@@ -13,7 +13,7 @@
       },
       {
         "matchDatasources": ["docker"],
-        "matchUpdateTypes": ["minor"],
+        "matchUpdateTypes": ["minor", "patch],
         "commitMessagePrefix": "deps(docker): ",
         "commitMessageTopic": "{{depName}}",
         "commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
