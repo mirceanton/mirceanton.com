@@ -1,60 +1,60 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "packageRules": [
-    // ============================================================================================
-    // Docker
-    // ============================================================================================
-      {
-        "matchDatasources": ["docker"],
-        "matchUpdateTypes": ["major"],
-        "commitMessagePrefix": "deps(docker)!: ",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
-      },
-      {
-        "matchDatasources": ["docker"],
-        "matchUpdateTypes": ["minor", "patch],
-        "commitMessagePrefix": "deps(docker): ",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
-      },
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"packageRules": [
+		// ============================================================================================
+		// Docker
+		// ============================================================================================
+		{
+			"matchDatasources": ["docker"],
+			"matchUpdateTypes": ["major"],
+			"commitMessagePrefix": "deps(docker)!: ",
+			"commitMessageTopic": "{{depName}}",
+			"commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
+		},
+		{
+			"matchDatasources": ["docker"],
+			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"commitMessagePrefix": "deps(docker): ",
+			"commitMessageTopic": "{{depName}}",
+			"commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
+		},
 
-      
-    // ============================================================================================
-    // Ruby
-    // ============================================================================================
-      {
-        "matchDatasources": ["rubygems"],
-        "matchUpdateTypes": ["major"],
-        "commitMessagePrefix": "deps(ruby)!: ",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      },
-      {
-        "matchDatasources": ["rubygems"],
-        "matchUpdateTypes": ["minor", "patch"],
-        "commitMessagePrefix": "deps(ruby): ",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      },
+		
+		// ============================================================================================
+		// Ruby
+		// ============================================================================================
+		{
+			"matchDatasources": ["rubygems"],
+			"matchUpdateTypes": ["major"],
+			"commitMessagePrefix": "deps(ruby)!: ",
+			"commitMessageTopic": "{{depName}}",
+			"commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
+		},
+		{
+			"matchDatasources": ["rubygems"],
+			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"commitMessagePrefix": "deps(ruby): ",
+			"commitMessageTopic": "{{depName}}",
+			"commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
+		},
 
 
-    // ============================================================================================
-    // GitHub Actions
-    // ============================================================================================
-      {
-        "matchManagers": ["github-actions"],
-        "matchUpdateTypes": ["major"],
-        "commitMessagePrefix": "deps(actions)!: ",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      },
-      {
-        "matchManagers": ["github-actions"],
-        "matchUpdateTypes": ["minor", "patch"],
-        "commitMessagePrefix": "deps(actions): ",
-        "commitMessageTopic": "{{depName}}",
-        "commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-      },
-    ]
-  }
+		// ============================================================================================
+		// GitHub Actions
+		// ============================================================================================
+		{
+			"matchManagers": ["github-actions"],
+			"matchUpdateTypes": ["major"],
+			"commitMessagePrefix": "deps(actions)!: ",
+			"commitMessageTopic": "{{depName}}",
+			"commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
+		},
+		{
+			"matchManagers": ["github-actions"],
+			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"commitMessagePrefix": "deps(actions): ",
+			"commitMessageTopic": "{{depName}}",
+			"commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
+		},
+	]
+}
