@@ -8,7 +8,7 @@ on:
       custom-tag:
         description: "Custom tag for the image"
         type: string
-        required: false
+        required: true
   pull_request:
     paths: [ "website/*", "Dockerfile" ]
   push:
@@ -45,7 +45,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           tags: |
             # tag event
-            type=ref,enable=true,priority=00,prefix=,suffix=,event=tag
+            type=ref,enable=true,priority=500,prefix=,suffix=,event=tag
             # pull request event
             type=ref,enable=true,priority=600,prefix=pr-,suffix=,event=pr
             # custom tag for manual triggers
@@ -63,3 +63,17 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # 0.24.0
+        with:
+          image-ref: "ghcr.io/${{ github.repository }}:{{ github.ref_name }}"
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
