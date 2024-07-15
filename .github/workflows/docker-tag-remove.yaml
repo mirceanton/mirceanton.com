@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Docker Tag Remove
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The tag to delete.
+        type: string
+        required: true
+
+jobs:
+  purge-tag:
+    name: Delete tag from ghcr.io
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: chipkent/action-cleanup-package@1316a66015b82d745b57acbb6c570f2bb1d108f9 # v1.0.3
+        with:
+          package-name: ${{ github.event.repository.name }}
+          tag: ${{ github.event.inputs.tag }}
+          github-token: ${{ secrets.GHCR_RW_TOKEN }}
