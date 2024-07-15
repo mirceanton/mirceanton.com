@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Jekyll Build site
+
+on:
+  pull_request:
+    paths: [ "website/*" ]
+
+  workflow_call:
+    inputs:
+      upload-artifact:
+        type: boolean
+        description: Whether or not to upload the built site to GitHub Artifacts.
+        required: false
+        default: false
+      artifact-name:
+        type: string
+        description: The name of the artifact to upload.
+        required: false
+        default: "${{ github.sha }}"
+
+jobs:
+  jekyll-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+
+      - name: Install jekyll and bundler
+        run: |
+          sudo gem install bundler jekyll
+          bundler --version
+          jekyll --version
+
+      - name: Install gems
+        run: sudo bundle install --gemfile=website/Gemfile
+
+      - name: Run jekyll build
+        run: |
+          cd website/
+          bundle exec jekyll build --trace
+
+      - name: Upload built site to artifacts
+        if: "${{ inputs.upload-artifact == true }}"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ inputs.artifact-name }}"
+          path: website/_site/
