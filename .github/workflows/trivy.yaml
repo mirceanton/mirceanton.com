@@ -5,8 +5,12 @@ name: Trivy Scan
 on:
   workflow_dispatch:
     inputs:
-      custom-tag:
-        description: "Custom tag for the image"
+      trivy-scan-tag:
+        description: "The tag to scan"
+        type: string
+        required: false
+      trivy-output-format:
+        description: "Format for trivy output"
         type: string
         required: false
   registry_package:
@@ -25,8 +29,8 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: "${{ env.REGISTRY_IMAGE }}:${{ inputs.tag || 'latest' }}"
-          format: table
+          image-ref: "${{ env.REGISTRY_IMAGE }}:${{ inputs.trivy-scan-tag || 'latest' }}"
+          format: "${{ inputs.trivy-output-format || 'table' }}"
           ignore-unfixed: true
           output: trivy-results.md
 
