@@ -22,6 +22,13 @@ jobs:
     if: ${{ github.event.registry_package.package_version.container_metadata.tag.name != '' || github.event_name == 'workflow_dispatch' }}
 
     steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@31c86eb3b33c9b601a1f60f98dcbfd1d70f379b4 # v1.10.3
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # 0.24.0
         with:
@@ -33,3 +40,4 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
+          token: "${{ steps.app-token.outputs.token }}"
