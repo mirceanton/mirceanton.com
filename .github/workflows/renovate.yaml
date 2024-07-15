@@ -14,8 +14,6 @@ on:
         required: false
   schedule:
     - cron: "0 * * * *"  # hourly
-  push:
-    branches: [ main ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
