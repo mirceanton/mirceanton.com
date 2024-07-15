@@ -3,44 +3,21 @@
 name: Build and Publish Docker Image
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - website/*
-      - Dockerfile
-
   workflow_dispatch:
     inputs:
       custom-tag:
         description: "Custom tag for the image"
         type: string
         required: false
+  pull_request: {}
+  push:
+    tags: [ "*" ]
+
 
 env:
   REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 jobs:
-  generate-tag:
-    runs-on: "ubuntu-latest"
-    outputs:
-      tags: ${{ steps.generator.outputs.tags }}
-
-    steps:
-      - name: Install prerqeuisites
-        run: sudo apt update && sudo apt install -y curl jq
-
-      - name: Checkout the Repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-
-      - name: Generate Calver Tag
-        id: generator
-        env:
-          REGISTRY_USER: "${{ github.repository_owner }}"
-          REGISTRY_TOKEN: "${{ secrets.GHCR_RW_TOKEN }}"
-          REGISTRY_URL: ghcr.io
-          IMAGE_NAME: ${{ github.event.repository.name }}
-        run: echo "tags=$(bash scripts/generate_calver_tag.sh)" | tee "$GITHUB_OUTPUT"
-
   build:
     runs-on: ubuntu-latest
 
@@ -67,9 +44,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           tags: |
-            latest
-            type=sha
-            ${{ needs.generate-tag.outputs.tags }}
+            type=ref,event=tag
+            type=ref,event=pull_request
             ${{ github.event.inputs.custom-tag }}
 
       - name: Build and push by digest
