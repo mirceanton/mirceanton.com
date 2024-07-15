@@ -9,7 +9,8 @@ on:
         description: "Custom tag for the image"
         type: string
         required: false
-  pull_request: {}
+  pull_request:
+    paths: [ "website/*", "Dockerfile" ]
   push:
     tags: [ "*" ]
 
@@ -45,7 +46,7 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
           tags: |
             # tag event
-            type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
+            type=ref,enable=true,priority=00,prefix=,suffix=,event=tag
             # pull request event
             type=ref,enable=true,priority=600,prefix=pr-,suffix=,event=pr
             # custom tag for manual triggers
