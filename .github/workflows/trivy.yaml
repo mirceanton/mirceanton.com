@@ -3,11 +3,18 @@
 name: Trivy Scan
 
 on:
+  workflow_dispatch:
+    inputs:
+      custom-tag:
+        description: "Custom tag for the image"
+        type: string
+        required: false
   registry_package:
     types: [ "published" ]
 
 env:
   WORKFLOW_ISSUE_TITLE: "Security Dashboard 👮"
+  REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 jobs:
   trivy:
@@ -18,13 +25,10 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
-          format: 'table'
-          exit-code: '1'
+          image-ref: "${{ env.REGISTRY_IMAGE }}:${{ inputs.tag || 'latest' }}"
+          format: table
           ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-          output: "trivy-results.md"
+          output: trivy-results.md
 
       - name: Generate Token
         uses: actions/create-github-app-token@31c86eb3b33c9b601a1f60f98dcbfd1d70f379b4 # v1.10.3
