@@ -12,8 +12,8 @@ on:
   registry_package:
     types: [ "published", "updated" ]
 
-env:
-  WORKFLOW_ISSUE_TITLE: "Security Dashboard 👮"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
 
 jobs:
   trivy:
@@ -39,4 +39,4 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
-          token: "${{ steps.app-token.outputs.token }}"
+
