@@ -7,6 +7,7 @@ on:
     inputs:
       trivy-scan-tag:
         description: "The tag to scan"
+        default: latest
         type: string
         required: false
   registry_package:
@@ -16,9 +17,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
 
 jobs:
-  trivy:
+  trivy-on-push:
     runs-on: ubuntu-latest
-    if: ${{ github.event.registry_package.package_version.container_metadata.tag.name != '' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event.registry_package.package_version.container_metadata.tag.name != '' }}
 
     steps:
       - name: Generate Token
@@ -31,7 +32,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # 0.24.0
         with:
-          image-ref: "ghcr.io/${{ github.repository }}:${{ inputs.trivy-scan-tag || 'latest' }}"
+          image-ref: "ghcr.io/${{ github.repository }}:${{ github.event.registry_package.package_version.container_metadata.tag.name }}"
           format: 'sarif'
           output: 'trivy-results.sarif'
 
@@ -39,4 +40,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
-
