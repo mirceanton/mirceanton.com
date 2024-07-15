@@ -19,7 +19,7 @@ concurrency:
 jobs:
   trivy-on-push:
     runs-on: ubuntu-latest
-    if: ${{ github.event.registry_package.package_version.container_metadata.tag.name != '' }}
+    if: ${{ github.event.registry_package.package_version.container_metadata.tag.name != '' && github.event.registry_package.package_version.container_metadata.tag.name != 'buildcache' }}
 
     steps:
       - name: Generate Token
