@@ -19,7 +19,7 @@ env:
 jobs:
   trivy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.registry_package.package_version.container_metadata.tag.name != '' }}
+    if: ${{ github.event.registry_package.package_version.container_metadata.tag.name != '' || github.event_name == 'workflow_dispatch' }}
 
     steps:
       - name: Run Trivy vulnerability scanner
