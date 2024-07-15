@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # 0.24.0
         with:
           image-ref: "${{ env.REGISTRY_IMAGE }}:${{ inputs.trivy-scan-tag || 'latest' }}"
           format: 'sarif'
