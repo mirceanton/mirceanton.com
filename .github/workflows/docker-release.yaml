@@ -14,17 +14,12 @@ on:
   push:
     tags: [ "*" ]
 
-
-env:
-  REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: read
-      attestations: write
+      packages: write
 
     steps:
       - name: Checkout
@@ -41,13 +36,13 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_RW_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
         with:
-          images: ${{ env.REGISTRY_IMAGE }}
+          images: ghcr.io/${{ github.repository }}
           tags: |
             # tag event
             type=ref,enable=true,priority=00,prefix=,suffix=,event=tag

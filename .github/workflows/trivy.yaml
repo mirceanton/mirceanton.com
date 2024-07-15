@@ -10,11 +10,10 @@ on:
         type: string
         required: false
   registry_package:
-    types: [ "published" ]
+    types: [ "published", "updated" ]
 
 env:
   WORKFLOW_ISSUE_TITLE: "Security Dashboard 👮"
-  REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 jobs:
   trivy:
@@ -32,7 +31,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # 0.24.0
         with:
-          image-ref: "${{ env.REGISTRY_IMAGE }}:${{ inputs.trivy-scan-tag || 'latest' }}"
+          image-ref: "ghcr.io/${{ github.repository }}:${{ inputs.trivy-scan-tag || 'latest' }}"
           format: 'sarif'
           output: 'trivy-results.sarif'
 
