@@ -22,5 +22,5 @@ RUN mkdir /website && \
 # =================================================================================================
 # Production Stage
 # =================================================================================================
-FROM nginx:1.27.0-alpine3.19-slim@sha256:aa12034f49f164af20b6b8bf5852da25fd4c65f32113198f40bf911ca48f2186
+FROM nginx:1.27.0-alpine3.19-slim@sha256:128b00fcaa7b65716658bc2316a089ea9fc9b6ef8129b1db6d3643797e85dfca
 COPY --from=builder /website /usr/share/nginx/html
