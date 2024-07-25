@@ -15,16 +15,7 @@ permissions:
 
 jobs:
   label-sync:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-        with:
-          sparse-checkout: .github/configs/labels.yaml
-
-      - name: Sync Labels
-        uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
-        with:
-          config-file: .github/configs/labels.yaml
-          delete-other-labels: true
+    uses: mirceanton/reusable-workflows/.github/workflows/meta-label-sync.yaml@main
+    with:
+      config-file: .github/configs/labels.yaml
+    secrets: inherit

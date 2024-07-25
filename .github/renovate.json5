@@ -13,8 +13,9 @@
 		":disableRateLimiting",
 		":semanticCommits",
 
+		"github>mirceanton/centralized-workflows//.github/configs/renovate/devcontainerNoDigest.json5",
+
 		"github>mirceanton/mirceanton.com//.github/configs/renovate/autoMerge.json5",
-		"github>mirceanton/mirceanton.com//.github/configs/renovate/devcontainerNoDigest.json5",
 		"github>mirceanton/mirceanton.com//.github/configs/renovate/labels.json5",
 		"github>mirceanton/mirceanton.com//.github/configs/renovate/semanticCommits.json5"
 	]

@@ -36,3 +36,20 @@
   color: "ff9800"
 - name: type/major
   color: "f6412d"
+
+
+# =================================================================================================
+# Size Types
+# =================================================================================================
+- name: size/XS
+  color: "0000ff"
+- name: size/S
+  color: "000ff0"
+- name: size/M
+  color: "00ff00"
+- name: size/L
+  color: "0ff000"
+- name: size/XL
+  color: "ff0000"
+- name: size/XXL
+  color: "ff00ff"

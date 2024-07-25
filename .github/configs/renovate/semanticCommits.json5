@@ -19,7 +19,7 @@
 			"commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
 		},
 
-		
+
 		// ============================================================================================
 		// Ruby
 		// ============================================================================================
@@ -55,6 +55,6 @@
 			"commitMessagePrefix": "deps(actions): ",
 			"commitMessageTopic": "{{depName}}",
 			"commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
-		},
+		}
 	]
 }
