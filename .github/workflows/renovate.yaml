@@ -19,17 +19,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  LOG_LEVEL: "${{ inputs.logLevel || 'debug' }}"
-  RENOVATE_AUTODISCOVER: true
-  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
-  RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
-  RENOVATE_PLATFORM: github
-  RENOVATE_PLATFORM_COMMIT: true
-  RENOVATE_VERSION: 37.367.0
-  RENOVATE_GIT_AUTHOR: 'mr-borboto[bot] <170036086+mr-borboto[bot]@users.noreply.github.com>'
-
 jobs:
   renovate:
     uses: mirceanton/reusable-workflows/.github/workflows/renovate.yaml@main
+    with:
+      dryRun: "${{ inputs.dryRun == true }}"
+      lobLevel: "${{ inputs.logLevel || 'debug' }}"
     secrets: inherit
