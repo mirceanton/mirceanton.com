@@ -4,7 +4,7 @@ name: Build and Publish Docker Image
 
 on:
   pull_request:
-    paths: [ "website/*", "Dockerfile" ]
+    paths: [ "website/*", "Dockerfile", ".github/workflows/docker.yaml" ]
   push:
     tags: [ "*" ]
 
