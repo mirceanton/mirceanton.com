@@ -3,16 +3,23 @@
 name: Build and Publish Docker Image
 
 on:
+  workflow_dispatch:
+    inputs:
+      custom-tag:
+        type: string
+        description: Additional custom tags for the image.
+        required: false
   pull_request:
-    paths: [ "website/*", "Dockerfile", ".github/workflows/docker.yaml" ]
+    paths:
+      - "website/*"
+      - "Dockerfile"
+      - ".github/workflows/docker.yaml"
   push:
     tags: [ "*" ]
-
-
-env:
-  REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 jobs:
   build:
     uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
+    with:
+      custom-tag: ${{ inputs.custom-tag }}
     secrets: inherit
