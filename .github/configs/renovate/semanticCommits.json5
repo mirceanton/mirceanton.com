@@ -13,7 +13,7 @@
 		},
 		{
 			"matchDatasources": ["docker"],
-			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"matchUpdateTypes": ["minor", "patch"],
 			"commitMessagePrefix": "deps(docker): ",
 			"commitMessageTopic": "{{depName}}",
 			"commitMessageExtra": " ( {{currentVersion}} → {{newVersion}} )"
@@ -32,7 +32,7 @@
 		},
 		{
 			"matchDatasources": ["rubygems"],
-			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"matchUpdateTypes": ["minor", "patch"],
 			"commitMessagePrefix": "deps(ruby): ",
 			"commitMessageTopic": "{{depName}}",
 			"commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
@@ -51,7 +51,7 @@
 		},
 		{
 			"matchManagers": ["github-actions"],
-			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"matchUpdateTypes": ["minor", "patch"],
 			"commitMessagePrefix": "deps(actions): ",
 			"commitMessageTopic": "{{depName}}",
 			"commitMessageExtra": "( {{currentVersion}} → {{newVersion}} )"
