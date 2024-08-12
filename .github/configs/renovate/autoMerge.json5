@@ -2,20 +2,42 @@
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"packageRules": [
 		{
-			"description": ["Auto-merge container updates for trusted containers"],
-			"matchDatasources": ["docker"],
+			"description": [
+				"Auto-merge container updates for trusted containers"
+			],
+			"matchDatasources": [
+				"docker"
+			],
 			"automerge": true,
 			"automergeType": "pr",
-			"matchUpdateTypes": ["digest", "patch", "minor", "major"],
-			"matchPackagePatterns": ["nginx", "ruby", "mcr.microsoft.com/devcontainers/jekyll"]
+			"matchUpdateTypes": [
+				"digest",
+				"patch",
+				"minor",
+				"major"
+			],
+			"matchPackagePatterns": [
+				"nginx",
+				"ruby",
+				"mcr.microsoft.com/devcontainers/jekyll"
+			]
 		},
 		{
-			"description": ["Auto-merge GitHub Actions for minor and patch"],
-			"matchManagers": ["github-actions"],
-			"matchDatasources": ["github-tags"],
+			"description": [
+				"Auto-merge GitHub Actions for minor and patch"
+			],
+			"matchManagers": [
+				"github-actions"
+			],
+			"matchDatasources": [
+				"github-tags"
+			],
 			"automerge": true,
 			"automergeType": "pr",
-			"matchUpdateTypes": ["minor", "patch"]
+			"matchUpdateTypes": [
+				"minor",
+				"patch"
+			]
 		}
 	]
 }

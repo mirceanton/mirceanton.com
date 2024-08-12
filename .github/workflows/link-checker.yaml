@@ -5,7 +5,7 @@ name: Link Checker
 on:
   workflow_dispatch: {}
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - ".github/workflows/link-checker.yaml"
       - "website/**"
@@ -44,7 +44,7 @@ jobs:
 
   link-checker:
     runs-on: ubuntu-latest
-    needs: [ build-site ]
+    needs: [build-site]
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7

@@ -31,7 +31,11 @@ include_verbatim = false
 glob_ignore_case = false
 
 # Exclude URLs and mail addresses from checking (supports regex).
-exclude = ['^https://fonts\.googleapis\.com/', '^https://fonts\.gstatic\.com/', '^https://www\.linkedin\.com']
+exclude = [
+    '^https://fonts\.googleapis\.com/',
+    '^https://fonts\.gstatic\.com/',
+    '^https://www\.linkedin\.com',
+]
 
 # Exclude these filesystem paths from getting checked.
 exclude_path = []
