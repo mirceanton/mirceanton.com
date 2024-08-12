@@ -11,9 +11,9 @@ on:
         required: false
   pull_request:
     paths:
-      - "website/*"
+      - "website/**"
       - "Dockerfile"
-      - ".github/workflows/docker.yaml"
+      - ".github/workflows/docker-release.yaml"
   push:
     tags: ["*"]
 
