@@ -1,7 +1,7 @@
 # =================================================================================================
 # Building Stage
 # =================================================================================================
-FROM ruby:3.3.5-bookworm@sha256:2a57e5c868eac461dce2d1302dc57e00c94f335712856867c5038b589654de72 AS builder
+FROM ruby:3.3.5-bookworm@sha256:6ffe7c2b09974f3af4da0a7085d40d4ceef147307e4da83e8ec1555a5a342495 AS builder
 
 # Install Jekyll and Bundler
 RUN gem install bundler jekyll && \
