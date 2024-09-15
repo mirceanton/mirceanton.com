@@ -34,25 +34,28 @@ jobs:
         with:
           token: "${{ steps.app-token.outputs.token }}"
       
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
+      - name: Install jekyll and bundler
+        run: sudo gem install bundler jekyll
+        
+      - name: Show bundler version
+        run: bundler --version
+          
+      - name: Show jekyll version
+        run: jekyll --version
 
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
-          source: ./website/
-          destination: ./_site
-          verbose: true
+      - name: Install gems
+        run: sudo bundle install --gemfile=website/Gemfile
+
+      - name: Run jekyll build
+        working-directory: ./website
+        run: bundle exec jekyll build --trace
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           name: jekyll_build
           retention-days: 1
-          path: ./_site
+          path: ./website/_site
 
   deploy:
     environment:
