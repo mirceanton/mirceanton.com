@@ -97,9 +97,9 @@ jobs:
         id: find-issue
         if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run == 'false') || github.event_name == 'schedule' }}
         run: |
-          gh_output=$(gh issue list --state=open --json=number --search="in:title \"$WORKFLOW_ISSUE_TITLE\"")
+          gh_output=$(gh issue list --state=open --json=number --search="in:title $WORKFLOW_ISSUE_TITLE")
           issue_number=$(echo "$gh_output" | jq --raw-output '.[0].number')
-          echo "issue-number=${issue_number}" >> $GITHUB_OUTPUT
+          echo "issue-number=${issue_number}" >> "$GITHUB_OUTPUT"
           echo "${issue_number}"
         env:
           GH_TOKEN: "${{ steps.app-token.outputs.token }}"
