@@ -2,15 +2,12 @@
 name: GitHub Pages
 
 on:
+  # "Wet" Run on any Git Release
   push:
-    branches: ["main"]
-    paths: ["website"]
-  workflow_dispatch: {}
+    tags: ["*"]
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  # Manual Trigger
+  workflow_dispatch: {}
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
@@ -33,13 +30,13 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           token: "${{ steps.app-token.outputs.token }}"
-      
+
       - name: Install jekyll and bundler
         run: sudo gem install bundler jekyll
-        
+
       - name: Show bundler version
         run: bundler --version
-          
+
       - name: Show jekyll version
         run: jekyll --version
 
