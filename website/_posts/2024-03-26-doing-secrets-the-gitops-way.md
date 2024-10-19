@@ -1,7 +1,7 @@
 ---
 title: Doing Secrets The GitOps Way
 description: |-
-  Pushing your secrets to git is generally a bad practice... unless you encrypt them.  
+  Pushing your secrets to git is generally a bad practice... unless you encrypt them.
   In this blog post I go over one of the solutions that allows us to safely and securely encrypt our Kubernetes and Talos secret files and push them to git without being compromised.
 
 categories: ""
@@ -21,7 +21,7 @@ image:
 date: 2024-03-26
 ---
 
-Alrighty then, let's talk GitOps. 
+Alrighty then, let's talk GitOps.
 
 I think it's pretty neat that you can push all your manifests to Git, and just like that, your cluster auto-magically syncs up seamlessly. I also think it's a bit of a pain to push **all** manifests to git, since among those manifests lurk some secrets that definitely shouldn't be out there for the world to see.
 
@@ -81,6 +81,7 @@ sudo mv age/age* /usr/local/bin/
 # Make the binaries executable
 sudo chmod +x /usr/local/bin/age*
 ```
+
 {: file='age-install.sh'}
 
 Now, to verify that everything's set up correctly, run:
@@ -119,7 +120,6 @@ _AGE Encryption and Decryption Diagram_
 
 With the keys sorted, let's encrypt a file. For this demo, I'll be using our `secrets.yaml` file from the [Talos Linux blog post](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes).
 
-
 Just run the `age --encrypt` command, toss in the public key we generated earlier as the `--recipient`, point `age` to the file we want to encrypt (`secrets.yaml`), and redirect the encrypted version away in `secrets.age`.
 
 ```bash
@@ -130,7 +130,6 @@ If you try to view the contents of `secrets.age`, you'll notice that it's in bin
 
 ![AGE-encrypted File](/assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/age_file_encrypted.webp)
 _Sample of file encrypted using `age`_
-
 
 Now, let's try and decrypt the file and see what we get.
 
@@ -189,6 +188,7 @@ mv sops-$SOPS_VERSION.linux.amd64 /usr/local/bin/sops
 # Make the binary executable
 chmod +x /usr/local/bin/sops
 ```
+
 {: file='mozilla-install.sh}
 
 To make sure the installation was successful, run:
@@ -208,7 +208,7 @@ _The `sops` config file_
 
 This config file defines a list of "creation rules". These rules instruct SOPS on how to handle the various files we will process with it, based on a regex matches with their names/paths.
 
-If we break this down bit by bit, we can see that this particular creation rule we defined will handle all files with a `path_regex` matching `/*secrets(\.encrypted)?.yaml$`. What this regex essentially does, is that it matches any `secrets.yaml` (notice the question mark at the end of `(\.encrypted)?`) or `secrets.encrypted.yaml` file anywhere (recursively) within our current directory.  
+If we break this down bit by bit, we can see that this particular creation rule we defined will handle all files with a `path_regex` matching `/*secrets(\.encrypted)?.yaml$`. What this regex essentially does, is that it matches any `secrets.yaml` (notice the question mark at the end of `(\.encrypted)?`) or `secrets.encrypted.yaml` file anywhere (recursively) within our current directory.
 We also added in the `(\.encrypted)?` part because that is the name we will give to our Talos secrets file after we encrypt it.
 
 Going a bit further, the `encrypted_regex` tells sops the values of which keys from the YAML file it needs to encrypt. In this case, the regex `"^(id|secret|bootstraptoken|secretboxencryptionsecret|token|ca|crt|key)$"` essentially tells sops to encrypt the values associated to any of the keys in that list.
@@ -288,9 +288,9 @@ In my GitOps repository, I adhere to a fairly strict naming convention for my Ku
 
 Oh, I thought you'd never ask!
 
-Starting with the "*why are you doing this*" part, it's fairly simple. Before setting this all up I was encrypting and decrypting secrets in place. Initially by hand and after a while using some scripts. The problem here is that I have (on multiple occasions even 😅) accidentally pushed unencrypted secret files to git without realizing. I even accidentally pushed my private age key once, but we don't speak of that 😆
+Starting with the "_why are you doing this_" part, it's fairly simple. Before setting this all up I was encrypting and decrypting secrets in place. Initially by hand and after a while using some scripts. The problem here is that I have (on multiple occasions even 😅) accidentally pushed unencrypted secret files to git without realizing. I even accidentally pushed my private age key once, but we don't speak of that 😆
 
-As for the "*why is it relevant*" bit - well, this essentially means that all files containing secrets end with `.secret.yaml`. I know ahead of time what is the naming format for any file that needs to be encrypted and **should not make it to git**.
+As for the "_why is it relevant_" bit - well, this essentially means that all files containing secrets end with `.secret.yaml`. I know ahead of time what is the naming format for any file that needs to be encrypted and **should not make it to git**.
 
 This allows me to easily identify and exclude them from version control using `.gitignore` by simply adding a `*.secret.yaml` in there. I then expand on this for any other kind of secret files, such as `talhelper` secrets -> `talsecret.yaml` (spoiler alert for future video 😉), `terraform` values -> `*.auto.tfvars` and so on.
 
@@ -321,12 +321,12 @@ while IFS= read -r path; do
     path=$(echo "$path" | sed 's/\(\.sops\)/ /g')
     find . -regextype egrep -regex ".*/$path" -type f | while IFS= read -r file; do
         encrypted_file="${file%.yaml}.sops.yaml"
-        
+
         if [ -f "$encrypted_file" ]; then
             # Decrypt the encrypted version
             decrypted_temp=$(mktemp)
             sops --decrypt "$encrypted_file" > "$decrypted_temp"
-            
+
             # Compare the decrypted version with the file on disk
             if cmp -s "$file" "$decrypted_temp"; then
                 echo -e "${GREEN}No changes detected. Skipping encryption for file: $file${NC}"
@@ -334,7 +334,7 @@ while IFS= read -r path; do
                 echo -e "${RED}Changes detected. Re-encrypting file: $file${NC}"
                 sops --encrypt "$file" > "$encrypted_file"
             fi
-            
+
             rm "$decrypted_temp"
         else
             # No encrypted version exists, encrypt the file
@@ -344,6 +344,7 @@ while IFS= read -r path; do
     done
 done < <(grep -oP '^\s*- path_regex:\s*\K.*' ".sops.yaml")
 ```
+
 {: file='scripts/sops-encrypt-all.sh}
 
 This script searches for all files matching the `path_regex` entries in my `.sops.yaml` configuration file.
@@ -352,7 +353,7 @@ For each file found, it checks if an encrypted version already exists (i.e. if `
 
 If an encrypted version doesn't exist, it simply encrypts the `<file>.yaml` into `<file>.sops.yaml`.
 
-If an encrypted version does exist, it decrypts it in memory and compares the content of the existing encrypted file with the plain file. If they differ, it overwrites the encrypted file, but if they are the same it will skip over the file without re-encrypting it.  
+If an encrypted version does exist, it decrypts it in memory and compares the content of the existing encrypted file with the plain file. If they differ, it overwrites the encrypted file, but if they are the same it will skip over the file without re-encrypting it.
 
 This last check is the important bit which prevents my git history from getting all messy,
 
@@ -383,12 +384,12 @@ done
 
 find . -regextype egrep -regex "\.\/.+\/.*.sops.yaml" -type f | while IFS= read -r file; do
     decrypted_file="${file%.sops.yaml}.yaml"
-    
+
     if [ -f "$decrypted_file" ]; then
         # Decrypt the encrypted version
         decrypted_temp=$(mktemp)
         sops --decrypt "$file" > "$decrypted_temp"
-        
+
         # Compare the decrypted version with the existing decrypted file
         if cmp -s "$decrypted_file" "$decrypted_temp"; then
             echo -e "${GREEN}No changes detected. Skipping decryption for file: $file${NC}"
@@ -400,7 +401,7 @@ find . -regextype egrep -regex "\.\/.+\/.*.sops.yaml" -type f | while IFS= read 
                 echo -e "${RED}Changes detected. Use -f or --force flag to overwrite $file${NC}"
             fi
         fi
-        
+
         if [ -f "$decrypted_temp" ]; then
             rm "$decrypted_temp"
         fi
@@ -411,6 +412,7 @@ find . -regextype egrep -regex "\.\/.+\/.*.sops.yaml" -type f | while IFS= read 
     fi
 done
 ```
+
 {: file='scripts/sops-decrypt-all.sh}
 
 ---
@@ -421,17 +423,16 @@ For each encrypted file found, it checks if the associated plain file exists.
 
 If a plain file with the same name (sans the `.sops`) already exists, it compares the content of the decrypted file with the existing plain file.
 
-If they are the same, the file is simply skipped over, but if they are different then an alert gets printed.  
+If they are the same, the file is simply skipped over, but if they are different then an alert gets printed.
 
 Note that the script will **not** overwrite the plain secret file unless the `-f`/`--force` flag is passed in. The reason for prioritizing the plain file over the encrypted one is that there logically is no reason for the two files to be different and the encrypted one to be the most up-to-date.
 
 If I am to change the encrypted file, I need to change the plain file first and then re-encrypt.
 
-### Taskfile to the Rescue!
+### Taskfile to the Rescue
 
 ![Taskfile Logo](/assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/taskfile_logo.webp)
 _Taskfile Logo_
-
 
 Finally, my last gripes with this setup are quite trivial and minor, but while I was at it I decided to solve everything.
 
@@ -454,11 +455,13 @@ includes:
 
 ...
 ```
+
 {: file='Taskfile.yaml}
 
 Which includes this sub-taskfile from my `.taskfiles` directory under the `sops` namespace:
 
 {% raw %}
+
 ```yaml
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
@@ -479,6 +482,7 @@ tasks:
     cmds:
       - bash {{.ROOT_DIR}}/scripts/sops-decrypt-all.sh {{.CLI_ARGS}}
 ```
+
 {: file='.taskfiles/sops.yaml}
 {% endraw %}
 
@@ -494,7 +498,7 @@ It all depends on how lazy I'm feeling, really 😆
 ![That's all Folks](/assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/thats_all_folks.jpg)
 _image from [wallpapers.net](http://wallpapers.net/thats-all-folks-hd-wallpaper/1500x500)_
 
-And that's a wrap, folks! We can *finally* push our secrets in git without losing sleep over it!
+And that's a wrap, folks! We can _finally_ push our secrets in git without losing sleep over it!
 
 We covered quite a bit of ground in this post. We started from the bottom by seeing how `age` works by itself. Then, we went one layer of abstraction higher by checking out `sops`, and we finally created our own abstraction layer on top of `sops` with some `bash` scripts and `Taskfiles` that automate our secret management end-to-end.
 

@@ -1,7 +1,7 @@
 ---
 title: Migrating From OPNsense to Mikrotik
 description: |
-  In this blog post I go over the reasons behind my latest upgrade - my new Mikrotik RB5009 - as well as the considerations for moving away from my old OPNsense box.  
+  In this blog post I go over the reasons behind my latest upgrade - my new Mikrotik RB5009 - as well as the considerations for moving away from my old OPNsense box.
   We'll talk about the old server, the new router, the reasons for the upgrade and the out-of-the-box experience with the Mikrotik RB5009.
 
 categories: ""
@@ -28,13 +28,12 @@ Now, why the switch, you ask? Well, grab a seat, and let me walk you through the
 ![OPNsense server with the top panel off, showcasing the internals](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_internals.webp)
 _OPNsense server with the top panel off, showcasing the internals_
 
-
 So, let me give you the rundown of my current setup. It's a DIY rig rocking an i5 6500 processor, cooled by the trusty Intel stock cooler. We're talking 8 gigs of RAM in the most performance-optimized single-stick configuration, with a pair of 256 GB NVMe SSDs in a ZFS mirror for the OS.
 
 ![OPNsense server, front view showing the 80mm Noctua fans](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_front.webp)
 _OPNsense server, front view showing the 80mm Noctua fans_
 
-The whole shebang is housed in an InterTech 2U-20248 case, with a couple of 80mm Noctua fans keeping things cool and quiet.  
+The whole shebang is housed in an InterTech 2U-20248 case, with a couple of 80mm Noctua fans keeping things cool and quiet.
 The case is the middle child in the 2U InterTech lineup. They also make the 2U-20255 which is the bigger, longer case, featuring a bank of 4x hot-swappable 80mm fans in the middle, as well as the 2U-20240 which is basically just like this 20248 I have right here but a bit shorter.
 
 ![OPNsense server, power supply top view](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_psu_top.webp)
@@ -54,7 +53,7 @@ Finally, onto networking. We've got the onboard Intel NIC as our WAN port and a 
 
 Oh, and there's another single-port NIC reserved for emergencies, because, well, better safe than sorry! This is just a network with an allow-all firewall rule, essentially allowing me to do anything when I'm plugged into it. It's there in case I break things and need to fix them 😅
 
-### 📖 Story Time...
+### 📖 Story Time
 
 This server has been through quite the journey through its lifetime. It started life as an HP prebuilt back in my high school days. Dad used it to bribe me to learn programming, the deal being that I have to go through a "Learn C++ in 21 days" book (spoiler alert, it took me way more than 21 days 😅).
 
@@ -68,7 +67,6 @@ Enter the Mikrotik RB5009UG+S+IN – a slick, low-power RouterOS device with a n
 
 ![Mikrotik RB5009, seen from the front, showcasing the connectivity](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/mikrotik_front.webp)
 _Mikrotik RB5009, seen from the front, showcasing the connectivity_
-
 
 First off, starting from the front of the device we've got:
 
@@ -107,7 +105,7 @@ Now, you might be wondering why I'm ditching my DIY setup for this Mikrotik. Wel
 2. **Space Economy++**
 
     As time goes on and my rack slowly but surely fills up, I'm starting to take U-efficiency into consideration. Dedicating 2U of precious rack space just for a router feels a bit excessive.
-    
+
     Time to free up some room for other projects! It is also much easier to mount this to the back of my rack if I ever decide to do that, as it does not need rails in order to slide into the rack.
 
     > Update: by the time I finished up editing and writing this, I did end up moving all the networking to the back of the rack since I got yet more equipment and I needed to make room... I am not to be trusted with money
@@ -124,7 +122,7 @@ When planning out this blog and the associated video, I thought about running pe
 
 As a quick recap, my old router was a quad-core Intel i5 with 8Gb of RAM and a bunch of 1 gigabit interfaces. Any test I would run on it would be bottlenecked not by the performance of the system, but by my network being limited to 1 gigabit only.
 
-Sure, the Mikrotik has a 2.5Gb and a 10Gb connection, but here's the deal-breaker — I don't have any other devices that can handle those speeds in my network (*yet*). So, those tests? Not happening.
+Sure, the Mikrotik has a 2.5Gb and a 10Gb connection, but here's the deal-breaker — I don't have any other devices that can handle those speeds in my network (_yet_). So, those tests? Not happening.
 
 And honestly, within my network, there's not much traffic pushing past 1gb anyway. The heavy lifting happens mainly on the switchm as I am not routing any storage traffic or anything of the sort.
 
@@ -143,7 +141,7 @@ _The OPNsense box, plugged into a Kill-A-Watt meter on the left, and the Mikroti
 
 Then, I hooked up my old router to a Kill-A-Watt meter, and boy oh boy, was I in for a surprise. Just by being plugged in (not even turned on), it was slurping up about 5 watts of power. During boot-up, that number skyrocketed to around 50 watts, before settling at a more modest 32-38 watts during idle.
 
-In contrast, the new Mikrotik comes with a 12V 2A power supply, capping its maximum draw at 24 watts. Typically, it hovers around 8 watts during idle. So, you see, there's not much point in putting them through the stress tests when the old router's idle draw is a whopping ~50% higher than the new one's max potential. 
+In contrast, the new Mikrotik comes with a 12V 2A power supply, capping its maximum draw at 24 watts. Typically, it hovers around 8 watts during idle. So, you see, there's not much point in putting them through the stress tests when the old router's idle draw is a whopping ~50% higher than the new one's max potential.
 
 Oh, and a little disclaimer: those power consumption figures I mentioned? Well, the Mikrotik was hard at work, serving as my main router with 7 out of the 9 interfaces humming along (most bridged together in a makeshift switch, but still), while the old OPNsense box was just idling with nothing to do (no network cables plugged in).
 
@@ -155,7 +153,7 @@ As I've been messing around - both in my homelab and in my professional work as 
 
 Over the years, I've tried to get clever with Ansible, writing roles and playbooks to automate things. That, however, has always been a bit of a headache.
 
-Some of the config changes would be picked up on the fly, yet most would not. I'd have to reboot my firewall when changes were made to the config for them to actually be picked up. And you know how lovely it is when your firewall is down and your internet access is gone... 
+Some of the config changes would be picked up on the fly, yet most would not. I'd have to reboot my firewall when changes were made to the config for them to actually be picked up. And you know how lovely it is when your firewall is down and your internet access is gone...
 
 Not to mention that messing with the insides of that XML file feels like performing open-heart surgery — I'm always worried about pulling the wrong lever and breaking the whole setup.
 
@@ -177,8 +175,8 @@ The good news are that it seems fairly extensive and it covers all functionaliti
 
 Mikrotik's switch offering consists of 2 main lines:
 
-- the C.R.S. -> Cloud Router Switch -> can boot into *either* RouterOS or SwOS
-- the C.S.S. -> Cloud Smart Switch -> can *only* boot into SwOS
+- the C.R.S. -> Cloud Router Switch -> can boot into _either_ RouterOS or SwOS
+- the C.S.S. -> Cloud Smart Switch -> can _only_ boot into SwOS
 
 Thus, I absolutely need a CRS device to make this work. Can you guess which model is more expensive? 🥲
 
