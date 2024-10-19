@@ -35,6 +35,7 @@ exclude = [
     '^https://fonts\.googleapis\.com/',
     '^https://fonts\.gstatic\.com/',
     '^https://www\.linkedin\.com',
+    '^https://www\.instagram\.com',     # fails with 429 too many requests :shrug:
 ]
 
 # Exclude these filesystem paths from getting checked.

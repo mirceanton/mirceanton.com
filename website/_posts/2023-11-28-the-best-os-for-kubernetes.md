@@ -1,7 +1,7 @@
 ---
 title: The Best OS For Kubernetes
 description: >
-    Typically, when we deploy a Kubernetes cluster, we pick a generic OS, like RHEL or Ubuntu as our "base image", and then we start installing Kubernetes using tools like `kubeadm`, `k3s` or `<insert-your-favorite-tool here>`.  
+    Typically, when we deploy a Kubernetes cluster, we pick a generic OS, like RHEL or Ubuntu as our "base image", and then we start installing Kubernetes using tools like `kubeadm`, `k3s` or `<insert-your-favorite-tool here>`.
     While this is not inherently wrong, I'd say it's a relic of the past and not the best way to go moving forward. In this blog post I aim to explain why and to present a better alternative.
 
 categories: ""
@@ -14,7 +14,7 @@ image:
   path: /assets/img/posts/2023-11-28-the-best-os-for-kubernetes/featured.webp
   lqip: ""  # TODO
 
-# This permalink is needed for backwards compatibility 
+# This permalink is needed for backwards compatibility
 # due to the migration from my previous Hugo theme.
 # The hugo site used this format for the blog post links.
 permalink: /posts/:year-:month-:day-:title/
@@ -29,7 +29,7 @@ How quickly can you tear down and redeploy your Kubernetes cluster? What if I to
 ![Old Ubuntu being old](/assets/img/posts/2023-11-28-the-best-os-for-kubernetes/ubuntu-old.webp)
 _"Old Ubuntu Being Old" by [bomkii](https://bomkii.com)_
 
-When setting up an on-prem Kubernetes cluster, the usual process involves installing, configuring and hardening a base OS like Ubuntu or RHEL, installing a 3rd party tool to deploy kubernetes and then - *finally* - deploying Kubernetes. While this approach is not wrong per-se, it has plenty of drawbacks.
+When setting up an on-prem Kubernetes cluster, the usual process involves installing, configuring and hardening a base OS like Ubuntu or RHEL, installing a 3rd party tool to deploy kubernetes and then - _finally_ - deploying Kubernetes. While this approach is not wrong per-se, it has plenty of drawbacks.
 
 Manual configuration is error-prone, and relying on third-party automation introduces trust issues. Ansible playbooks, terraform providers and even plain old bash scripts eventually get out of date, and then it's up to the maintainer to update them, fix bugs or add new features. More often than not, though, this doesn't happen either at all or as fast as we would need/want to.
 
@@ -38,7 +38,6 @@ Another aspect to consider is that when it comes to our container images, the ge
 ## The Modern Approach
 
 In short, Talos Linux is simply Linux, but designed for Kubernetes. It is a minimal distro, built specifically to run containers and not much else. Essentially, Talos is an OS managed by a collection of services running within containers, similar to Kubernetes itself.
-
 
 ![Talos Linux Logo Banner](/assets/img/posts/2023-11-28-the-best-os-for-kubernetes/talos-banner.webp)
 _Talos Linux Logo Banner from [talos.dev](https://talos.dev)_
@@ -70,66 +69,65 @@ If you want to follow along, there are a few things that you will need:
 
 - The latest Talos ISO image (`1.5.3` at the time of making this video)
 
-	```bash
-	export TALOS_VERSION=v1.5.3
-	wget https://github.com/siderolabs/talos/releases/download/$TALOS_VERSION/metal-amd64.iso -O talos-$TALOS_VERSION-amd64.iso
-	```
+ ```bash
+ export TALOS_VERSION=v1.5.3
+ wget https://github.com/siderolabs/talos/releases/download/$TALOS_VERSION/metal-amd64.iso -O talos-$TALOS_VERSION-amd64.iso
+ ```
 
-	Either flash this onto a USB drive, or upload it into your hypervisor. For this demo, I will be uploading it into Proxmox.
+ Either flash this onto a USB drive, or upload it into your hypervisor. For this demo, I will be uploading it into Proxmox.
 
 - At least one server or virtual machine to install Talos on
 
-	For this demo, I will be setting up 3 virtual machines, each of them with 8 CPU cores, 16 gigabytes of RAM and a 32 gigabyte boot disk. There's nothing special about the VM creation process for Talos as opposed to any other OS, so I will not go through it step by step.
+ For this demo, I will be setting up 3 virtual machines, each of them with 8 CPU cores, 16 gigabytes of RAM and a 32 gigabyte boot disk. There's nothing special about the VM creation process for Talos as opposed to any other OS, so I will not go through it step by step.
 
 > Make sure you have to set the CPU type either to `host` or to `x86-64v2` if you are on PVE version `8.0` or newer.
 {: .prompt-warning }
 
-
 - `[optional]`: DHCP reservations for your virtual machines
 
-	I also made some reservations in my DHCP server to give my VMs the following IPs and hostnames:
+ I also made some reservations in my DHCP server to give my VMs the following IPs and hostnames:
 
-	|    hostname     |      ip      |
-	| :-------------: | :----------: |
-	| `talos-demo-01` | `10.0.10.11` |
-	| `talos-demo-02` | `10.0.10.12` |
-	| `talos-demo-03` | `10.0.10.13` |
+ |    hostname     |      ip      |
+ | :-------------: | :----------: |
+ | `talos-demo-01` | `10.0.10.11` |
+ | `talos-demo-02` | `10.0.10.12` |
+ | `talos-demo-03` | `10.0.10.13` |
 
 - `kubectl` installed on your local machine
 
-	```bash
-	export KUBECTL_VERSION=v1.28.2
+ ```bash
+ export KUBECTL_VERSION=v1.28.2
 
-	# Download the binary
-	curl -LO https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl
+ # Download the binary
+ curl -LO https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl
 
-	# Make it executable
-	chmod +x kubectl
+ # Make it executable
+ chmod +x kubectl
 
-	# Put it in PATH
-	sudo mv kubectl /usr/local/bin/kubectl
+ # Put it in PATH
+ sudo mv kubectl /usr/local/bin/kubectl
 
-	# Check installation
-	kubectl --version
-	```
+ # Check installation
+ kubectl --version
+ ```
 
 - `talosctl` installed on your local machine
 
-	```bash
-	export TALOS_VERSION=v1.5.3
+ ```bash
+ export TALOS_VERSION=v1.5.3
 
-	# Download the binary
-	wget https://github.com/siderolabs/talos/releases/download/$TALOS_VERSION/talosctl-linux-amd64
+ # Download the binary
+ wget https://github.com/siderolabs/talos/releases/download/$TALOS_VERSION/talosctl-linux-amd64
 
-	# Make it executable
-	chmod +x talosctl-linux-amd64
+ # Make it executable
+ chmod +x talosctl-linux-amd64
 
-	# Put it in PATH
-	sudo mv talosctl-linux-amd64 /usr/local/bin/talosctl
+ # Put it in PATH
+ sudo mv talosctl-linux-amd64 /usr/local/bin/talosctl
 
-	# Check installation
-	talosctl --version
-	```
+ # Check installation
+ talosctl --version
+ ```
 
 With all that out of the way, let's get straight to installing Talos.
 
@@ -145,19 +143,19 @@ Now we need to generate the YAML file which will configure our entire cluster, b
 
 - The name of the cluster
 
-	Similar to how we’re using `kubectl` to manage multiple Kubernetes clusters, so can we manage multiple Talos clusters using `talosctl`. In both cases, switching between clusters is done using contexts and the contexts are identified via `<username>@<cluster name>`.
+ Similar to how we’re using `kubectl` to manage multiple Kubernetes clusters, so can we manage multiple Talos clusters using `talosctl`. In both cases, switching between clusters is done using contexts and the contexts are identified via `<username>@<cluster name>`.
 
-	For my cluster, I'll use the name `demo-cluster`.
+ For my cluster, I'll use the name `demo-cluster`.
 
 - The Kubernetes endpoint, which will be used to bootstrap Kubernetes later on
 
-	This should be either the DNS name or the IP address of a load balancer placed in front of the control-plane nodes of your Kubernetes cluster to ensure high availability. Luckily, Talos has some built-in configuration to set up a virtual IP in order to loadbalance requests to the Kubernetes API, so we will use that.
+ This should be either the DNS name or the IP address of a load balancer placed in front of the control-plane nodes of your Kubernetes cluster to ensure high availability. Luckily, Talos has some built-in configuration to set up a virtual IP in order to loadbalance requests to the Kubernetes API, so we will use that.
 
-	Since my nodes have the IPs of `10.0.10.11`, `10.0.10.12` and `10.0.10.13`, I will use the `10.0.10.10` IP address for my Kubernetes VIP.
+ Since my nodes have the IPs of `10.0.10.11`, `10.0.10.12` and `10.0.10.13`, I will use the `10.0.10.10` IP address for my Kubernetes VIP.
 
 To customize the default configuration, we can either just generate it as-is, and then manually go through the YAML files to adjust them, or we can do it more elegantly using configuration patches.
 
-> *spoiler: we're doing it via config patches 😉*
+> _spoiler: we're doing it via config patches 😉_
 
 The first patch will simply allow pods to be scheduled on controlplane nodes. This is required since we're running a 3-node HA cluster, so all nodes will be both control-plane and data-plane. By default, control-plane nodes have a taint on them that prevents workloads from getting assigned, so we need to work around that.
 
@@ -166,6 +164,7 @@ The first patch will simply allow pods to be scheduled on controlplane nodes. Th
 cluster:
   allowSchedulingOnControlPlanes: true
 ```
+
 {: file='patches/allow-controlplane-workloads.yaml'}
 
 Next, let's enable kubelet certificate rotation and ensure that new certificates are approved automatically using the `kubelet-serving-cert-approver`. This will make sure that system health reporting works in our talos dashboard, allowing talos to have access to the health status of the kubernetes controlplane components, as well as other tools, such as the `metrics-server`.
@@ -181,6 +180,7 @@ cluster:
   extraManifests:
     - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
 ```
+
 {: file='patches/kubelet-certificates.yaml'}
 
 On Talos version `v1.5.0`, predictable interface names have been enabled. Personally, I dislike this, especially on virtual environments where all nodes are more or less identical, given that hardware is virtualized. Thus, what I like to do is to disable predictable interface names by setting the kernel argument `net.ifnames` to `0`. This makes sure that all my interfaces have similar names, such as `eth0` and `eth1` as opposed to `eth<MAC>`.
@@ -192,6 +192,7 @@ machine:
     extraKernelArgs:
       - net.ifnames=0
 ```
+
 {: file='patches/interface-names.yaml'}
 
 Next, I want to enable DHCP on the `eth0` interface on all nodes. Since I already created the static leases in my DHCP server. My nodes will get both the IP and the hostname from that.
@@ -204,6 +205,7 @@ machine:
       - interface: eth0
         dhcp: true
 ```
+
 {: file='patches/dhcp.yaml'}
 
 And finally I will configure the virtual IP I mentioned earlier, which will act as my Kubernetes API load balancer.
@@ -217,6 +219,7 @@ machine:
         vip:
           ip: 10.0.10.10
 ```
+
 {: file='patches/vip.yaml'}
 
 For the cluster networking solution, Talos uses `flannel` by default, but we can either override that to deploy something else or just disable it entirely, if we want to manually deploy one after the fact. Normally, I disable it by setting `cluster.network.cni.name: none` and then I deploy `cilium` after the fact using `helm`, but for the purposes of this demo I will create a dedicated patch to deploy `calico` on the cluster so that we're ready to go once the installation is complete and our nodes can reach the `Ready` state:
@@ -230,6 +233,7 @@ cluster:
       urls:
         - https://docs.projectcalico.org/archive/v3.20/manifests/canal.yaml
 ```
+
 {: file='patches/cni.yaml'}
 
 And finally, the last thing to do is to specify the disk on which we want our OS to be installed. If you set the disk bus to `SCSI` when creating the VM, it will most likely be `/dev/sda`, or `/dev/vda` if the bus was set to `VirtIO`. However, you can get a list of all of the available disks using the `talosctl disks` command.
@@ -246,6 +250,7 @@ machine:
     install:
         disk: /dev/sda
 ```
+
 {: file='patches/install-disk.yaml'}
 
 With all of the config-patches in the `patches/` directory, we can go ahead and generate our config file.
@@ -341,7 +346,6 @@ talosctl config node 10.0.10.11
 ```
 
 And with that, the context should finally look something like this:
-
 
 ```bash
 mike@talos-demo-ctl:~/workspace$ talosctl config contexts

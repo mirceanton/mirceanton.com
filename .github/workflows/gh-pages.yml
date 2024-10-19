@@ -2,15 +2,18 @@
 name: GitHub Pages
 
 on:
-  push:
-    branches: ["main"]
-    paths: ["website"]
-  workflow_dispatch: {}
+  # Manual Trigger
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Dry Run
+        default: true
+        required: false
+        type: boolean
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  # "Wet" Run on any Git Release
+  push:
+    tags: ["*"]
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
@@ -33,13 +36,13 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           token: "${{ steps.app-token.outputs.token }}"
-      
+
       - name: Install jekyll and bundler
         run: sudo gem install bundler jekyll
-        
+
       - name: Show bundler version
         run: bundler --version
-          
+
       - name: Show jekyll version
         run: jekyll --version
 
@@ -56,11 +59,14 @@ jobs:
           path: ./website/_site
 
   deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: "${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dry-run == false)}}"
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
+
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
