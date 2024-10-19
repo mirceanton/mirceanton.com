@@ -47,7 +47,7 @@ jobs:
           token: "${{ steps.app-token.outputs.token }}"
 
       - name: Install jekyll and bundler
-        run: sudo gem install bundler jekyll
+        run: gem install bundler jekyll
 
       - name: Show bundler version
         run: bundler --version
@@ -56,7 +56,7 @@ jobs:
         run: jekyll --version
 
       - name: Install gems
-        run: sudo bundle install --gemfile=website/Gemfile
+        run: bundle install --gemfile=website/Gemfile
 
       - name: Run jekyll build
         working-directory: ./website
