@@ -495,9 +495,6 @@ It all depends on how lazy I'm feeling, really 😆
 
 ## Conclusion
 
-![That's all Folks](/assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/thats_all_folks.jpg)
-_image from [wallpapers.net](http://wallpapers.net/thats-all-folks-hd-wallpaper/1500x500)_
-
 And that's a wrap, folks! We can _finally_ push our secrets in git without losing sleep over it!
 
 We covered quite a bit of ground in this post. We started from the bottom by seeing how `age` works by itself. Then, we went one layer of abstraction higher by checking out `sops`, and we finally created our own abstraction layer on top of `sops` with some `bash` scripts and `Taskfiles` that automate our secret management end-to-end.
