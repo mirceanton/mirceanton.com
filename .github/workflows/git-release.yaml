@@ -3,7 +3,10 @@
 name: Release
 
 on:
+  # Manual Trigger
   workflow_dispatch: {}
+
+  # Run on any website content change
   push:
     branches: ["main"]
     paths:

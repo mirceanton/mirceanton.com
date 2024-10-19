@@ -6,27 +6,38 @@ on:
   # Manual Trigger
   workflow_dispatch:
     inputs:
+      dry-run:
+        description: Dry Run
+        default: true
+        required: false
+        type: boolean
       custom-tag:
         type: string
         description: Additional custom tags for the image.
         required: false
 
-  # Dry Run on any PR that modifies the site
+  # Dry Run on any PR that modifies the workflow, the dockerfile or the site contents
   pull_request:
     paths:
+      - ".github/workflows/docker-release.yaml"
       - "website/**"
       - "Dockerfile"
-      - ".github/workflows/docker-release.yaml"
 
   # "Wet" Run on any Git Release
   push:
     tags: ["*"]
 
 jobs:
-  build:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-docker-build-push.yaml@b15f79125a97349d2f1043d1556d6e3cebae2227 # v3.4.5
+  release:
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-docker-build-push.yaml@1f67ebf2d8aa5a366dc1a2179911c7edaea8a5af # v3.4.18
     secrets: inherit
     with:
-      image-name: ghcr.io/${{ github.repository }}
-      platforms: linux/amd64, linux/arm64
-      custom-tag: ${{ inputs.custom-tag }}
+      image: "ghcr.io/${{ github.repository }}"
+      platforms: linux/amd64,linux/arm64
+      tags: |
+        type=ref,event=tag
+        type=ref,event=pr
+        ${{ inputs.custom-tag }}
+      context: .
+      dockerfile: ./Dockerfile
+      dry-run: "${{ inputs.dry-run == true || github.event_name == 'pull_request' }}"

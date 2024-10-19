@@ -3,14 +3,24 @@
 name: Link Checker
 
 on:
-  workflow_dispatch: {}
-  push:
-    branches: ["main"]
+  # Manual Trigger
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Dry Run
+        default: true
+        required: false
+        type: boolean
+
+  # Dry Run on any PR that modifies the workflow, the dockerfile or the site contents
+  pull_request:
     paths:
       - ".github/workflows/link-checker.yaml"
       - "website/**"
+
+  # "Wet" run daily at midnight
   schedule:
-    - cron: "0 0 * * *" # Every day at midnight
+    - cron: "0 0 * * *"
 
 env:
   WORKFLOW_ISSUE_TITLE: "Link Checker Dashboard 🔗"
@@ -85,6 +95,7 @@ jobs:
 
       - name: Find Link Checker Issue
         id: find-issue
+        if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run == 'false') || github.event_name == 'schedule' }}
         run: |
           gh_output=$(gh issue list --state=open --json=number --search="in:title \"$WORKFLOW_ISSUE_TITLE\"")
           issue_number=$(echo "$gh_output" | jq --raw-output '.[0].number')
@@ -95,6 +106,7 @@ jobs:
 
       - name: Create or Update Issue
         uses: peter-evans/create-issue-from-file@24452a72d85239eacf1468b0f1982a9f3fec4c94 # v5.0.0
+        if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.dry-run == 'false') || github.event_name == 'schedule' }}
         with:
           token: "${{ steps.app-token.outputs.token }}"
           title: "${{ env.WORKFLOW_ISSUE_TITLE }}"
