@@ -113,7 +113,7 @@ This command will only print the public key to your standard output and redirect
 ![age-keygen command output to file](/assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/terminal_age_keygen_file.webp)
 _`age-keygen` command output redirection to `keys.txt`_
 
-### Encrypting and Decrypting Files
+### Encrypting and Decrypting Files with `age`
 
 ![AGE Encryption and Decryption Diagram](/assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/age_encryption_diagram.webp)
 _AGE Encryption and Decryption Diagram_
@@ -217,7 +217,7 @@ And finally, the `age` line just specifies the `age` **public** key which will b
 
 With our configuration file in place, executing SOPS commands becomes a breeze as it automatically infers the necessary CLI arguments based on the rules defined within the file.
 
-### Encrypting and Decrypting Files
+### Encrypting and Decrypting Files with `sops`
 
 Encrypting our file is a simple process now that we have our config file in place. SOPS will automatically look for a `.sops.yaml` file in our current directory, so all we really need to do is to simply utilize the `sops --encrypt` command and specify the file we want to encrypt. This command will dump the encrypted content in our `stdout`, so we can either:
 
