@@ -6,10 +6,15 @@ IMAGES_DIRECTORY="website/assets/img/posts"
 POSTS_DIRECTORY="website/_posts"
 
 print_wide_string() {
-  local string="$1"
-  local terminal_width=$(tput cols)
-  local string_length=${#string}
-  local remaining_width=$((terminal_width - string_length))
+  local string
+  local terminal_width
+  local string_length
+  local remaining_width
+
+  string="$1"
+  terminal_width=$(tput cols)
+  string_length=${#string}
+  remaining_width=$((terminal_width - string_length))
 
   # Print the string followed by '#' characters to fill the remaining width
   printf "%s" "$string "
