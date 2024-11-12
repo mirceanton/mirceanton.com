@@ -1,7 +1,7 @@
 # =================================================================================================
 # Building Stage
 # =================================================================================================
-FROM --platform=$BUILDPLATFORM ruby:3.3.6-bookworm@sha256:3ae98cd2cc44319a92cc7f51fa95dc9dcb2bbb9a15a57b126c21ff43f5f86d11 AS builder
+FROM --platform=$BUILDPLATFORM ruby:3.3.6-bookworm@sha256:7680208bbd56c9db5bd28f24f596d7238532165863511bac46673df30a2aeb50 AS builder
 
 # Install Jekyll and Bundler
 RUN gem install bundler jekyll && jekyll --version
