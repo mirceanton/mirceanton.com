@@ -35,13 +35,16 @@ social:
 github:
   username: mirceanton
 
-
 ## ================================================================================================
-## Google Settings
+## SEO Settings
 ## ================================================================================================
-google_site_verification: ""  # TODO: fill in verification string
-google_analytics:
-  id: G-6C126MZNGT
+# Web Analytics Settings
+analytics:
+  google:
+    id: G-6C126MZNGT
+# # Site Verification Settings
+# webmaster_verifications:
+#   google: # fill in your Google verification code
 
 
 ## ================================================================================================
@@ -51,7 +54,7 @@ toc: true
 paginate: 10
 
 comments:
-  active: giscus
+  provider: giscus
   giscus:
     repo: mirceanton/website
     repo_id: R_kgDOLUY-RA
