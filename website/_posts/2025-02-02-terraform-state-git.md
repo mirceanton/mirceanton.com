@@ -15,11 +15,27 @@ date: 2025-02-02
 
 ## Introduction
 
-In this article, I'll be discussing how to store Terraform state in Git securely using the `terraform-backend-git` tool and SOPS for encryption.
+Recently, I came across a new tool called terraform-backend-git. It’s not a flashy, overhyped solution, but rather an interesting approach to managing Terraform state. The tool lets you store your state directly in a Git repository, using SOPS for encryption to ensure your data remains secure. In this post, I'll walk you through how it works and share my thoughts on its potential benefits and limitations.
 
-It's called `terraform-backend-git`. As the name implies, it's a tool that can start an HTTP backend for terraform to store state and under the hood it will actually get the state and push it to a git repo of your choosing. To do it all safely, it supports encryption via sops (i wrote a blog post about sops too, we can link to it here)
+## Background
 
-Dor some context, i've been working quite a bit with terraform lately, especially since, as i mentioned in one of my other posts about moving from opnsense to mikrotik, i started automating my entire network using it. In the time between writing that post and now, I actually moved out to a new apartment, so I started redoing my entire network setup, but thats a discussion for another day. The topic for today is another one.
+I've been diving deep into Terraform recently—ever since my post about transitioning from OPNsense to MikroTik, where I began automating my entire network setup. A recent move to a new apartment pushed me to rework my network configuration again, and along the way, I started rethinking how I manage Terraform state.
+
+## The Challenge of Traditional State Backends
+
+One persistent issue was choosing an appropriate state backend. Storing state locally isn't viable for CI workflows, and most remote backends depend on third-party cloud services. In my view, those solutions still require managing extra infrastructure—think S3 buckets, DynamoDB for state locking, IAM roles, and more. Even when I experimented with self-hosting a PostgreSQL database, the overhead of deploying and managing additional infrastructure remained a concern.
+
+I initially cobbled together a DIY solution for my MikroTik Terraform projects using Taskfile and SOPS. Instead of running terraform plan directly, I ran a custom task plan that decrypted state and variable files, executed Terraform, and then re-encrypted everything. While this approach worked, it had its downsides:
+
+- No state locking.
+- SOPS isn’t idempotent -> each run modified the encrypted state file, even if nothing changed.
+- Running the process in CI was clunky and error-prone.
+
+This led me to explore terraform-backend-git, a tool that provides a lightweight HTTP backend for Terraform, storing state directly in Git and, crucially, offering state locking.
+
+## Context
+
+For some context, i've been working quite a bit with terraform lately, especially since, as i mentioned in one of my other posts about moving from opnsense to mikrotik, i started automating my entire network using it. In the time between writing that post and now, I actually moved out to a new apartment, so I started redoing my entire network setup, but thats a discussion for another day. The topic for today is another one.
 
 So as i've been saying... `terraform`. I started automating more and more things with it and one problem I ran into is choosing a state backend. Storing state locally is not really an option since I want to be able to run my code in CI as well, and most remote state backends would require a depencency on some 3rd party cloud service which i'm not so keen on.
 
@@ -40,12 +56,6 @@ There's this tool I randomly stumbled on, called `terraform-backend-git`. It's *
 Essentially, what this tool does is that you can start it in the background and it will start an HTTP backend you can use for your terraform code. This http backend will intercept all the requests terraform sends to it and at the end, it will store your state directly in git.
 
 This far it is quite similar to what I put together myself with some taskfile automation, but it does have a nice feature on top of that. IT SUPPORTS STATE LOCKING!
-
-How it does that you may ask? Well quite ingeniously, if I do say so myself! 
-
-
-anyways, lets get back on topic.
-
 
 ## Prerequisites
 
