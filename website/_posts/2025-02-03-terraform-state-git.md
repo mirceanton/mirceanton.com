@@ -339,7 +339,7 @@ backblaze on  main via 💠 default
   origin/main
 ```
 
-We can now see here that it created a new branch: `locks/tfstate.json`. 
+We can now see here that it created a new branch: `locks/tfstate.json`.
 
 Technically, this also allows us to do a monorepo of multiple projects as long as we choose a unique state file per project since the format is `locks/<state-file-name>`.
 
@@ -429,7 +429,6 @@ And if we check it out, we can see that it contains the state file:
 ```
 {: file="tfstate.json" }
 
-
 So that's it, right? It worked! We have a working Terraform configuration and we have a state file stored in git. What more can we possibly want?
 
 Well at this point the file is, as you can see, stored in plaintext. Functionally speaking, we only really gained state locking via branches, but we still have a plaintext state file.
@@ -440,7 +439,7 @@ To encrypt the state file, we need to instruct the HTTP backend server to do so.
 
 For better or worse, this part of the configuration is done via environment variables. Personally, I don't like environment variables and I'd prefer a configuration file or something like that, but they're the only way to do this right now.
 
-Complaining aside, I will be using `sops` to encrypt the state file. If you're not familiar with `sops`, I made a [detailed blog](https://mirceanton.com/posts/doing-secrets-the-gitops-way/) post about what it is and how it works. The TLDR is that it's sort of a meta-tool for encrypting files. 
+Complaining aside, I will be using `sops` to encrypt the state file. If you're not familiar with `sops`, I made a [detailed blog](https://mirceanton.com/posts/doing-secrets-the-gitops-way/) post about what it is and how it works. The TLDR is that it's sort of a meta-tool for encrypting files.
 
 It can encrypt files using various providers, like `gpg`, `aws-kms`, etc. Normally, I quite like to use `age` as my encryption backend. In this case, though, it seems that `age` is not supported, so I'll be using `gpg` instead.
 
