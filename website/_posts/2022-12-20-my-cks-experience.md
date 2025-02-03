@@ -1,20 +1,16 @@
 ---
 title: My CKS Experience
 description: Secure your cluster and your career with the CKS exam
-
-categories: ""
-tags: Kubernetes Certification Security
-
-# img_path: /assets/img/posts/2022-12-20-my-cks-experience/
+tags:
+  - kubernetes
+  - certification
+  - security
 image:
   path: /assets/img/posts/2022-12-20-my-cks-experience/featured.webp
   lqip: ""  # TODO
 
 # This permalink is needed for backwards compatibility
-# due to the migration from my previous Hugo theme.
-# The hugo site used this format for the blog post links.
 permalink: /posts/:year-:month-:day-:title/
-
 date: 2022-12-20
 ---
 

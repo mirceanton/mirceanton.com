@@ -3,13 +3,9 @@ title: Doing Secrets The GitOps Way
 description: |-
   Pushing your secrets to git is generally a bad practice... unless you encrypt them.
   In this blog post I go over one of the solutions that allows us to safely and securely encrypt our Kubernetes and Talos secret files and push them to git without being compromised.
-
-categories: ""
 tags:
-  - Secrets
-  - Security
-  - Encryption
-  - GitOps
+  - gitops
+  - security
   - sops
   - age
 
@@ -17,7 +13,6 @@ tags:
 image:
   path: /assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/featured.webp
   lqip: ""  # TODO
-
 date: 2024-03-26
 ---
 
