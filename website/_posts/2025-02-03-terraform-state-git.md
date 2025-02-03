@@ -1,5 +1,5 @@
 ---
-title: "Storing Terraform State in Git... Securely!"
+title: "Terraform: No Backend? No Problem!"
 description: |
   Recently, I came across a new tool called `terraform-backend-git`. It’s an interesting approach to managing Terraform state. The tool lets you store your state directly in a Git repository, using SOPS for encryption to ensure your data remains secure. In this post, I'll walk you through how it works and share my thoughts on its potential benefits and limitations.
 
