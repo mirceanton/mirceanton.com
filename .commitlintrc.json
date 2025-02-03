@@ -10,7 +10,8 @@
         "feat",
         "fix",
         "patch",
-        "style"
+        "style",
+        "post"
       ]
     ],
     "subject-empty": [

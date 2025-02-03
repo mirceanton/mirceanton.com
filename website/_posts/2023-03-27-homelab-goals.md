@@ -1,20 +1,15 @@
 ---
 title: My Homelab Plans for 2023
 description: In this blog post, I go over the upgrades and changes I have planned for my homelab in the coming year.
-
-categories: ""
-tags: Homelab Kubernetes Hardware
-
-# img_path: /assets/img/posts/2023-03-27-homelab-goals/
+tags:
+  - homelab
+  - kubernetes
 image:
   path: /assets/img/posts/2023-03-27-homelab-goals/featured.webp
   lqip: ""  # TODO
 
 # This permalink is needed for backwards compatibility
-# due to the migration from my previous Hugo theme.
-# The hugo site used this format for the blog post links.
 permalink: /posts/:year-:month-:day-:title/
-
 date: 2023-03-27
 ---
 

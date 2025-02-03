@@ -1,20 +1,13 @@
 ---
 title: My CKA Experience
 description: Ready to take on the CKA? Here's how I prepared and passed the exam
-
-categories: ""
 tags: Kubernetes Certification
-
-# img_path: /assets/img/posts/2022-12-06-my-cka-experience/
 image:
   path: /assets/img/posts/2022-12-06-my-cka-experience/featured.webp
   lqip: ""  # TODO
 
-# This permalink is needed for backwards compatibility
-# due to the migration from my previous Hugo theme.
-# The hugo site used this format for the blog post links.
+#! This permalink is needed for backwards compatibility
 permalink: /posts/:year-:month-:day-:title/
-
 date: 2022-12-06
 ---
 

@@ -1,0 +1,18 @@
+---
+---
+
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+@font-face {
+    font-family: 'CaskaydiaCove';
+    src: url('/assets/fonts/CaskaydiaCoveNerdFont-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+code, pre{
+    font-family: 'CaskaydiaCove', sans-serif;
+}

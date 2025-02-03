@@ -1,20 +1,12 @@
 ---
 title: Hello World 👋
 description: My first ever blog post!
-
-categories: ""
-tags: ""
-
-# img_path: /assets/img/posts/2022-09-17-hello-world/
 image:
   path: /assets/img/posts/2022-09-17-hello-world/featured.webp
   lqip: ""  # TODO
 
-# This permalink is needed for backwards compatibility
-# due to the migration from my previous Hugo theme.
-# The hugo site used this format for the blog post links.
+#! This permalink is needed for backwards compatibility
 permalink: /posts/:year-:month-:day-:title/
-
 date: 2022-09-17
 ---
 

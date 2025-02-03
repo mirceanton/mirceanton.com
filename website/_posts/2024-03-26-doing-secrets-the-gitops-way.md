@@ -3,13 +3,9 @@ title: Doing Secrets The GitOps Way
 description: |-
   Pushing your secrets to git is generally a bad practice... unless you encrypt them.
   In this blog post I go over one of the solutions that allows us to safely and securely encrypt our Kubernetes and Talos secret files and push them to git without being compromised.
-
-categories: ""
 tags:
-  - Secrets
-  - Security
-  - Encryption
-  - GitOps
+  - gitops
+  - security
   - sops
   - age
 
@@ -17,7 +13,6 @@ tags:
 image:
   path: /assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/featured.webp
   lqip: ""  # TODO
-
 date: 2024-03-26
 ---
 
@@ -81,7 +76,6 @@ sudo mv age/age* /usr/local/bin/
 # Make the binaries executable
 sudo chmod +x /usr/local/bin/age*
 ```
-
 {: file='age-install.sh'}
 
 Now, to verify that everything's set up correctly, run:
@@ -188,7 +182,6 @@ mv sops-$SOPS_VERSION.linux.amd64 /usr/local/bin/sops
 # Make the binary executable
 chmod +x /usr/local/bin/sops
 ```
-
 {: file='mozilla-install.sh}
 
 To make sure the installation was successful, run:
@@ -344,7 +337,6 @@ while IFS= read -r path; do
     done
 done < <(grep -oP '^\s*- path_regex:\s*\K.*' ".sops.yaml")
 ```
-
 {: file='scripts/sops-encrypt-all.sh}
 
 This script searches for all files matching the `path_regex` entries in my `.sops.yaml` configuration file.
@@ -412,7 +404,6 @@ find . -regextype egrep -regex "\.\/.+\/.*.sops.yaml" -type f | while IFS= read 
     fi
 done
 ```
-
 {: file='scripts/sops-decrypt-all.sh}
 
 ---
@@ -455,7 +446,6 @@ includes:
 
 ...
 ```
-
 {: file='Taskfile.yaml}
 
 Which includes this sub-taskfile from my `.taskfiles` directory under the `sops` namespace:
@@ -482,7 +472,6 @@ tasks:
     cmds:
       - bash {{.ROOT_DIR}}/scripts/sops-decrypt-all.sh {{.CLI_ARGS}}
 ```
-
 {: file='.taskfiles/sops.yaml}
 {% endraw %}
 
