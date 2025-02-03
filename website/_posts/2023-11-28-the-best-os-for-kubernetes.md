@@ -158,7 +158,6 @@ The first patch will simply allow pods to be scheduled on controlplane nodes. Th
 cluster:
   allowSchedulingOnControlPlanes: true
 ```
-
 {: file='patches/allow-controlplane-workloads.yaml'}
 
 Next, let's enable kubelet certificate rotation and ensure that new certificates are approved automatically using the `kubelet-serving-cert-approver`. This will make sure that system health reporting works in our talos dashboard, allowing talos to have access to the health status of the kubernetes controlplane components, as well as other tools, such as the `metrics-server`.
@@ -174,7 +173,6 @@ cluster:
   extraManifests:
     - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
 ```
-
 {: file='patches/kubelet-certificates.yaml'}
 
 On Talos version `v1.5.0`, predictable interface names have been enabled. Personally, I dislike this, especially on virtual environments where all nodes are more or less identical, given that hardware is virtualized. Thus, what I like to do is to disable predictable interface names by setting the kernel argument `net.ifnames` to `0`. This makes sure that all my interfaces have similar names, such as `eth0` and `eth1` as opposed to `eth<MAC>`.
@@ -186,7 +184,6 @@ machine:
     extraKernelArgs:
       - net.ifnames=0
 ```
-
 {: file='patches/interface-names.yaml'}
 
 Next, I want to enable DHCP on the `eth0` interface on all nodes. Since I already created the static leases in my DHCP server. My nodes will get both the IP and the hostname from that.
@@ -199,7 +196,6 @@ machine:
       - interface: eth0
         dhcp: true
 ```
-
 {: file='patches/dhcp.yaml'}
 
 And finally I will configure the virtual IP I mentioned earlier, which will act as my Kubernetes API load balancer.
@@ -213,7 +209,6 @@ machine:
         vip:
           ip: 10.0.10.10
 ```
-
 {: file='patches/vip.yaml'}
 
 For the cluster networking solution, Talos uses `flannel` by default, but we can either override that to deploy something else or just disable it entirely, if we want to manually deploy one after the fact. Normally, I disable it by setting `cluster.network.cni.name: none` and then I deploy `cilium` after the fact using `helm`, but for the purposes of this demo I will create a dedicated patch to deploy `calico` on the cluster so that we're ready to go once the installation is complete and our nodes can reach the `Ready` state:
@@ -227,7 +222,6 @@ cluster:
       urls:
         - https://docs.projectcalico.org/archive/v3.20/manifests/canal.yaml
 ```
-
 {: file='patches/cni.yaml'}
 
 And finally, the last thing to do is to specify the disk on which we want our OS to be installed. If you set the disk bus to `SCSI` when creating the VM, it will most likely be `/dev/sda`, or `/dev/vda` if the bus was set to `VirtIO`. However, you can get a list of all of the available disks using the `talosctl disks` command.
@@ -244,7 +238,6 @@ machine:
     install:
         disk: /dev/sda
 ```
-
 {: file='patches/install-disk.yaml'}
 
 With all of the config-patches in the `patches/` directory, we can go ahead and generate our config file.

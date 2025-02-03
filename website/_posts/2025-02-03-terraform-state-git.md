@@ -31,12 +31,12 @@ This required infrastructure can vary in complexity, from an S3 bucket to store 
 
 I only mention the Postgres backend specifically since that is the one I have used most often when it comes to remote state. While it made things much simpler and it can be self-hosted quite easily, compared to MinIO for example, it is still **extra** infrastructure I have to put in place and maintain.
 
-## Storing State in Git?!
+## Storing State in Git
 
 ![Git Police](/assets/img/posts/2025-02-03-terraform-state-git/git-police-tf-chain_dark.png)
 _Image by [bomkii](https://bomkii.com)_
 
-One thing is clear: We need **some** sort of external infrastructure or something that can store this state so that we can access it both locally, from our machine, as well as remotely in CI. 
+One thing is clear: We need **some** sort of external infrastructure or something that can store this state so that we can access it both locally, from our machine, as well as remotely in CI.
 
 There's no working around it, so the question really is *how can we make it as simple and as convenient as possible?*
 
@@ -45,7 +45,7 @@ At this point, I got thrown back to my GitLab days. Back then, whenever I had so
 My solution, at this point, like any self-respecting engineer is to build something myself. I initially cobbled together a solution for my MikroTik-Terraform project using `Taskfile` and `SOPS`. Instead of running `terraform` commands directly, I ran a custom `task` that:
 
 1. decrypts the state and variable files,
-2. executes my terraform command, 
+2. executes my terraform command,
 3. re-encrypts everything.
 
 This **technically** works. From a functional point of view, it solves all of my problems:
@@ -700,7 +700,7 @@ backblaze on  main via 💠 default
 }
 ```
 
-This means that even if at some point we want to move away from this backend and use a different one, we will have no problem doing so. Even if we can't get a hold of the binary to start the server again for whatever reason, we can simply decrypt the file ourselves using `sops` and fall back to the `local` backend configuration. 
+This means that even if at some point we want to move away from this backend and use a different one, we will have no problem doing so. Even if we can't get a hold of the binary to start the server again for whatever reason, we can simply decrypt the file ourselves using `sops` and fall back to the `local` backend configuration.
 
 ## The Good, the Bad, and the Ugly
 
@@ -719,7 +719,7 @@ Generally, I like my commits conventional. I (try to) follow the [conventional c
 
 Secondly, the commit author seems to default to `username@hostname`. I do have a GitHub app called `mr-borboto` I configured for my org to interact with my repos, but this does not seem to be possible *yet*.
 
-For the first problem, I opened an [issue](https://github.com/plumber-cd/terraform-backend-git/issues/51) and tried my hand at a [PR](https://github.com/plumber-cd/terraform-backend-git/pull/52) to fix it. I'm not sure if this is the right way to do things or not, but we'll see what happens. 
+For the first problem, I opened an [issue](https://github.com/plumber-cd/terraform-backend-git/issues/51) and tried my hand at a [PR](https://github.com/plumber-cd/terraform-backend-git/pull/52) to fix it. I'm not sure if this is the right way to do things or not, but we'll see what happens.
 
 For the second, I just opened an [issue](https://github.com/plumber-cd/terraform-backend-git/issues/53) for now. I'll see if I have the time and brainpower to also put together a PR, but for now, this will do.
 
