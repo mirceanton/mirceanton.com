@@ -39,6 +39,9 @@ I only mention the Postgres backend specifically since that is the one I have us
 
 ## Storing State in Git?!
 
+![Git Police](/assets/img/posts/2025-02-03-terraform-state-git/git-police-tf-chain_dark.png)
+_Image by [bomkii](https://bomkii.com)_
+
 One thing is clear: We need **some** sort of external infrastructure or something that can store this state so that we can access it both locally, from our machine, as well as remotely in CI. 
 
 There's no working around it, so the question really is *how can we make it as simple and as convenient as possible?*
