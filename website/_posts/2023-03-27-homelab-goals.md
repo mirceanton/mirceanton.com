@@ -1,6 +1,6 @@
 ---
 title: My Homelab Plans for 2023
-description: In this blog post, I go over the upgrades and changes I have planned for my homelab in the coming year.
+description: Planned upgrades and changes for my homelab in 2023.
 tags:
   - homelab
   - kubernetes

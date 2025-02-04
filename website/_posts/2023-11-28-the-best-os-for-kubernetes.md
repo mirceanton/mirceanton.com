@@ -1,8 +1,6 @@
 ---
 title: The Best OS For Kubernetes
-description: >
-    Typically, when we deploy a Kubernetes cluster, we pick a generic OS, like RHEL or Ubuntu as our "base image", and then we start installing Kubernetes using tools like `kubeadm`, `k3s` or `<insert-your-favorite-tool here>`.
-    While this is not inherently wrong, I'd say it's a relic of the past and not the best way to go moving forward. In this blog post I aim to explain why and to present a better alternative.
+description: If you're not using Talos Linux for Kubernetes, you're (probably) doing it wrong. Here’s why.
 tags:
   - Kubernetes
   - talos_linux
