@@ -9,6 +9,7 @@ tasks:
   dev:
     desc: Start a development server that also builds future posts.
     dir: website
+    deps: [clean]
     vars:
       PORT:
         sh: shuf --input-range=4000-10000 -n 1
