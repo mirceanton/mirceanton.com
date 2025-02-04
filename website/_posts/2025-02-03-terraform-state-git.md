@@ -8,7 +8,7 @@ tags:
   - sops
 image:
   path: /assets/img/posts/2025-02-03-terraform-state-git/featured.webp
-  lqip: ""  # TODO`
+  lqip: /assets/img/posts/2025-02-03-terraform-state-git/featured_lqip.webp
 date: 2025-02-03
 ---
 

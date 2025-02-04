@@ -3,7 +3,7 @@ title: Hello World 👋
 description: My first ever blog post!
 image:
   path: /assets/img/posts/2022-09-17-hello-world/featured.webp
-  lqip: ""  # TODO
+  lqip: /assets/img/posts/2022-09-17-hello-world/featured_lqip.webp
 
 #! This permalink is needed for backwards compatibility
 permalink: /posts/:year-:month-:day-:title/

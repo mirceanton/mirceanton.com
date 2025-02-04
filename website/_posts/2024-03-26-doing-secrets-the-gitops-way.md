@@ -12,7 +12,7 @@ tags:
 # img_path: /assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/
 image:
   path: /assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/featured.webp
-  lqip: ""  # TODO
+  lqip: /assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/featured_lqip.webp
 date: 2024-03-26
 ---
 

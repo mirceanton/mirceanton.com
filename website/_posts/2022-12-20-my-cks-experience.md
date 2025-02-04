@@ -7,7 +7,7 @@ tags:
   - security
 image:
   path: /assets/img/posts/2022-12-20-my-cks-experience/featured.webp
-  lqip: ""  # TODO
+  lqip: /assets/img/posts/2022-12-20-my-cks-experience/featured_lqip.webp
 
 # This permalink is needed for backwards compatibility
 permalink: /posts/:year-:month-:day-:title/
