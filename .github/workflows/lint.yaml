@@ -3,31 +3,20 @@
 name: Lint
 
 on:
-  # Manual Trigger
   workflow_dispatch: {}
-
-  # Run on any PR
   pull_request: {}
 
 jobs:
   yamllint:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@e3a95ef75601e0b811d0e3f1b9afc04a175acb22 # v3.6.0
-    secrets: inherit
     with:
       yamllint-args: "--config-file=.yamllint.yaml"
 
   actionlint:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@e3a95ef75601e0b811d0e3f1b9afc04a175acb22 # v3.6.0
-    secrets: inherit
-
   shellcheck:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@e3a95ef75601e0b811d0e3f1b9afc04a175acb22 # v3.6.0
-    secrets: inherit
-
   markdownlint:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@e3a95ef75601e0b811d0e3f1b9afc04a175acb22 # v3.6.0
-    secrets: inherit
-
   commitlint:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@e3a95ef75601e0b811d0e3f1b9afc04a175acb22 # v3.6.0
-    secrets: inherit
