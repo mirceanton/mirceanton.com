@@ -8,15 +8,15 @@ on:
 
 jobs:
   yamllint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@c2dc5ba45f0a8b29e0c5d46f70295efff63984ab # v3.7.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@c60bb9813e634b15663d4ff01027e3b32102aef4 # v3.7.2
     with:
       yamllint-args: "--config-file=.yamllint.yaml"
 
   actionlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@c2dc5ba45f0a8b29e0c5d46f70295efff63984ab # v3.7.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-actionlint.yaml@c60bb9813e634b15663d4ff01027e3b32102aef4 # v3.7.2
   shellcheck:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@c2dc5ba45f0a8b29e0c5d46f70295efff63984ab # v3.7.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-shellcheck.yaml@c60bb9813e634b15663d4ff01027e3b32102aef4 # v3.7.2
   markdownlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@c2dc5ba45f0a8b29e0c5d46f70295efff63984ab # v3.7.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-markdownlint.yaml@c60bb9813e634b15663d4ff01027e3b32102aef4 # v3.7.2
   commitlint:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@c2dc5ba45f0a8b29e0c5d46f70295efff63984ab # v3.7.1
+    uses: mirceanton/reusable-workflows/.github/workflows/reusable-commitlint.yaml@c60bb9813e634b15663d4ff01027e3b32102aef4 # v3.7.2
