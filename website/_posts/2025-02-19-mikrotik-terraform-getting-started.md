@@ -390,7 +390,7 @@ resource "routeros_interface_bridge_port" "bridge_ports" {
 By default, a Mikrotik router comes configured with two IP settings:
 
 1. **Static LAN IP:**
-   This is the IP address used by devices on the local network. In ymy default configuration, the router assigns the LAN interface a static IP of `192.168.88.1/24` via the bridge.
+   This is the IP address used by devices on the local network. In my default configuration, the router assigns the LAN interface a static IP of `192.168.88.1/24` via the bridge.
 
 2. **Dynamic WAN IP (DHCP Client):**
    For external connectivity, the router typically obtains a dynamic IP address on the WAN interface through DHCP. In my particular case this won't actually work, as I am not using DHCP, but we'll cross that bridge when we get to it.
@@ -500,7 +500,7 @@ resource "routeros_ip_dns_record" "defconf" {
 ```
 {: file='dns.tf'}
 
-Note that here I am specifying the upstream dns servers as `1.1.1.1` and `8.8.8.8`. I *think* that by default Mikrotik would use the values it receives via DHCP on the WAN interface.
+Note that here I am specifying the upstream dns servers as `1.1.1.1` and `8.8.8.8`. I *think* that by default Mikrotik uses the values it receives via DHCP on the WAN interface.
 
 ### Interface Lists
 
