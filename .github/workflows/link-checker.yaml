@@ -29,22 +29,13 @@ jobs:
   build-site:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
-
-      - name: Generate Token
-        uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1.11.6
-        id: app-token
-        with:
-          app-id: "${{ secrets.BOT_APP_ID }}"
-          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
-
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
 
       - name: Install jekyll and bundler
         run: gem install bundler jekyll
@@ -86,14 +77,13 @@ jobs:
 
       - name: Download Site Files
         uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
-        with:
-          path: ./site
+        with: { path: ./site }
 
       - name: Check Links
         id: link-checker
         uses: lycheeverse/lychee-action@f613c4a64e50d792e0b31ec34bbcbba12263c6a6 # v2.3.0
         with:
-          args: --config=lychee.toml './site/**/*.html'
+          args: --config=.github/configs/lychee.toml './site/**/*.html'
           format: markdown
           output: lychee.md
           fail: false

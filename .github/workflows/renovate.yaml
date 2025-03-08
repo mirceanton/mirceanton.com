@@ -17,9 +17,9 @@ on:
         required: false
         type: string
 
-  # "Wet" Run every 20 minutes
+  # "Wet" Run hourly
   schedule:
-    - cron: "*/20 * * * *"
+    - cron: "0 * * * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -32,4 +32,4 @@ jobs:
     with:
       dry-run: "${{ inputs.dry-run == true || github.event_name == 'pull_request' }}"
       log-level: "${{ inputs.log-level || 'debug' }}"
-      config-file: "renovate.json5"
+      config-file: ".github/renovate.json5"
