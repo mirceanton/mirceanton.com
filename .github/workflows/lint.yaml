@@ -20,4 +20,3 @@ jobs:
   yamllint:
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-yamllint.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
     with: { config-file: .github/configs/yamllint.yaml }
-
