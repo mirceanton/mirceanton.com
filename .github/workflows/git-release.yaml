@@ -38,7 +38,7 @@ jobs:
           token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Create Release
-        uses: mirceanton/action-calver-release@2025.5.0
+        uses: mirceanton/action-calver-release@5cd262a2c16b0310855514f6a63bab7769d09e1c # 2025.5.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           dry-run: ${{ (inputs.dry-run || github.event_name == 'pull_request') }}
