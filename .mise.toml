@@ -1,0 +1,28 @@
+[tools]
+ruby = "3.3"
+
+# =================================================================================================
+# CI Tools
+# =================================================================================================
+"aqua:rhysd/actionlint" = "1"
+"npm:markdownlint-cli" = "0.44"
+"aqua:koalaman/shellcheck" = "0.10"
+
+
+# =================================================================================================
+# Tasks
+# =================================================================================================
+[tasks.dev]
+description = "Start a development server that also builds future posts."
+dir = "website"
+run = "bundle exec jekyll serve --incremental --future --drafts --livereload --force_polling"
+
+[tasks.build]
+description = "Build the website."
+dir = "website"
+run = "bundle exec jekyll build"
+
+[tasks.clean]
+description = "Clean up the generated files."
+dir = "website"
+run = "bundle exec jekyll clean"

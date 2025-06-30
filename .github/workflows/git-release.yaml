@@ -1,18 +1,44 @@
 ---
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Release
 
 on:
-  # Manual Trigger
-  workflow_dispatch: {}
+  # Manually trigger a new release from the Actions tab
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Dry Run
+        default: false
+        required: false
+        type: boolean
+      draft:
+        description: Draft Release
+        default: false
+        required: false
+        type: boolean
 
-  # Run on any website content change
+  # Dry run on any PR to the main branch to make sure the workflow would run
+  # successfully before merging
+  pull_request:
+    branches: ['main']
+    paths: ["website/**", "website/.github/workflows/git-release.yaml"]
+
+  # Automatically create releases on every push to the main branch
   push:
-    branches: ["main"]
-    paths:
-      - "website/**"
+    branches: ['main']
+    paths: ["website/**"]
 
 jobs:
   release:
-    uses: mirceanton/reusable-workflows/.github/workflows/reusable-release-calver.yaml@09f31ab6340ce5651dc6c28512a82de6b2415fb9 # v3.8.2
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Create Release
+        uses: mirceanton/action-calver-release@2025.5.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dry-run: ${{ (inputs.dry-run || github.event_name == 'pull_request') }}
+          draft: ${{ inputs.draft }}
