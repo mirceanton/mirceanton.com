@@ -1,5 +1,6 @@
 ---
 name: Release
+permissions: { contents: read }
 
 on:
   # Manually trigger a new release from the Actions tab
