@@ -18,13 +18,13 @@ Alrighty then, let's talk GitOps.
 
 I think it's pretty neat that you can push all your manifests to Git, and just like that, your cluster auto-magically syncs up seamlessly. I also think it's a bit of a pain to push **all** manifests to git, since among those manifests lurk some secrets that definitely shouldn't be out there for the world to see.
 
-So, in this blog post, alongside the video I've put together, I'm going over one of the solutions that allows me to simply push those secret files to git without worrying about them.
+In this blog post, alongside a [YouTube video](https://youtu.be/wqD7k5iNvqs) I've put together, I'm going over one of the solutions that allows me to simply push those secret files to git without worrying about them.
 
 ## Context
 
-So, the reason I'm writing this blog post and making the video right now instead of later is because in one of my previous blogs/videos I left you on a bit of a cliffhanger. Remember that deep dive we took into Talos Linux in the last video? If not, no worries, I've got you covered. You can catch up on it [here](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes).
+The reason I'm writing this blog post right now instead of later is because in one of my previous blogs/videos I left you on a bit of a cliffhanger. Remember that [deep dive into Talos Linux](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes) we took in the last post?
 
-Now, one of the key highlights I kept rambling on about was the fact that we can store the entire OS config in a YAML file and then simply push it to Git. While that does sound great, here's the catch: by the end of that video, those files weren't really ready for the `git push`.
+One of the key highlights I kept rambling on about was the fact that we can store the entire OS config in a YAML file and then simply push it to Git. While that does sound great, here's the catch: by the end of that video, those files weren't really ready for the `git push`.
 
 Why, I hear you ask? Well, here's the deal: those files were packed with sensitive information, and putting them out there in the open, even in a private repo, would've been a recipe for disaster.
 
@@ -38,14 +38,14 @@ Okay then, here's the game plan:
 4. We're going to encrypt and decrypt our Talos secrets file again, but this time using `sops` and we're going to look over the differences.
 5. Finally, I'll sprinkle in a couple of my own tried-and-tested tips and tricks from my GitOps repository to keep those secrets snug as a bug in a rug. 😉
 
-Alrighty, with all that preamble out of the way, let's dive right in, shall we?
+With all that preamble out of the way, let's dive right in!
 
 ## Age
 
 ![AGE](/assets/img/posts/2024-03-26-doing-secrets-the-gitops-way/age_logo.webp)
 _AGE Encryption Tool Logo_
 
-Before diving into the installation process, let's briefly discuss what `age` is.
+Before going into the installation process, let's briefly discuss what `age` is.
 
 In essence, `age` is a simple, modern and secure (not that you'd want the thing that encrypts your files to be anything but secure) file encryption tool, format, and Go library. It facilitates the encryption and decryption of files into/from a binary format.
 

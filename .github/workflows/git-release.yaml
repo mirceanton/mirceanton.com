@@ -3,7 +3,14 @@ name: Release
 permissions: { contents: read }
 
 on:
-  # Manually trigger a new release from the Actions tab
+  pull_request:
+    branches: ['main']
+    paths: ["website/**", "website/.github/workflows/git-release.yaml"]
+
+  push:
+    branches: ['main']
+    paths: ["website/**"]
+
   workflow_dispatch:
     inputs:
       dry-run:
@@ -16,17 +23,6 @@ on:
         default: false
         required: false
         type: boolean
-
-  # Dry run on any PR to the main branch to make sure the workflow would run
-  # successfully before merging
-  pull_request:
-    branches: ['main']
-    paths: ["website/**", "website/.github/workflows/git-release.yaml"]
-
-  # Automatically create releases on every push to the main branch
-  push:
-    branches: ['main']
-    paths: ["website/**"]
 
 jobs:
   release:
@@ -41,5 +37,8 @@ jobs:
         uses: mirceanton/action-calver-release@5cd262a2c16b0310855514f6a63bab7769d09e1c # 2025.5.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          dry-run: ${{ (inputs.dry-run || github.event_name == 'pull_request') }}
-          draft: ${{ inputs.draft }}
+          dry-run: |
+            ${{ 
+              ( github.event.inputs.dry-run == 'true' && github.event_name == 'workflow_dispatch' ) ||
+              github.event_name == 'pull_request'
+            }}
