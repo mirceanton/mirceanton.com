@@ -28,15 +28,23 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Generate Token
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        id: app-token
+        with:
+          app-id: '${{ secrets.BOT_APP_ID }}'
+          private-key: '${{ secrets.BOT_APP_PRIVATE_KEY }}'
+
+      - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          fetch-depth: 0
+          token: '${{ steps.app-token.outputs.token }}'
 
       - name: Create Release
         uses: mirceanton/action-calver-release@5cd262a2c16b0310855514f6a63bab7769d09e1c # 2025.5.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: '${{ steps.app-token.outputs.token }}'
           dry-run: |
             ${{ 
               ( github.event.inputs.dry-run == 'true' && github.event_name == 'workflow_dispatch' ) ||
