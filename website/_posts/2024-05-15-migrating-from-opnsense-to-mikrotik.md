@@ -37,7 +37,7 @@ And let's not forget the power supply. It's all being powered by the BeQuiet 300
 ![OPNsense server, 3d-printed power supply bracket](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_psu_front.webp)
 _OPNsense server, 3d-printed power supply bracket_
 
-Nowadays, it is securely bolted in with a 3D-printed bracket thanks to one of my buddies that has a 3D printer. You can find the link to the TFX to 2U adapter on [here](https://www.thingiverse.com/thing:4317040).
+Nowadays, it is "securely" bolted in with a [3D-printed bracket](https://www.thingiverse.com/thing:4317040) thanks to one of my buddies that has a 3D printer.
 
 ![OPNsense server, rear-io showcasing the network interfaces](/assets/img/posts/2024-05-15-migrating-from-opnsense-to-mikrotik/opnsense_server_network_interfaces.webp)
 _OPNsense server, read-io showcasing the network interfaces_
