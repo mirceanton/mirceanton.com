@@ -30,7 +30,7 @@ jobs:
         uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
 
       - name: Run markdownlint
-        run: mise exec -- markdownlint '**/*.md'
+        run: mise exec -- markdownlint -c .github/.markdownlint.yaml '**/*.md'
 
   shellcheck:
     runs-on: ubuntu-latest
