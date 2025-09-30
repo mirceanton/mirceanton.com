@@ -1,28 +1,14 @@
 [tools]
-ruby = "3.3"
+# Runtimes
+go = "latest"
+dart = "latest"
 
-# =================================================================================================
-# CI Tools
-# =================================================================================================
-"aqua:rhysd/actionlint" = "1.7"
-"npm:markdownlint-cli" = "0.45"
-shellcheck = "0.11.0"
+# Static Site Generator
+hugo-extended = "0.150.0"
+"github:sass/dart-sass" = { "version" = "1.93.0", "extract_all" = "true", "executable" = "dart-sass/sass" }
 
-
-# =================================================================================================
-# Tasks
-# =================================================================================================
-[tasks.dev]
-description = "Start a development server that also builds future posts."
-dir = "website"
-run = "bundle exec jekyll serve --incremental --future --drafts --livereload --force_polling"
-
-[tasks.build]
-description = "Build the website."
-dir = "website"
-run = "bundle exec jekyll build"
-
-[tasks.clean]
-description = "Clean up the generated files."
-dir = "website"
-run = "bundle exec jekyll clean"
+# Linters
+shellcheck = "0.11"
+actionlint = "1.7"
+yamllint = "1.37"
+markdownlint-cli2 = "0.18"
