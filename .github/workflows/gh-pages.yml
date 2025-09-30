@@ -2,7 +2,7 @@
 name: GitHub Pages
 
 on:
-  # Manual Trigger
+  push: {}
   workflow_dispatch:
     inputs:
       dry-run:
@@ -10,10 +10,6 @@ on:
         default: true
         required: false
         type: boolean
-
-  # "Wet" Run on any Git Release
-  push:
-    tags: ["*"]
 
 permissions:
   contents: read
@@ -33,30 +29,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
+      - name: Setup mise
+        uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
 
-      - name: Install jekyll and bundler
-        run: gem install bundler jekyll
-
-      - name: Show bundler version
-        run: bundler --version
-
-      - name: Show jekyll version
-        run: jekyll --version
-
-      - name: Install gems
-        run: bundle install --gemfile=website/Gemfile
-
-      - name: Run jekyll build
-        working-directory: ./website
-        run: bundle exec jekyll build --trace
+      - name: Build site
+        run: mise exec -- hugo --minify --destination ./public
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
-        with: { path: ./website/_site }
+        with: { path: ./public }
 
   deploy:
     runs-on: ubuntu-latest
