@@ -1,0 +1,102 @@
+---
+baseURL: https://mirceanton.com
+languageCode: en-us
+theme: github.com/geekifan/hugo-theme-chirpy
+
+title: Mircea Anton
+params:
+  author: mirceanton
+  tagline: DevOps by day, HomeOps by night!
+  description: In this blog I share my insights and experiences in the realm of devops and the tools and technologies I use in my home lab.
+  avatar: img/icon.png # the avatar on sidebar, should be a relative path to /assets.
+  images: ["img/icon.png"] # Default social media share image
+
+  social:
+    # This section is for the copyright notice in the footer.
+    name: Mircea-Pavel Anton
+    url: https://mirceanton.com
+
+    # Social links in the sidebar footer
+    links:
+      - { url: https://github.com/mirceanton, icon: fab fa-github }
+      - { url: https://www.youtube.com/@mirceanton, icon: fab fa-youtube }
+      - { url: https://links.mirceanton.com/, icon: fas fa-link }
+      - { url: mailto:mircea@mirceanton.com, icon: fas fa-envelope }
+
+  # Theme Features
+  readingTime: true # Show estimated reading time
+  wordCount: true # Show word count
+  toc: true # Enable Table of Contents by default in posts
+  analytics: { google: { id: G-6C126MZNGT } }
+  search: { enable: true, maxResults: 20 }
+
+  comments:
+    enable: true
+    provider: giscus
+    giscus:
+      repo: mirceanton/website
+      repo_id: R_kgDOLUY-RA
+      category: Announcements
+      category_id: DIC_kwDOLUY-RM4CdWUH
+      mapping: title
+      input_position: bottom
+      lang: en
+      reactions_enabled: 1
+      theme: noborder_gray # noborder_dark
+
+
+# ===============================================================================================
+# Hugo configuration
+# ===============================================================================================
+permalinks:
+  post: /posts/:slug/
+
+taxonomies:
+  tag: tags
+
+enableGitInfo: true # Add git commit info to pages (last modified date)
+enableRobotsTXT: true # Generate robots.txt
+enableEmoji: true # Enable emoji support in content
+
+# Output formats (for RSS, sitemap, etc)
+outputs:
+  home: [HTML, RSS, JSON]
+
+# Sitemap configuration
+sitemap:
+  changefreq: weekly
+  priority: 0.5
+  filename: sitemap.xml
+
+# Privacy settings
+privacy:
+  googleAnalytics:
+    anonymizeIP: true
+    respectDoNotTrack: true
+
+# ===============================================================================================
+# Markup configuration
+# ===============================================================================================
+markup:
+  goldmark:
+    renderer:
+      unsafe: true # Allow HTML in markdown
+  highlight:
+    anchorLineNos: false
+    codeFences: true
+    guessSyntax: false
+    lineNos: true
+    lineNumbersInTable: true
+    noClasses: false
+    style: monokai
+    tabWidth: 2
+  tableOfContents:
+    endLevel: 4
+    ordered: false
+    startLevel: 2
+
+# ===============================================================================================
+# RSS
+# ===============================================================================================
+rss:
+  limit: 20 # Number of items in feed
