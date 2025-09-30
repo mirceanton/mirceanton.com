@@ -1,5 +1,5 @@
 ---
-baseURL: https://mirceanton.com
+baseURL: https://mirceanton.com/
 languageCode: en-us
 theme: github.com/geekifan/hugo-theme-chirpy
 
@@ -14,12 +14,12 @@ params:
   social:
     # This section is for the copyright notice in the footer.
     name: Mircea-Pavel Anton
-    url: https://mirceanton.com
+    url: https://mirceanton.com/
 
     # Social links in the sidebar footer
     links:
-      - { url: https://github.com/mirceanton, icon: fab fa-github }
-      - { url: https://www.youtube.com/@mirceanton, icon: fab fa-youtube }
+      - { url: https://github.com/mirceanton/, icon: fab fa-github }
+      - { url: https://www.youtube.com/@mirceanton/, icon: fab fa-youtube }
       - { url: https://links.mirceanton.com/, icon: fas fa-link }
       - { url: mailto:mircea@mirceanton.com, icon: fas fa-envelope }
 
