@@ -12,7 +12,7 @@ menu:
 
 ![banner](img/banner.png)
 
-# Hi there 👋
+## Hi there 👋
 
 I'm Mircea Anton, a ML OPS Engineer from Bucharest, Romania
 
