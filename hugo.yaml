@@ -1,7 +1,8 @@
 ---
 baseURL: https://mirceanton.com/
 languageCode: en-us
-theme: github.com/geekifan/hugo-theme-chirpy
+isMultilingual: false
+theme: github.com/mirceanton/hugo-theme-chirpy
 
 title: Mircea Anton
 params:
