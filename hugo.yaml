@@ -35,7 +35,7 @@ params:
     enable: true
     provider: giscus
     giscus:
-      repo: mirceanton/website
+      repo: mirceanton/mirceanton.com
       repo_id: R_kgDOLUY-RA
       category: Announcements
       category_id: DIC_kwDOLUY-RM4CdWUH
