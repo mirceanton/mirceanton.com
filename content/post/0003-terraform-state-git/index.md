@@ -6,7 +6,7 @@ tags: [ terraform, git, sops, age ]
 image: { path: featured.webp }
 
 description: |
-  Could it be? A Terraform state backend that stores your state securely in Git?
+  terraform-backend-git is a simple yet elegant solution for managing Terraform state by storing it directly in git. It comes built-in with state locking via branches, encryption via sops and much more!
 ---
 
 ## Introduction
@@ -90,13 +90,12 @@ mise ~/Workspace/terraform/backblaze/mise.toml tools: aqua:plumber-cd/terraform-
 
 These commands generated the following `mise.toml` file:
 
-```toml
+```toml {file="mise.toml"}
 [tools]
 "aqua:plumber-cd/terraform-backend-git" = "latest"
 sops = "latest"
 terraform = "latest"
 ```
-{: file="mise.toml" }
 
 `mise` has now configured what is more or less like a python virtual environment for all of the tools I need in this project.
 
@@ -104,7 +103,7 @@ terraform = "latest"
 
 Anyways, what we need to do now is to configure `terraform` to use our fancy-pants new state backend. To do that, we need to define, obviously, a `backend` block:
 
-```hcl
+```hcl {file="backend.tf"}
 terraform {
  backend "HTTP" {
  address        = "http://localhost:6061/?type=git&repository=https://github.com/mirceanton/backblaze-terraform&ref=main&state=tfstate.json"
@@ -113,7 +112,6 @@ terraform {
  }
 }
 ```
-{: file="backend.tf" }
 
 You can see here that the HTTP backend is hosted on `localhost` at port `6061`. These are the default settings for the `terraform-backend-git` server. On top of that, we're also passing in 4 variables:
 
@@ -215,14 +213,13 @@ I mean don't get me wrong, we haven't pushed anything to git yet, but hey, we di
 
 Let's add some dummy code to our Terraform configuration so that we can test it. We'll create a simple `random_string` resource. This resource will generate a random string of a set length (duh):
 
-```terraform
+```terraform {file="main.tf"}
 resource "random_string" "random" {
  length           = 64
  special          = true
  override_special = "/@£$"
 }
 ```
-{: file="main.tf" }
 
 ## Creating State
 
@@ -384,7 +381,7 @@ Fast-forward
 
 And if we check it out, we can see that it contains the state file:
 
-```json
+```json {file="tfstate.json"}
 {
   "version": 4,
   "terraform_version": "1.10.5",
@@ -392,13 +389,13 @@ And if we check it out, we can see that it contains the state file:
   "lineage": "e8969210-0a8d-7daa-aba4-c7108abcbeb0",
   "outputs": {},
   "resources": [
- {
+    {
       "mode": "managed",
       "type": "random_string",
       "name": "random",
       "provider": "provider[\"registry.terraform.io/hashicorp/random\"]",
       "instances": [
- {
+        {
           "schema_version": 2,
           "attributes": {
             "id": "�hz6Ag@Fxe2VaoV7Hq6KEUpkyMZAs7Ad1OZmx36VAMw7nFO2OmboeEN$$VwkjTPg",
@@ -415,16 +412,15 @@ And if we check it out, we can see that it contains the state file:
             "result": "�hz6Ag@Fxe2VaoV7Hq6KEUpkyMZAs7Ad1OZmx36VAMw7nFO2OmboeEN$$VwkjTPg",
             "special": true,
             "upper": true
- },
+          },
           "sensitive_attributes": []
- }
- ]
- }
- ],
+        }
+      ]
+    }
+  ],
   "check_results": null
 }
 ```
-{: file="tfstate.json" }
 
 So that's it, right? It worked! We have a working Terraform configuration and we have a state file stored in git. What more can we possibly want?
 
@@ -641,7 +637,7 @@ The cool thing about it is, we can just use sops as usual to decrypt it.
 
 We need a sops config to parse the `tfstate.json` file:
 
-```yaml
+```yaml {file=".sops.yaml"}
 ---
 creation_rules:
   # Terraform State
@@ -649,7 +645,6 @@ creation_rules:
     encrypted_regex: ".*"
     pgp: "60A6849DA8C872ED5E3803E3CAE4C9DA0D9FDDC0"
 ```
-{: file='.sops.yaml'}
 
 And then we can just `sops decrypt` the file to get our state:
 

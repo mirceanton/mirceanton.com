@@ -1,12 +1,11 @@
 ---
 title: Doing Secrets The GitOps Way
-slug: doing-secrets-the-gitops-way
 date: "2024-03-26"
 tags: [ git, gitops, sops, age ]
 image: { path: featured.webp }
 
 description: |
-    Storing secrets in Git is generally a bad practice... Unless you encrypt them. In this blog post I explain how to easily encrypt files.
+    Storing secrets in Git is generally a bad practice... Unless you encrypt them. In this blog post I explain how to do that easily.
 ---
 
 Alrighty then, let's talk GitOps.
@@ -19,11 +18,11 @@ In this blog post, alongside a [YouTube video](https://youtu.be/wqD7k5iNvqs) I'v
 
 The reason I'm writing this blog post right now instead of later is because in one of my previous blogs/videos I left you on a bit of a cliffhanger. Remember that [deep dive into Talos Linux](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes) we took in the last post?
 
-One of the key highlights I kept rambling on about was the fact that we can store the entire OS config in a YAML file and then simply push it to Git. While that does sound great, here's the catch: by the end of that video, those files weren't really ready for the `git push`.
+One of the key highlights I kept rambling on about was the fact that we can store the entire OS config in a YAML file and then simply push it to Git. While that does sound great, there's a catch! By the end of that video, those files weren't really ready for the `git push`.
 
-Why, I hear you ask? Well, here's the deal: those files were packed with sensitive information, and putting them out there in the open, even in a private repo, would've been a recipe for disaster.
+Those files were packed with sensitive information, and putting them out there in the open, even in a private repo, would've been a recipe for disaster.
 
-Thus, today we're taking a look at what we need to do in order to finally get those files - or any other secret files, really - ready for the push command.
+Thus, today we're taking a look at what we need to do in order to finally get those files, or any other secret files, ready for the push command.
 
 Okay then, here's the game plan:
 
@@ -69,7 +68,6 @@ sudo mv age/age* /usr/local/bin/
 # Make the binaries executable
 sudo chmod +x /usr/local/bin/age*
 ```
-{: file='age-install.sh'}
 
 Now, to verify that everything's set up correctly, run:
 
@@ -105,7 +103,7 @@ _`age-keygen` command output redirection to `keys.txt`_
 ![AGE Encryption and Decryption Diagram](./img/age_encryption_diagram.webp)
 _AGE Encryption and Decryption Diagram_
 
-With the keys sorted, let's encrypt a file. For this demo, I'll be using our `secrets.yaml` file from the [Talos Linux blog post](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes).
+With the keys sorted, let's encrypt a file. For this demo, I'll be using our `secrets.yaml` file from the [Talos Linux blog post](https://mirceanton.com/posts/2023-11-28-the-best-os-for-kubernetes), but literally any kind of file will work.
 
 Just run the `age --encrypt` command, toss in the public key we generated earlier as the `--recipient`, point `age` to the file we want to encrypt (`secrets.yaml`), and redirect the encrypted version away in `secrets.age`.
 
@@ -120,7 +118,7 @@ _Sample of file encrypted using `age`_
 
 Now, let's try and decrypt the file and see what we get.
 
-Similarly, we're now running the `age --decrypt` command, we tell it where your private key file is located (`keys.txt`), we point it to the encrypted file (`secrets.age`), and voilà! Your secrets are back in the open!
+Similarly, we're now running the `age --decrypt` command, we tell it where your private key file is located (`keys.txt`), we point it to the encrypted file (`secrets.age`), and *voilà*! Your secrets are back in the open!
 
 By default it will all be dumped in your `stdout`, but you can easily redirect that output to a file, say `secrets-decrypted.yaml`
 
@@ -147,7 +145,7 @@ Functionally speaking, it works, but practically speaking it will be a pain and 
 ## Mozilla SOPS
 
 ![Mozilla SOPS](./img/sops_logo.webp)
-_Mozilla SOPS Logo_
+_Mozilla SOPS Logo (there's at least 3 pixels in that photo)_
 
 Before we go ahead with the installation process, let's clarify what `SOPS` is all about.
 
@@ -163,7 +161,7 @@ Just like installing `age`, we need to go to the [SOPS GitHub repository](https:
 
 Taking a quick look at the commands before we're running them, we can see that we're just downloading the binary file, adding it to our `$PATH` and making it executable - the same old standard procedure. This time, as opposed to the `age` installation, we're downloading the binary directly instead of an archive, so there's no need to `untar` things.
 
-```bash
+```bash {file="mozilla-install.sh"}
 export SOPS_VERSION=v3.8.1
 
 # Download the binary
@@ -175,7 +173,6 @@ mv sops-$SOPS_VERSION.linux.amd64 /usr/local/bin/sops
 # Make the binary executable
 chmod +x /usr/local/bin/sops
 ```
-{: file='mozilla-install.sh}
 
 To make sure the installation was successful, run:
 
@@ -296,7 +293,7 @@ Thus, my two wrapper scripts for `sops` were born.
 
 #### Encryption Script
 
-```bash
+```bash {file="scripts/sops-encrypt-all.sh"}
 #!/bin/bash
 
 GREEN='\033[0;32m'
@@ -330,11 +327,8 @@ while IFS= read -r path; do
     done
 done < <(grep -oP '^\s*- path_regex:\s*\K.*' ".sops.yaml")
 ```
-{: file='scripts/sops-encrypt-all.sh}
 
-This script searches for all files matching the `path_regex` entries in my `.sops.yaml` configuration file.
-
-For each file found, it checks if an encrypted version already exists (i.e. if `<file>.sops.yaml` exists).
+This script searches for all files matching the `path_regex` entries in my `.sops.yaml` configuration file. For each file found, it checks if an encrypted version already exists (i.e. if `<file>.sops.yaml` exists).
 
 If an encrypted version doesn't exist, it simply encrypts the `<file>.yaml` into `<file>.sops.yaml`.
 
@@ -344,7 +338,7 @@ This last check is the important bit which prevents my git history from getting 
 
 #### Decryption Script
 
-```bash
+```bash {file="scripts/sops-decrypt-all.sh"}
 #!/bin/bash
 
 GREEN='\033[0;32m'
@@ -397,7 +391,6 @@ find . -regextype egrep -regex "\.\/.+\/.*.sops.yaml" -type f | while IFS= read 
     fi
 done
 ```
-{: file='scripts/sops-decrypt-all.sh}
 
 ---
 
@@ -430,43 +423,26 @@ I will not cover what Taskfile is, how to use it or how to set it up in this pos
 
 What I had to do to set this up is that I had to add this snippet in my `Taskfile.yaml`:
 
-```yaml
+```yaml {file="Taskfile.yaml"}
 ---
-version: '3'
-
-includes:
-  sops: .taskfiles/sops.yaml
-
-...
-```
-{: file='Taskfile.yaml}
-
-Which includes this sub-taskfile from my `.taskfiles` directory under the `sops` namespace:
-
-{% raw %}
-
-```yaml
----
-# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
 tasks:
-  encrypt:
+  sops:encrypt:
     aliases: [enc,e]
     desc: Encrypt all sops files in this repository.
     run: once
     cmds:
       - bash {{.ROOT_DIR}}/scripts/sops-encrypt-all.sh
 
-  decrypt:
+  sops:decrypt:
     aliases: [dec,d]
     desc: Decrypt all sops files in this repository.
     run: once
     cmds:
       - bash {{.ROOT_DIR}}/scripts/sops-decrypt-all.sh {{.CLI_ARGS}}
+...
 ```
-{: file='.taskfiles/sops.yaml}
-{% endraw %}
 
 This essentially allows me to run:
 
@@ -474,16 +450,6 @@ This essentially allows me to run:
 - `task sops:decrypt` / `task sops:dec` / `task sops:d` to decrypt all of my secret files
 
 It all depends on how lazy I'm feeling, really 😆
-
-## Conclusion
-
-And that's a wrap, folks! We can _finally_ push our secrets in git without losing sleep over it!
-
-We covered quite a bit of ground in this post. We started from the bottom by seeing how `age` works by itself. Then, we went one layer of abstraction higher by checking out `sops`, and we finally created our own abstraction layer on top of `sops` with some `bash` scripts and `Taskfiles` that automate our secret management end-to-end.
-
-What is your preffered tool/stack to manage your secrets and why? Let me know in the comments section down below what you are using and how it compares to `age` and `sops`.
-
-Until next time, keep safe, keep encrypting! 🛡️🔒
 
 ---
 
