@@ -432,6 +432,8 @@ pvesm add cephfs cephfs-data -content iso,vztmpl,backup,snippets
 
 ## Performance Testing
 
+-> TODO expand code snippets with actual output
+
 Alright, the moment of truth. How fast is this thing actually?
 
 I'm using Ceph's built-in `rados bench` tool to test raw cluster performance before any VM overhead.
