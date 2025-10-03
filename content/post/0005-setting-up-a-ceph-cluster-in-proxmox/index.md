@@ -2,14 +2,14 @@
 title: "Hyperconverged Storage: Setting Up Ceph in My Proxmox Cluster"
 slug: proxmox-ceph-hyperconverged-storage
 date: "2025-10-05"
-tags: [ ceph, proxmox, storage, homelab ]
+tags: [ceph, proxmox, storage, homelab]
 image: { path: featured.webp }
 
 description: |
   Moving from clustered compute with single points of failure to a fully hyperconverged infrastructure using Ceph. Because apparently I hate having free time.
 ---
 
-If you're following along with my homelab journey, either here or on the [YouTubez](https://www.youtube.com/@mirceanton), you migth know that a few weeks ago I got a new three-node Proxmox cluster up and running. 
+If you're following along with my homelab journey, either here or on the [YouTubez](https://www.youtube.com/@mirceanton), you migth know that a few weeks ago I got a new three-node Proxmox cluster up and running.
 
 It's been great for compute, no complaints there. If a node dies, VMs can restart elsewhere. But only if they were using my NAS for storage.
 
@@ -86,6 +86,7 @@ pveceph init \
 ```
 
 Quick note about those network parameters. Ceph uses two networks:
+
 - **Public network**: For clients to access storage served by Ceph
 - **Cluster network**: For internal node-to-node cluster traffic
 
@@ -109,7 +110,7 @@ Monitors are the first Ceph service you will run into. You cannot have a cluster
 
 To keep the Kube analogies going (let me know in the comments if they are actually helpful or not), in my mind these are kind of like the etcd in a Kubernetes cluster. They store all of the information about the state of the cluster for the other components to use, but they don't necessarily do something with that information themselves.
 
-These use a consensus algorithm to establish quorum and maintain data integrity. Practically speaking, this means that you need an odd number of nodes to maintain a healthy cluster and prevent [split-brain scenarios](https://en.wikipedia.org/wiki/Split-brain_(computing)).
+These use a consensus algorithm to establish quorum and maintain data integrity. Practically speaking, this means that you need an odd number of nodes to maintain a healthy cluster and prevent [split-brain scenarios](<https://en.wikipedia.org/wiki/Split-brain_(computing)>).
 
 Technically one works, but that's not exactly high availability. Three is the minimum for proper HA. Since I have three nodes in my cluster, I'm going to put a monitor on each
 
@@ -126,7 +127,7 @@ To keep the Kube analogies rolling, though at this point I am stretching it a bi
 
 All of that information is then exposed through user-friendly features like the web-based Ceph Dashboard and a REST API. These are not enabled by default, but rather as add-ons or modules which you can enabled if you want them.
 
-Managers work in an active/standby mode, meaning only one is actively working at any given time while the others wait to take over if it fails. Because of this, you technically only need two for proper HA. However, the documentation recommends running one alongside each of your monitors in a small cluster. 
+Managers work in an active/standby mode, meaning only one is actively working at any given time while the others wait to take over if it fails. Because of this, you technically only need two for proper HA. However, the documentation recommends running one alongside each of your monitors in a small cluster.
 
 ```bash
 # Run on ALL nodes
@@ -159,23 +160,22 @@ cluster:
   id:     ad0e709505e80-4001-868b-f2e23d5c592d
   health: HEALTH_WARN
           OSD count 0 < osd_pool_default_size 3
- 
+
 services:
   mon: 3 daemons, quorum pve01,pve02,pve03 (age 2h)
   mgr: pve01(active, since 2h), standbys: pve02, pve03
   osd: 0 osds: 0 up , 0 in
- 
+
 data:
   pools:   0 pools, 0 pgs
   objects: 0 objects, 0 B
   usage:   0 B used, 0 B / 0 B avail
-  pgs:     
+  pgs:
 ```
-
 
 > The metadata servers do not show up in the status command until there is a CephFS pool created in the cluster.  
 > They are running but currently inactive. Their status can be checked by verifying the underlying service using the `systemctl status` command.
-{.prompt-info}
+> {.prompt-info}
 
 At this point, we have the control plane up and running, though it is managing nothing. Time to give it some disks! This is where **Object Storage Daemons (OSDs)** come in.
 
@@ -258,7 +258,7 @@ So, how do we make CRUSH smarter? We can create custom CRUSH rules to make use o
 
 A failure domain is just a way of telling Ceph which pieces of hardware are likely to fail together. This could be an individual disk (`osd`), an entire server (`host`), or even a whole server rack (`rack`).
 
-By understanding these failure domains, the CRUSH algorithm can make more intelligent placement decisions. When I tell Ceph I want three copies of my data for redundancy, I don't just want three copies *somewhere*. I need them in locations that won't all fail at the same time.
+By understanding these failure domains, the CRUSH algorithm can make more intelligent placement decisions. When I tell Ceph I want three copies of my data for redundancy, I don't just want three copies _somewhere_. I need them in locations that won't all fail at the same time.
 
 For my three-node cluster, the most important failure domain is the `host`. By setting my failure domain to host level, I'm giving CRUSH a critical rule: "When you place the three replicas of a piece of data, make absolutely sure each copy lands on a different physical server."
 
@@ -459,6 +459,7 @@ rados bench -p nvme-replicated 60 seq -t 32
 ```
 
 Results:
+
 - Write: ~1,100 MB/s burst
 - Read: ~1,800 MB/s burst
 
@@ -504,6 +505,7 @@ rados bench -p ssd-erasure 60 seq -t 32
 ```
 
 Results:
+
 - Write: ~480 MB/s burst
 - Read: ~720 MB/s burst
 
