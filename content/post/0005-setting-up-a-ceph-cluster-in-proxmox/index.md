@@ -1,7 +1,7 @@
 ---
 title: "Hyperconverged Storage: Setting Up Ceph in My Proxmox Cluster"
 slug: proxmox-ceph-hyperconverged-storage
-date: "2025-10-03"
+date: "2025-10-05"
 tags: [ ceph, proxmox, storage, homelab ]
 image: { path: featured.webp }
 
