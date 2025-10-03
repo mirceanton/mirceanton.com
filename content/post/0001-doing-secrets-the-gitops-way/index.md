@@ -1,11 +1,11 @@
 ---
 title: Doing Secrets The GitOps Way
 date: "2024-03-26"
-tags: [ git, gitops, sops, age ]
+tags: [git, gitops, sops, age]
 image: { path: featured.webp }
 
 description: |
-    Storing secrets in Git is generally a bad practice... Unless you encrypt them. In this blog post I explain how to do that easily.
+  Storing secrets in Git is generally a bad practice... Unless you encrypt them. In this blog post I explain how to do that easily.
 ---
 
 Alrighty then, let's talk GitOps.
@@ -118,7 +118,7 @@ _Sample of file encrypted using `age`_
 
 Now, let's try and decrypt the file and see what we get.
 
-Similarly, we're now running the `age --decrypt` command, we tell it where your private key file is located (`keys.txt`), we point it to the encrypted file (`secrets.age`), and *voilà*! Your secrets are back in the open!
+Similarly, we're now running the `age --decrypt` command, we tell it where your private key file is located (`keys.txt`), we point it to the encrypted file (`secrets.age`), and _voilà_! Your secrets are back in the open!
 
 By default it will all be dumped in your `stdout`, but you can easily redirect that output to a file, say `secrets-decrypted.yaml`
 
@@ -153,7 +153,7 @@ SOPS, or "Secrets OPerationS", is a tool for managing sensitive data within file
 
 Fundamentally, all YAML is just a bunch of key-value pairs nicely formatted in a file. What `SOPS` can do (that `age` can't) is that it is aware of these keys and values and it can encrypt the values only, leaving the keys untouched. This way the file is still somewhat readable so we can still work with it, all while exposing no secret information. Even more, it can encrypt only the values associated to keys matching a given regex, so it's not even required to encrypt an entire file if all you need is a single entry.
 
-Given that `SOPS` cannot encrypt files by itself, it can make use of various encryption backends, including AWS or GCP KMS, Azure Key Vault, PGP and - drum roll, please 🥁 -  `age`! Can you guess which one we're going to use? 😆
+Given that `SOPS` cannot encrypt files by itself, it can make use of various encryption backends, including AWS or GCP KMS, Azure Key Vault, PGP and - drum roll, please 🥁 - `age`! Can you guess which one we're going to use? 😆
 
 ### Installing SOPS
 
@@ -229,16 +229,16 @@ To fix this, we have a couple of options:
 
 1. set the `SOPS_AGE_KEY_FILE` environment variable to the path of our secret age key file
 
-    ```bash
-    export SOPS_AGE_KEY_FILE="$(pwd)/keys.txt"
-    ```
+   ```bash
+   export SOPS_AGE_KEY_FILE="$(pwd)/keys.txt"
+   ```
 
 2. Put our `keys.txt` file under `~/.config/sops/age/keys.txt` (the default location sops will automatically look in)
 
-    ```bash
-    mkdir -p ~/.config/sops/age
-    mv keys.txt ~/.config/sops/age/keys.txt
-    ```
+   ```bash
+   mkdir -p ~/.config/sops/age
+   mv keys.txt ~/.config/sops/age/keys.txt
+   ```
 
 With either of those 2 options applied, we can now decrypt our encrypted file without passing in any additional CLI arguments:
 
@@ -425,23 +425,22 @@ What I had to do to set this up is that I had to add this snippet in my `Taskfil
 
 ```yaml {file="Taskfile.yaml"}
 ---
-version: '3'
+version: "3"
 
 tasks:
   sops:encrypt:
-    aliases: [enc,e]
+    aliases: [enc, e]
     desc: Encrypt all sops files in this repository.
     run: once
     cmds:
       - bash {{.ROOT_DIR}}/scripts/sops-encrypt-all.sh
 
   sops:decrypt:
-    aliases: [dec,d]
+    aliases: [dec, d]
     desc: Decrypt all sops files in this repository.
     run: once
     cmds:
       - bash {{.ROOT_DIR}}/scripts/sops-decrypt-all.sh {{.CLI_ARGS}}
-...
 ```
 
 This essentially allows me to run:

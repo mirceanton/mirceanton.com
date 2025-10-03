@@ -197,8 +197,6 @@ machine:
           ip: 10.0.10.10
 ```
 
-
-
 For the cluster networking solution, Talos uses `flannel` by default, but we can either override that to deploy something else or just disable it entirely, if we want to manually deploy one after the fact. Normally, I disable it by setting `cluster.network.cni.name: none` and then I deploy `cilium` after the fact using `helm`, but for the purposes of this demo I will create a dedicated patch to deploy `calico` on the cluster so that we're ready to go once the installation is complete and our nodes can reach the `Ready` state:
 
 ```yaml {file="patches/cni.yaml"}
@@ -225,7 +223,6 @@ machine:
     install:
         disk: /dev/sda
 ```
-
 
 With all of the config-patches in the `patches/` directory, we can go ahead and generate our config file.
 
@@ -290,7 +287,7 @@ export TALOSCONFIG=./rendered/talosconfig
 Either option works fine, I just personally dislike using the CLI flag as it involves too much typing 😅
 
 > If you end up managing multiple Talos clusters and want a talosconfig-file manager, you might want to take a look at [`talswitcher`](github.com/mirceanton/talswitcher)
-{.prompt-tip}
+> {.prompt-tip}
 
 ```bash
 mike@talos-demo-ctl:~/workspace$ talosctl config contexts

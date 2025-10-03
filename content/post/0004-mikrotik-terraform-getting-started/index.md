@@ -2,7 +2,7 @@
 title: Getting Started With Mikrotik and Terraform
 slug: mikrotik-terraform-getting-started
 date: "2025-02-19"
-tags: [ terraform, mikrotik ]
+tags: [terraform, mikrotik]
 image: { path: featured.webp }
 
 description: |
@@ -15,7 +15,7 @@ After much ado and months of procrastination, I'm finally getting started with m
 
 1. Connect Terraform to Mikrotik,
 2. Import the default Mikrotik configuration that comes with my RB5009 into Terraform,
-3. Make the *least* amount of changes necessary to get internet access.
+3. Make the _least_ amount of changes necessary to get internet access.
 
 This might not seem like much, but the aim is to set up a solid base for my network automation going forward. At the end of this post (hopefully), my entire Mikrotik router will be terraform-managed!
 
@@ -63,8 +63,8 @@ _Initializing the Terraform workspace_
 ### Provider Configuration
 
 > By default, Mikrotik routers use an IP of `192.168.88.1` and a username of `admin`.
-> Depending on your model, the password *might* be blank or it *might* be randomized. If it's blank, well... you'll know. If it's randomized, it will be written on your device, on the label next to the serial number and whatnot.
-{.prompt-info}
+> Depending on your model, the password _might_ be blank or it _might_ be randomized. If it's blank, well... you'll know. If it's randomized, it will be written on your device, on the label next to the serial number and whatnot.
+> {.prompt-info}
 
 With the provider installed, I need to configure it to tell it how it can connect to my router to manage it. It needs to know the IP address and the credentials to authenticate against the RouterOS API.
 
@@ -80,7 +80,7 @@ provider "routeros" {
 }
 ```
 
-You can see here that I defined variables for all these connection parameters instead of hardcoding them in. You *can* do that if you want to (put your credentials in there), but I don't really recommend to, especially if you intend to push this code to git eventually.  
+You can see here that I defined variables for all these connection parameters instead of hardcoding them in. You _can_ do that if you want to (put your credentials in there), but I don't really recommend to, especially if you intend to push this code to git eventually.  
 To be able to use these variables, I need to first define them:
 
 ```terraform {file="variables.tf"}
@@ -119,7 +119,7 @@ mikrotik_insecure = true
 ```
 
 > While you can continue using the `admin` user, it is best practice to log in and create a dedicated user for terraform.
-{.prompt-tip}
+> {.prompt-tip}
 
 ### Validating the Connection
 
@@ -253,14 +253,14 @@ Secondly, while we're specifying that the `local-root-cert` is signed with no ex
 
 If I were to apply this right now, however, the operation would fail. Terraform would send the request to the ROS API to create 2 new certificates and RouterOS will complain saying that they already exist.
 
-To fix that, I need to *import* them into my state. This can be done either manually by running a `terraform import` command, or by adding an `import` block in my terraform config.
+To fix that, I need to _import_ them into my state. This can be done either manually by running a `terraform import` command, or by adding an `import` block in my terraform config.
 
 Regardless of which option I choose, I firstly need to get the IDs of the certs.
 
 ![mikrotik certificate ids](./img/mikrotik-certificate-ids.webp)
 _Certificate resource ID_
 
-From this output, we can see that `local-root-cert` has an ID of `*1` and `webfig` is `*2` (the "*" is actually required). To import them, I will add the following `import` blocks to my `certificates.tf` file:
+From this output, we can see that `local-root-cert` has an ID of `*1` and `webfig` is `*2` (the "\*" is actually required). To import them, I will add the following `import` blocks to my `certificates.tf` file:
 
 ```bash {file="certificates.tf"}
 import {
@@ -303,7 +303,7 @@ resource "routeros_ip_service" "ssl" {
 }
 ```
 
-With this, I am making sure that all of the services I *don't* need are disabled, and, most importantly, all of the services that need TLS have the webfig certificate bound to them.
+With this, I am making sure that all of the services I _don't_ need are disabled, and, most importantly, all of the services that need TLS have the webfig certificate bound to them.
 
 These resources don't actually need to be imported, so there's nothing else to do here. We can safely apply this config and move on with our lives.
 
@@ -406,7 +406,6 @@ resource "routeros_ip_dhcp_client" "wan" {
 }
 ```
 
-
 ### DHCP Server
 
 Mikrotik routers come pre-configured with a DHCP server on the LAN network so that devices connecting to them automatically receive an IP address. This setup is composed of three elements:
@@ -482,7 +481,7 @@ resource "routeros_ip_dns_record" "defconf" {
 }
 ```
 
-Note that here I am specifying the upstream dns servers as `1.1.1.1` and `8.8.8.8`. I *think* that by default Mikrotik uses the values it receives via DHCP on the WAN interface.
+Note that here I am specifying the upstream dns servers as `1.1.1.1` and `8.8.8.8`. I _think_ that by default Mikrotik uses the values it receives via DHCP on the WAN interface.
 
 ### Interface Lists
 
@@ -657,7 +656,7 @@ resource "routeros_ip_firewall_filter" "drop_all_wan_not_dstnat" {
 ```
 
 > Note that, since ordering is important, we do have the `place_before` argument for each rule to ensure they end up in the correct order.
-{.prompt-info}
+> {.prompt-info}
 
 There probably is a way to make this code more efficient/clean using a loop block or a similar approach. Given how critical firewall rules are, however, and especially given the risk of locking myself out due to misconfigurations, I’ve decided to keep things dumb and define each rule as a separate resource.
 

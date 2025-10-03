@@ -1,8 +1,8 @@
 ---
-title: 'Terraform: No Backend? No Problem!'
+title: "Terraform: No Backend? No Problem!"
 slug: terraform-state-git
 date: "2025-02-03"
-tags: [ terraform, git, sops, age ]
+tags: [terraform, git, sops, age]
 image: { path: featured.webp }
 
 description: |
@@ -20,7 +20,7 @@ I must (shamefully) admit that most often I'm just using the default `local` bac
 
 The problem with storing state locally is that it isn't really viable for CI workflows. There's no way to run a `terraform plan` or `terraform apply` in CI since the state file is not accessible. Well, that and the fact that if you accidentally delete or lose that file you need to re-build that entire state 😅
 
-Now, the solution here is simple then, right? Just use a *remote* backend solution. It's not like there aren't plenty of options out there!
+Now, the solution here is simple then, right? Just use a _remote_ backend solution. It's not like there aren't plenty of options out there!
 
 Well, most (all) remote backends depend on third-party services. The reason for which I'm stating what might be obvious is that in my view, those external services are still infrastructure, and infrastructure should, ideally, be managed as code. The problem arises since provisioning it as code brings us back to square one, needing some infrastructure for our infrastructure-provisioning code.
 
@@ -35,7 +35,7 @@ _Image by [bomkii](https://bomkii.com)_
 
 One thing is clear: We need **some** sort of external infrastructure or something that can store this state so that we can access it both locally, from our machine, as well as remotely in CI.
 
-There's no working around it, so the question really is *how can we make it as simple and as convenient as possible?*
+There's no working around it, so the question really is _how can we make it as simple and as convenient as possible?_
 
 At this point, I got thrown back to my GitLab days. Back then, whenever I had some terraform code in a repo I would just make use of the remote state backend that they graciously provide for us. As far as I understand, it was just an HTTP backend you can communicate with, but still. Why can't we have nice things like that on the GitHub side as well?
 
@@ -57,7 +57,7 @@ What if my CI runner applies some code and I also try to apply it locally and ma
 
 Also, `sops` is **not** idempotent. This means that each run of my fancy `task` jank modified the encrypted state file, even if nothing changed. This will over time pollute my git history too much for my liking.
 
-These pain points led to me just googling for random state backend solutions, an activity I have done quite a few times at this point.  One thing has changed, apparently, which was my search query. At this point, I am searching for ways to store my state in git.
+These pain points led to me just googling for random state backend solutions, an activity I have done quite a few times at this point. One thing has changed, apparently, which was my search query. At this point, I am searching for ways to store my state in git.
 
 This new combination of keywords got me to a GitHub page of an interesting project, aptly named [`terraform-backend-git`](https://github.com/plumber-cd/terraform-backend-git). Basically, it's' a lightweight HTTP backend for Terraform that intercepts the HTTP requests for Terraform state operations, stores them in Git, and serves them back.  
 It almost sounded too good to be true. So I decided to give it a try.
@@ -75,15 +75,15 @@ Installing everything is rather easy. All of these tools are written in our lord
 Lately, I've been trying out [`mise`](https://mise.jdx.dev/) as a package manager, so I'll be edgy and cool and use it to install everything:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ❯ mise use terraform
 mise ~/Workspace/terraform/backblaze/mise.toml tools: terraform@1.10.4
 
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ❯ mise use sops
 mise ~/Workspace/terraform/backblaze/mise.toml tools: sops@3.9.4
 
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ❯ mise use aqua:plumber-cd/terraform-backend-git
 mise ~/Workspace/terraform/backblaze/mise.toml tools: aqua:plumber-cd/terraform-backend-git@0.1.8
 ```
@@ -135,8 +135,8 @@ One practical application of this is that you can probably spin it up as a [serv
 Back on topic... So we configured Terraform to use an HTTP backend listening locally on port `6061`. Let's start the backend and see what happens:
 
 ```bash
-backblaze on  main via 💠 default 
-❯ terraform-backend-git 
+backblaze on  main via 💠 default
+❯ terraform-backend-git
 [terraform-backend-git]: WARNING: HTTP basic auth is disabled, please specify TF_BACKEND_GIT_HTTP_USERNAME and TF_BACKEND_GIT_HTTP_PASSWORD
 [terraform-backend-git]: listen on 127.0.0.1:6061
 ```
@@ -148,12 +148,12 @@ We can fix this by setting those environment variables, but we're not going to b
 Let's try to connect to the HTTP server with terraform and see what happens:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ❯ terraform-backend-git &
 [terraform-backend-git]: WARNING: HTTP basic auth is disabled, please specify TF_BACKEND_GIT_HTTP_USERNAME and TF_BACKEND_GIT_HTTP_PASSWORD
 [terraform-backend-git]: listen on 127.0.0.1:6061
 
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ terraform init
 Initializing the backend...
 [terraform-backend-git]: Git protocol was http but username was not set
@@ -163,7 +163,7 @@ Initializing the backend...
 │ Error: Error refreshing state: Failed to get state: GET http://localhost:6061/?type=git&repository=https://github.com/mirceanton/backblaze-terraform&ref=main&state=tfstate.json giving up after 3 attempt(s)
 
 backblaze on  main via 💠 default
-✦ ❯ 
+✦ ❯
 ```
 
 Oh, how lovely... An error!
@@ -181,12 +181,12 @@ backblaze on  main via 💠 default
 backblaze on  main via 💠 default
 ❯ export GITHUB_TOKEN="put-your-own-token-here ;)"
 
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ❯ terraform-backend-git &
 [terraform-backend-git]: WARNING: HTTP basic auth is disabled, please specify TF_BACKEND_GIT_HTTP_USERNAME and TF_BACKEND_GIT_HTTP_PASSWORD
 [terraform-backend-git]: listen on 127.0.0.1:6061
 
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ terraform init
 Initializing the backend...
 [terraform-backend-git]: Getting state from https://github.com/mirceanton/backblaze-terraform?ref=main&amend=false//tfstate.json
@@ -207,7 +207,7 @@ commands will detect it and remind you to do so if necessary.
 ```
 
 **AHA!** It worked!  
-I mean don't get me wrong, we haven't pushed anything to git yet, but hey, we did connect to the backend and we initialized our workspace. *Progress!*
+I mean don't get me wrong, we haven't pushed anything to git yet, but hey, we did connect to the backend and we initialized our workspace. _Progress!_
 
 ## Dummy Code
 
@@ -228,7 +228,7 @@ resource "random_string" "random" {
 We can now try to plan for it to see what happens:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ terraform plan
 Acquiring state lock. This may take a few moments...
 [terraform-backend-git]: Locking state in https://github.com/mirceanton/backblaze-terraform?ref=main&amend=false//tfstate.json
@@ -268,7 +268,7 @@ exactly these actions if you run "terraform apply" now.
 Releasing state lock. This may take a few moments...
 ```
 
-Nice! We still haven't pushed anything to our repo yet, but it at least seems to be doing *something*.  
+Nice! We still haven't pushed anything to our repo yet, but it at least seems to be doing _something_.  
 Let's now try to apply this.
 
 ```bash
@@ -308,7 +308,7 @@ Do you want to perform these actions?
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
 
-  Enter a value: 
+  Enter a value:
 ```
 
 ## State Locking
@@ -370,7 +370,7 @@ URL: https://github.com/mirceanton/backblaze-terraform
 Now we can `pull` to see a new commit to our repo:
 
 ```bash
-backblaze on  main [⇣] via 💠 default 
+backblaze on  main [⇣] via 💠 default
 ✦ ❯ git pull
 Updating 8b6f47e..f78f146
 Fast-forward
@@ -451,11 +451,11 @@ backblaze on  main via 💠 default
 Now let's restart the backend server to make sure it picked up the new environment variables:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ terraform-backend-git stop
 fish: Job 1, 'terraform-backend-git &' terminated by signal SIGTERM (Polite quit request)
 
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ❯ terraform-backend-git &
 [terraform-backend-git]: WARNING: HTTP basic auth is disabled, please specify TF_BACKEND_GIT_HTTP_USERNAME and TF_BACKEND_GIT_HTTP_PASSWORD
 [terraform-backend-git]: listen on 127.0.0.1:6061
@@ -464,7 +464,7 @@ backblaze on  main via 💠 default
 At this point, we should technically be all set up and ready to go. Let's modify our random string resource, in order to generate a change to our state file and apply our new code:
 
 ```bash
-backblaze on  main [!?⇣] via 💠 default 
+backblaze on  main [!?⇣] via 💠 default
 ✦ ❯ cat main.tf
 resource "random_string" "random" {
   length           = 20
@@ -472,7 +472,7 @@ resource "random_string" "random" {
   override_special = "/@£$"
 }
 
-backblaze on  main [!?⇣] via 💠 default 
+backblaze on  main [!?⇣] via 💠 default
 ✦ ❯ terraform apply -auto-approve
 Acquiring state lock. This may take a few moments...
 [terraform-backend-git]: Locking state in https://github.com/mirceanton/backblaze-terraform?ref=main&amend=false//tfstate.json
@@ -488,7 +488,7 @@ Releasing state lock. This may take a few moments...
 │ Error: error loading state: Failed to get state: GET http://localhost:6061/?type=git&repository=https://github.com/mirceanton/backblaze-terraform&ref=main&state=tfstate.json giving up after 3 attempt(s)
 
 backblaze on  main [!?⇣] via 💠 default
-✦ ❯ 
+✦ ❯
 ```
 
 While it is unfortunate we get an error, at least it's a good one! It is complaining about the sops metadata not being found in the file.
@@ -498,23 +498,23 @@ This is happening because we currently have a plaintext version of our state fil
 To fix this, we need to remove the plaintext version of our state file from git:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ rm tfstate.json
 
-backblaze on  main [✘!] via 💠 default 
+backblaze on  main [✘!] via 💠 default
 ✦ ❯ git add -A && git commit -m "Remove plaintext state file"
 [main b068821] Remove plaintext state file
  2 files changed, 1 insertion(+), 39 deletions(-)
  delete mode 100644 tfstate.json
 
-backblaze on  main [⇡] via 💠 default 
+backblaze on  main [⇡] via 💠 default
 ✦ ❯ git push origin main
 ```
 
 Now, let's apply the Terraform configuration again:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ terraform apply -auto-approve
 Acquiring state lock. This may take a few moments...
 [terraform-backend-git]: Locking state in https://github.com/mirceanton/backblaze-terraform?ref=main&amend=false//tfstate.json
@@ -552,7 +552,7 @@ random_string.random: Creation complete after 0s [id=gJ//ziVZ7wCOsXWSy3/C]
 [terraform-backend-git]: state did not existed
 [terraform-backend-git]: Saving state to https://github.com/mirceanton/backblaze-terraform?ref=main&amend=false//tfstate.json
 [terraform-backend-git]: Activating "pgp" encryption provider
-[PGP]    WARN[0007] Deprecation Warning: GPG key fetching from a keyserver within sops will be removed in a future version of sops. See https://github.com/mozilla/sops/issues/727 for more information. 
+[PGP]    WARN[0007] Deprecation Warning: GPG key fetching from a keyserver within sops will be removed in a future version of sops. See https://github.com/mozilla/sops/issues/727 for more information.
 [terraform-backend-git]: Unlocking state in https://github.com/mirceanton/backblaze-terraform?ref=main&amend=false//tfstate.json
 Releasing state lock. This may take a few moments...
 
@@ -570,7 +570,7 @@ Fast-forward
  1 file changed, 55 insertions(+)
  create mode 100644 tfstate.json
 
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ cat tfstate.json | jq
 {
   "version": "ENC[AES256_GCM,data:Gg==,iv:2rf+RTHRdS2OUMyw+3zljKhz/2MB+MD/5Gm3oSLF0Sg=,tag:QYi3cewvM+RDXYPZowXk1w==,type:float]",
@@ -649,7 +649,7 @@ creation_rules:
 And then we can just `sops decrypt` the file to get our state:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ sops decrypt tfstate.json | jq
 {
   "version": 4,
@@ -698,7 +698,7 @@ This means that even if at some point we want to move away from this backend and
 Now... I don't really like a few things here. Let's take a closer look at the commit that updates the state:
 
 ```bash
-backblaze on  main via 💠 default 
+backblaze on  main via 💠 default
 ✦ ❯ git log -n 1
 commit f78f14626eb2da480f518ae6f99aee65d689f442 (HEAD -> main, origin/main, origin/HEAD)
 Author: Mircea <mircea@mdesktop>
@@ -708,7 +708,7 @@ Date:   Sun Feb 2 23:37:11 2025 +0200
 
 Generally, I like my commits conventional. I (try to) follow the [conventional commit specification](https://www.conventionalcommits.org/en/v1.0.0/) as much as possible. Thus, I'd prefer that the commit message be something like `chore: Update tfstate.json` or something like that.
 
-Secondly, the commit author seems to default to `username@hostname`. I do have a GitHub app called `mr-borboto` I configured for my org to interact with my repos, but this does not seem to be possible *yet*.
+Secondly, the commit author seems to default to `username@hostname`. I do have a GitHub app called `mr-borboto` I configured for my org to interact with my repos, but this does not seem to be possible _yet_.
 
 For the first problem, I opened an [issue](https://github.com/plumber-cd/terraform-backend-git/issues/51) and tried my hand at a [PR](https://github.com/plumber-cd/terraform-backend-git/pull/52) to fix it. I'm not sure if this is the right way to do things or not, but we'll see what happens.
 

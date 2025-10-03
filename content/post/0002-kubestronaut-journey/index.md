@@ -33,7 +33,7 @@ Aside from this minor inconvenience, I found the PSI interface during the exam t
 
 **Pro tip**: Have a decent external webcam with a **long** USB cable. I took the exam with the camera built into the laptop and it was both funny and awkward when I had to pan it around the entire room to show my surroundings to the proctor. Especially when I had to get under the desk. Learn from my mistakes.
 
-### The Result
+---
 
 I passed with a score of **95**! 🎉🎉🎉 Needless to say, I was thrilled. One down, two to go!
 
@@ -64,11 +64,11 @@ So yeah... I was left with 50 minutes to do a speedrun through my CKAD exam, all
 
 ### The Exam Difficulty (What I Could See of It)
 
-Despite everything, I would say the exam itself was fair in terms of difficulty. Given a proper 2-hour duration, it would have easily been doable to go through each question 2-3 times. As I already mentioned, I was left with 50 minutes only to go through all my questions and I managed to speedrun through all but one. 
+Despite everything, I would say the exam itself was fair in terms of difficulty. Given a proper 2-hour duration, it would have easily been doable to go through each question 2-3 times. As I already mentioned, I was left with 50 minutes only to go through all my questions and I managed to speedrun through all but one.
 
 Granted, I had no time to verify my work, but I did get an "initial implementation" on all of the questions in about 50 minutes.
 
-### The Result
+---
 
 I managed to pass the exam, but I still don't think that changes anything! What happened is still **unacceptable**. I understand that I may have had a network cutout or something of the sort. I understand the app "had to" kick me from the exam. What I do not understand and find inexcusable is that the timer for my exam never stopped and that they did not implement any priority queueing or something similar for people that are trying to get back into their exams.
 
@@ -85,22 +85,26 @@ Personally, I found the CKS to be more difficult than either of those. Granted, 
 Here's how I'd rank the various CKS topics:
 
 **Very Easy** (one or two basic commands):
+
 - Using `kubesec` to scan and fix manifest files
 - Using `trivy` to scan images
 
 **Easy** (should be second nature if you've done CKA/CKAD):
+
 - Setting up `AppArmor` profiles
 - Configuring `seccomp`
 - Creating `network policies`
 - Managing `service accounts` with the appropriate `roles` and `rolebindings`
 
 **Moderate** (not difficult, but time-consuming):
+
 - Setting up `admission controllers`
 - Editing the static pod definition files to secure the cluster
 
 I placed these tasks in this category since validating your work can be quite time-consuming since you are editing the static pod manifests on the master node and it can take a bit for the pods to be recreated.
 
 **Difficult** (most challenging part):
+
 - Managing `Falco` configuration
 - Configuring `Falco` rules
 
@@ -112,7 +116,7 @@ On the technical side, everything went smoothly this time! Unlike my terrible CK
 
 I would go as far as to say it was almost a flawless experience, but since it is the first and only time things went so well, I am reluctant to make any bold claims. If I were to take another exam with PSI tomorrow, I wouldn't expect it to go this well again, so take that with a grain of salt.
 
-### The Result
+---
 
 While I did manage to pass, my score was considerably lower than my CKA and CKAD. I really should have taken more than 1 week to prepare for this one. The curriculum overlap with CKA/CKAD was minimal, and the security-focused topics were not as fresh in my mind from daily work.
 
@@ -135,7 +139,7 @@ I **really** wanted that vest. 😅
 
 ![KCNA and KCSA](./img/kcna-kcsa.webp)
 
-The thing about the KCNA and KCSA is that they are entry-level certifications. I do find it a bit weird, if I'm being honest, that they added 2 certifications that you're meant to take *before* the 3 that they already had, instead of going for some more advanced ones, but oh well.
+The thing about the KCNA and KCSA is that they are entry-level certifications. I do find it a bit weird, if I'm being honest, that they added 2 certifications that you're meant to take _before_ the 3 that they already had, instead of going for some more advanced ones, but oh well.
 
 The point for the KCNA and KCSA is mainly to get you introduced to and get your feet wet with Cloud Native technologies in general. These are not practical exams, which I do personally dislike, but again, they're supposed to be your entry into all this. They are supposed to be the (among the) first certs you're getting on your journey so I can't fault them here for going a bit easier.
 
@@ -165,7 +169,7 @@ That being said... If you're considering going for the full Kubestronaut title, 
 4. Follow with KCSA (security basics)
 5. Finish with CKS (hardest, requires CKA as prerequisite anyway)
 
-This way, you build up gradually instead of doing what I did and taking the hardest ones first. But hey, that wasn't an option *back in my days*. 🤷
+This way, you build up gradually instead of doing what I did and taking the hardest ones first. But hey, that wasn't an option _back in my days_. 🤷
 
 ## Usefule Resources
 
@@ -195,6 +199,7 @@ Looking back, I'm glad I challenged myself to get these certifications in a rela
 If I could do it over again, I would structure it differently:
 
 **Optimal Path** (6-8 weeks total):
+
 - **Week 1**: KCNA (warm up with the easiest one)
 - **Week 2-3**: CKA (build practical foundation)
 - **Week 4**: CKAD (leverage CKA knowledge)
@@ -204,7 +209,8 @@ If I could do it over again, I would structure it differently:
 
 **Difficulty Ranking**: CKS > CKAD > CKA > KCSA > KCNA
 
-**Time Management**: 
+**Time Management**:
+
 - CKA: Very doable in 2 hours, plenty of time to verify your work
 - CKAD: Fair difficulty, 2 hours is adequate (assuming PSI doesn't steal half your time)
 - CKS: More time-consuming, those Falco questions will eat up your minutes
