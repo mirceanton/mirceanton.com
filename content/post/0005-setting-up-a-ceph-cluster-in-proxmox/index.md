@@ -91,7 +91,7 @@ Quick note about those network parameters. Ceph uses two networks:
 
 Ideally, these should be separate physical networks to avoid throughput bottlenecks. Think about it, high traffic on the public network, say a client writing a lot of data to the cluster, will also result in high traffic on the cluster network since the nodes have to replicate that data across the cluster. If both the client and the cluster are using the same wire, well they're going to be competing for those bps.
 
-In my case? I am actually using a dedicated "storage" network. I couldn't think of another more fitting name. Basically, my nodes and my NAS each has an IP on this network. Any VM that needs access to my NAS also gets an IP on this network. Ceph also uses this network.
+In my case? I am actually using a dedicated "storage" network for this. I couldn't think of another more fitting name. Basically, besides the Ceph traffic, each node has an IP on this network, and any VM that needs access to my NAS gets one too.
 
 All of that traffic is going over the same 10Gbps bond because I'm running a homelab, not a datacenter. Will this bite me later? Maybe. Am I going to do it anyway? Absolutely.
 
@@ -553,7 +553,7 @@ So yeah, even under constant writes for 10 minutes straight, the NVMe pool just 
 
 ### SATA Erasure-Coded Pool
 
-Now for the other end of the spectrum, the erasure-codedSATA SSD pool. Same tests, but my expectations are lower here, both due to the drives themselves and the additional CPU cost of EC encoding.
+Now for the other end of the spectrum, the erasure-coded SATA SSD pool. Same tests, but my expectations are lower here, both due to the drives themselves and the additional CPU cost of EC encoding.
 
 **Sequential I/O**:
 
