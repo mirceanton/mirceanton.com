@@ -41,11 +41,11 @@ For me, this means that I can easily live-migrate VMs between nodes or shut them
 My cluster consists of three identical Proxmox nodes: `pve01`, `pve02`, `pve03`, each rocking:
 
 - **CPU**: Ryzen 7 5700G
-- **RAM**: 64Gi 2666Mhz DDR4
+- **RAM**: 64GiB 2666Mhz DDR4
 - **Networking**: Dual 10Gbps NICs in an LACP bond
 - **Storage**:
-  - **boot disk**: 1x 240Gi NVMe SSD in a PCIe x1 carrier board
-  - **data disk**: 1x 500GB SATA SSD
+  - **boot disk**: 1x 240GiB NVMe SSD in a PCIe x1 carrier board
+  - **data disk**: 1x 500GiB SATA SSD
   - **data disk**: 2x 1TB NVMe SSD
 
 Now, here's where things get interesting. I want to create two distinct pools:
