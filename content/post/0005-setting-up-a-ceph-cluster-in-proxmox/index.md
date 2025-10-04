@@ -628,6 +628,6 @@ After the initial burst, sustained write speed lands around ~500 MB/s, which lin
 
 Still, it's nice and stable, and totally fine for CephFS data, ISOs, and backups.
 
----
+## Wrapping Up
 
 So yeah, that’s my Ceph setup. Considering this is all running on a 3-node Proxmox cluster with consumer hardware and 10Gb networking, I'd say that's a massive win. Ceph might be complex to set up, but once it's humming... it really does feel like magic.
