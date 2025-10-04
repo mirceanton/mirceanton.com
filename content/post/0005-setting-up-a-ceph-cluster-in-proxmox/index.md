@@ -8,7 +8,7 @@ description: |
   Moving from clustered compute with single points of failure to a fully hyperconverged infrastructure using Ceph. Because apparently I hate having free time.
 ---
 
-If you're following along with my homelab journey, either here or on the [YouTubez](https://www.youtube.com/@mirceanton), you migth know that a few weeks ago I got a new three-node Proxmox cluster up and running.
+If you're following along with my homelab journey, either here or on the [YouTubez](https://www.youtube.com/@mirceanton), you might know that a few weeks ago I got a new three-node Proxmox cluster up and running.
 
 It's been great for compute, no complaints there. If a node dies, VMs can restart elsewhere. But only if they were using my NAS for storage.
 
@@ -60,7 +60,7 @@ Same reason you don't put your OS and data on the same RAID array. Different per
 
 ## Getting Ceph Up and Running
 
-I'll be doing this entire setup via the command line. While Proxmox has a great GUI for this, a blog post with just pictures of "click here and then click there" is not that interesting IMO.Plus, the CLI offers more control and, let's be honest, it's just more fun. 😉
+I'll be doing this entire setup via the command line. While Proxmox has a great GUI for this, a blog post with just pictures of "click here and then click there" is not that interesting IMO. Plus, the CLI offers more control and, let's be honest, it's just more fun. 😉
 
 ### Getting Started: Installation
 
@@ -124,7 +124,7 @@ Next up are the Managers. If the Monitors are keeping the cluster's map, the Man
 
 To keep the Kube analogies rolling, though at this point I am stretching it a bit, I think, if the Monitors are etcd, then the Managers are like the metrics-server and the Kubernetes Dashboard all rolled into one. They don't store the critical state themselves, but they are responsible for gathering all the telemetry, performance metrics, and capacity data from across the cluster.
 
-All of that information is then exposed through user-friendly features like the web-based Ceph Dashboard and a REST API. These are not enabled by default, but rather as add-ons or modules which you can enabled if you want them.
+All of that information is then exposed through user-friendly features like the web-based Ceph Dashboard and a REST API. These are not enabled by default, but rather as add-ons or modules which you can enabled if you want to.
 
 Managers work in an active/standby mode, meaning only one is actively working at any given time while the others wait to take over if it fails. Because of this, you technically only need two for proper HA. However, the documentation recommends running one alongside each of your monitors in a small cluster.
 
@@ -429,6 +429,8 @@ pvesm add rbd nvme-replicated -pool nvme-replicated -content images,rootdir
 pvesm add cephfs ceph-fs -content iso,vztmpl,backup,snippets
 ```
 
+With everything finally configured, I say it is time to see if all that effort was worth it or not!
+
 ## Performance Testing
 
 Time for the moment of truth. How fast is this Ceph cluster, really?
@@ -449,7 +451,7 @@ Let's start with the fast stuff, the NVMe pool. Again, this is the one using 3x 
 
 ```bash
 root@pve02:~# rados bench -p nvme-replicated 60 write -b 4096 -t 64
-#...output truncated for brevity...
+# ...output truncated for brevity...
 Total time run:         60.0023
 Total writes made:      1293487
 Write size:             4096
@@ -477,7 +479,7 @@ Not bad at all for a triple-replicated setup. What I really like is how steady i
 ```bash
 # Sequential writes
 root@pve02:~# rados bench -p nvme-replicated 60 write -t 32 --no-cleanup
-#...output truncated for brevity...
+# ...output truncated for brevity...
 Total time run:         60.0525
 Total writes made:      18476
 Write size:             4194304
@@ -497,7 +499,7 @@ Min latency(s):         0.0185459
 
 # Sequential reads
 root@pve02:~# rados bench -p nvme-replicated 60 seq -t 32
-#...output truncated for brevity...
+# ...output truncated for brevity...
 Total time run:       32.9274
 Total reads made:     18476
 Read size:            4194304
@@ -518,7 +520,7 @@ Results:
 
 Reads are almost twice as fast as writes, which totally checks out. Ceph can read from multiple replicas in parallel, but writes have to be acknowledged by all replicas before they count as done. Replication is great for redundancy, but it definitely makes you pay the bandwidth tax.
 
-Also, the read throughput here suggests that I might be hitting the ceiling of what my network can do, since 2.2GB is roughlt 17.6 gigabits. Very close to my theoretical limit of 20.
+Also, the read throughput here suggests that I might be hitting the ceiling of what my network can do, since 2.2GB is roughly 17.6 gigabits. Very close to my theoretical limit of 20.
 
 **Sustained Write (10 Minutes)**:
 
@@ -526,7 +528,7 @@ Burst numbers are cool, but what happens when the cache fills up and reality set
 
 ```bash
 root@pve02:~# rados bench -p nvme-replicated 600 write -t 64 --no-cleanup
-#...output truncated for brevity...
+# ...output truncated for brevity...
 Total time run:         600.577
 Total writes made:      149821
 Write size:             4194304
@@ -558,7 +560,7 @@ Now for the other end of the spectrum, the erasure-codedSATA SSD pool. Same test
 ```bash
 # Sequential writes
 root@pve02:~# rados bench -p ssd-erasure 60 write -t 32 --no-cleanup
-#...output truncated for brevity...
+# ...output truncated for brevity...
 Total time run:         60.0296
 Total writes made:      11746
 Write size:             4194304
@@ -578,7 +580,7 @@ Min latency(s):         0.0255088
 
 # Sequential reads
 root@pve02:~# rados bench -p ssd-erasure 60 seq -t 32
-#...output truncated for brevity...
+# ...output truncated for brevity...
 Total time run:       58.5217
 Total reads made:     11746
 Read size:            4194304
@@ -626,4 +628,6 @@ After the initial burst, sustained write speed lands around ~500 MB/s, which lin
 
 Still, it's nice and stable, and totally fine for CephFS data, ISOs, and backups.
 
-Considering this is all running on a 3-node Proxmox cluster with consumer hardware and 10Gb networking, I'd say that's a massive win. Ceph might be complex to set up, but once it's humming… it really does feel like magic.
+---
+
+So yeah, that’s my Ceph setup. Considering this is all running on a 3-node Proxmox cluster with consumer hardware and 10Gb networking, I'd say that's a massive win. Ceph might be complex to set up, but once it's humming... it really does feel like magic.
