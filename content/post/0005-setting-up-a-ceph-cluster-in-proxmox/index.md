@@ -1,7 +1,6 @@
 ---
-title: "Hyperconverged Storage: Setting Up Ceph in My Proxmox Cluster"
-slug: proxmox-ceph-hyperconverged-storage
-date: "2025-10-05"
+title: Setting Up Ceph in My Proxmox Cluster
+date: "2025-10-04"
 tags: [ceph, proxmox, storage, homelab]
 image: { path: featured.webp }
 
@@ -244,7 +243,7 @@ ID   CLASS  WEIGHT   TYPE NAME       STATUS  REWEIGHT  PRI-AFF
   8    ssd  0.45479          osd.8       up   1.00000  1.00000
 ```
 
-You should see each OSD listed under its host with its device class and a "weight". This weight is based on the disk capacity, with 1.0 ≈ 1TB. Ceph uses this weight to distribute data proportionally, so a 2TB drive will get twice as much data as a 1TB drive.
+You should see each OSD listed under its host with its device class and a "weight". This weight is based on the disk capacity, with 1.0 ~ 1TB. Ceph uses this weight to distribute data proportionally, so a 2TB drive will get twice as much data as a 1TB drive.
 
 ## Understanding CRUSH and Pools
 
@@ -426,114 +425,205 @@ rados -p ssd-erasure rm test-ssd
 After all that CLI work, mounting in Proxmox is almost anticlimactic. Since I used Proxmox's built-in Ceph management, it auto-detects everything.
 
 ```bash
-pvesm add rbd ceph-rbd -pool nvme-replicated -content images,rootdir
-pvesm add cephfs cephfs-data -content iso,vztmpl,backup,snippets
+pvesm add rbd nvme-replicated -pool nvme-replicated -content images,rootdir
+pvesm add cephfs ceph-fs -content iso,vztmpl,backup,snippets
 ```
 
 ## Performance Testing
 
--> TODO expand code snippets with actual output
+Time for the moment of truth. How fast is this Ceph cluster, really?
 
-Alright, the moment of truth. How fast is this thing actually?
+I used Ceph's built-in `rados bench` tool to get a sense of raw cluster performance, without any VM or filesystem overhead getting in the way. Basically, this is me asking Ceph, "If I just throw data straight at you, how fast can you catch it?"
 
-I'm using Ceph's built-in `rados bench` tool to test raw cluster performance before any VM overhead.
+For quick burst tests, I ran both 4K random writes (because that's what VM workloads usually look like) and 4MB sequential reads/writes (because that's what large file transfers or backups look like). Then, for the real endurance test, I let it run for 10 minutes to see how things hold up once the cache runs out.
+
+For the RBD pool, 4K random IOPS are the most relevant metric I am looking for, since this will be backing multiple VM disks.
+
+For the CephFS pool, sequential bandwidth matters more, obviously, since this will store larger files like ISOs or backups.
 
 ### NVMe Replicated Pool
 
-First, 4K random writes (the metric that matters most for VMs):
+Let's start with the fast stuff, the NVMe pool. Again, this is the one using 3x replication across nodes, so every write is getting sent to three different places at once.
+
+**4K Random Writes**:
 
 ```bash
-rados bench -p nvme-replicated 60 write -b 4096 -t 64
+root@pve02:~# rados bench -p nvme-replicated 60 write -b 4096 -t 64
+#...output truncated for brevity...
+Total time run:         60.0023
+Total writes made:      1293487
+Write size:             4096
+Object size:            4096
+Bandwidth (MB/sec):     84.2082
+Stddev Bandwidth:       2.01143
+Max bandwidth (MB/sec): 88.2266
+Min bandwidth (MB/sec): 79.7188
+Average IOPS:           21557
+Stddev IOPS:            514.927
+Max IOPS:               22586
+Min IOPS:               20408
+Average Latency(s):     0.00296778
+Stddev Latency(s):      0.000691922
+Max latency(s):         0.031469
+Min latency(s):         0.00150686
 ```
 
-Result: ~20,000 IOPS at 4K block sizes. Not bad for a homelab.
+Result: around 21.5K IOPS average, with a low of ~20.5K and a peak around 22.5K.
 
-Now let's test larger 4MB blocks:
+Not bad at all for a triple-replicated setup. What I really like is how steady it is. The standard deviation in IOPS is only about 500, meaning performance isn't flapping all over the place. Latency hangs out right around 3 ms, which feels totally reasonable given all the replication going on.
+
+**Sequential I/O (4 MB blocks)**:
 
 ```bash
 # Sequential writes
-rados bench -p nvme-replicated 60 write -t 32 --no-cleanup
+root@pve02:~# rados bench -p nvme-replicated 60 write -t 32 --no-cleanup
+#...output truncated for brevity...
+Total time run:         60.0525
+Total writes made:      18476
+Write size:             4194304
+Object size:            4194304
+Bandwidth (MB/sec):     1230.66
+Stddev Bandwidth:       130.653
+Max bandwidth (MB/sec): 1336
+Min bandwidth (MB/sec): 428
+Average IOPS:           307
+Stddev IOPS:            32.6632
+Max IOPS:               334
+Min IOPS:               107
+Average Latency(s):     0.103924
+Stddev Latency(s):      0.0758752
+Max latency(s):         1.17268
+Min latency(s):         0.0185459
 
 # Sequential reads
-rados bench -p nvme-replicated 60 seq -t 32
+root@pve02:~# rados bench -p nvme-replicated 60 seq -t 32
+#...output truncated for brevity...
+Total time run:       32.9274
+Total reads made:     18476
+Read size:            4194304
+Object size:          4194304
+Bandwidth (MB/sec):   2244.45
+Average IOPS:         561
+Stddev IOPS:          22.3058
+Max IOPS:             579
+Min IOPS:             473
+Average Latency(s):   0.0561809
+Max latency(s):       0.421182
+Min latency(s):       0.00966032
 ```
 
 Results:
+- Sequential Write: ~ 1.2 GB/s
+- Sequential Read: ~ 2.2 GB/s
 
-- Write: ~1,100 MB/s burst
-- Read: ~1,800 MB/s burst
+Reads are almost twice as fast as writes, which totally checks out. Ceph can read from multiple replicas in parallel, but writes have to be acknowledged by all replicas before they count as done. Replication is great for redundancy, but it definitely makes you pay the bandwidth tax.
 
-Reads are faster because Ceph can read from multiple replicas simultaneously. Writes have 3x replication overhead.
+Also, the read throughput here suggests that I might be hitting the ceiling of what my network can do, since 2.2GB is roughlt 17.6 gigabits. Very close to my theoretical limit of 20.
 
-### Sustained Performance
+**Sustained Write (10 Minutes)**:
 
-Burst tests are nice, but what about sustained load? Let's run a 10-minute write test:
+Burst numbers are cool, but what happens when the cache fills up and reality sets in?
 
 ```bash
 root@pve02:~# rados bench -p nvme-replicated 600 write -t 64 --no-cleanup
-
-Total time run:         600.409
-Total writes made:      111977
+#...output truncated for brevity...
+Total time run:         600.577
+Total writes made:      149821
 Write size:             4194304
 Object size:            4194304
-Bandwidth (MB/sec):     746.005
-Stddev Bandwidth:       220.728
-Max bandwidth (MB/sec): 976
-Min bandwidth (MB/sec): 104
-Average IOPS:           186
-Stddev IOPS:            55.1819
-Max IOPS:               244
-Min IOPS:               26
-Average Latency(s):     0.342943
-Stddev Latency(s):      0.153585
-Max latency(s):         1.54499
-Min latency(s):         0.0350017
+Bandwidth (MB/sec):     997.848
+Stddev Bandwidth:       365.282
+Max bandwidth (MB/sec): 1456
+Min bandwidth (MB/sec): 72
+Average IOPS:           249
+Stddev IOPS:            91.3205
+Max IOPS:               364
+Min IOPS:               18
+Average Latency(s):     0.256319
+Stddev Latency(s):      0.178475
+Max latency(s):         2.63443
+Min latency(s):         0.0517289
 ```
 
-After the initial burst, performance settles around **750 MB/s**. That's the caching layers getting saturated.
+After a few minutes, things level out around 1 GB/s sustained write throughput, which honestly surprised me. I was expecting a bigger drop. Latency does creep up a bit under load, but still stays in a perfectly fine range.
+
+So yeah, even under constant writes for 10 minutes straight, the NVMe pool just kind of shrugs and keeps going. Not bad at all.
 
 ### SATA Erasure-Coded Pool
 
-Same tests, but I'm not expecting miracles from consumer SATA drives:
+Now for the other end of the spectrum, the erasure-codedSATA SSD pool. Same tests, but my expectations are lower here, both due to the drives themselves and the additional CPU cost of EC encoding.
+
+**Sequential I/O**:
 
 ```bash
 # Sequential writes
-rados bench -p ssd-erasure 60 write -t 32 --no-cleanup
+root@pve02:~# rados bench -p ssd-erasure 60 write -t 32 --no-cleanup
+#...output truncated for brevity...
+Total time run:         60.0296
+Total writes made:      11746
+Write size:             4194304
+Object size:            4194304
+Bandwidth (MB/sec):     782.68
+Stddev Bandwidth:       118.754
+Max bandwidth (MB/sec): 920
+Min bandwidth (MB/sec): 464
+Average IOPS:           195
+Stddev IOPS:            29.6885
+Max IOPS:               230
+Min IOPS:               116
+Average Latency(s):     0.163412
+Stddev Latency(s):      0.0625509
+Max latency(s):         0.604346
+Min latency(s):         0.0255088
 
 # Sequential reads
-rados bench -p ssd-erasure 60 seq -t 32
+root@pve02:~# rados bench -p ssd-erasure 60 seq -t 32
+#...output truncated for brevity...
+Total time run:       58.5217
+Total reads made:     11746
+Read size:            4194304
+Object size:          4194304
+Bandwidth (MB/sec):   802.847
+Average IOPS:         200
+Stddev IOPS:          33.6774
+Max IOPS:             335
+Min IOPS:             158
+Average Latency(s):   0.158628
+Max latency(s):       1.29276
+Min latency(s):       0.0239395
 ```
 
 Results:
+- Write: ~ 780 MB/s
+- Read: ~ 800 MB/s
 
-- Write: ~480 MB/s burst
-- Read: ~720 MB/s burst
+Honestly, that's better than I expected. This is roughly what you'd get from a pair of SATA SSDs running in RAID 0, which makes sense, I guess, since Ceph is striping across three drives here. The CPU definitely works harder on this pool due to parity calculations, but the performance is still really solid for what it is.
 
-The erasure coding overhead hurts writes, but reads are solid since Ceph can read from multiple OSDs in parallel.
-
-Sustained write test:
+**Sustained Write (10 Minutes)**:
 
 ```bash
 root@pve02:~# rados bench -p ssd-erasure 600 write -t 64 --no-cleanup
-
-Total time run:         600.115
-Total writes made:      59839
+Total time run:         600.18
+Total writes made:      62455
 Write size:             4194304
 Object size:            4194304
-Bandwidth (MB/sec):     398.85
-Stddev Bandwidth:       48.5739
-Max bandwidth (MB/sec): 552
-Min bandwidth (MB/sec): 248
-Average IOPS:           99
-Stddev IOPS:            12.1435
-Max IOPS:               138
-Min IOPS:               62
-Average Latency(s):     0.641541
-Stddev Latency(s):      0.133584
-Max latency(s):         1.16818
-Min latency(s):         0.115442
-
+Bandwidth (MB/sec):     416.242
+Stddev Bandwidth:       54.7577
+Max bandwidth (MB/sec): 512
+Min bandwidth (MB/sec): 200
+Average IOPS:           104
+Stddev IOPS:            13.6894
+Max IOPS:               128
+Min IOPS:               50
+Average Latency(s):     0.614816
+Stddev Latency(s):      0.134532
+Max latency(s):         1.47546
+Min latency(s):         0.24148
 root@pve02:~#
 ```
 
-Settles around **400 MB/s** sustained. Slower due to parity calculations, but still very respectable for SATA SSDs.
+After the initial burst, sustained write speed lands around ~500 MB/s, which lines up perfectly with the throughput of a single SATA SSD. Basically, once the caches are full, the pool settles into "one-disk speed" mode. Kinda expected for erasure coding since every write involves extra parity math and data shuffling.
+
+Still, it's nice and stable, and totally fine for CephFS data, ISOs, and backups.
+
+Considering this is all running on a 3-node Proxmox cluster with consumer hardware and 10Gb networking, I'd say that's a massive win. Ceph might be complex to set up, but once it's humming… it really does feel like magic.
