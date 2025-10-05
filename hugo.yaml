@@ -62,6 +62,8 @@ enableEmoji: true # Enable emoji support in content
 # Output formats (for RSS, sitemap, etc)
 outputs:
   home: [HTML, RSS, JSON]
+outputFormats:
+  RSS: { baseName: "feed" } # Change RSS feed name to feed.xml
 
 # Sitemap configuration
 sitemap:
