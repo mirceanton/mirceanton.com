@@ -1,8 +1,6 @@
 ---
-title: "Archives"
-draft: false
+title: Archives
 layout: archives
-
 menu:
   main:
     name: Archives

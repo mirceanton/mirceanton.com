@@ -1,8 +1,5 @@
 ---
-title: "About"
-date: 2023-04-20
-draft: false
-
+title: About
 menu:
   main:
     name: About
