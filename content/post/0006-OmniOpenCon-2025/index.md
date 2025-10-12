@@ -1,16 +1,17 @@
 ---
-icon: hammer
-image: { path: featured.webp }
 title: From Zero to Website in 100 Minutes
-slug: omniopencon-2025
+image: { path: featured.webp }
 date: "2025-10-17"
-event: "OmniOpenCon"
-location: Bucharest, Romania
-duration: 100min
-level: Beginner
+
+categories: [ Talks ]
+tags:
+  - Hugo
+  - GitHub Actions
+  - GitHub Pages
+  - GitHub Codespaces
 
 description: |
-  In this workshop, we'll go from zero to a fully functional personal site using Hugo and GitHub Pages. Together, we'll explore how static site generators work, how to automate deployment with GitHub Actions, and how to publisih your content online for free.
+  Set up a Hugo site from scratch using GitHub Codespaces, GitHub Actions and GitHub Pages.
 ---
 
 ## Overview

@@ -1,11 +1,16 @@
 ---
 title: Setting Up Ceph in My Proxmox Cluster
-date: "2025-10-04"
-tags: [ceph, proxmox, storage, homelab]
 image: { path: featured.webp }
+date: "2025-10-04"
+
+categories: [ Blog Post ]
+tags:
+  - Ceph
+  - Proxmox
+  - Storage
 
 description: |
-  Moving from clustered compute with single points of failure to a fully hyperconverged infrastructure using Ceph. Because apparently I hate having free time.
+  Ceph cluster bootstrap, configuration and performance testing under Proxmox 9.0
 ---
 
 If you're following along with my homelab journey, either here or on the [YouTubez](https://www.youtube.com/@mirceanton), you might know that a few weeks ago I got a new three-node Proxmox cluster up and running.

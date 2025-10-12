@@ -1,12 +1,16 @@
 ---
 title: The Best OS For Kubernetes
 slug: 2023-11-28-the-best-os-for-kubernetes
-date: "2023-11-28"
-tags: [kubernetes, talos]
 image: { path: featured.webp }
+date: "2023-11-28"
+
+categories: [ Blog Post ]
+tags:
+  - Kubernetes
+  - Talos Linux
 
 description: |
-  Learn why Talos Linux is (probably) the best OS for Kubernetes. This minimal, API-driven operating system is secure by default and configured entirely via YAML, making cluster deployment and management effortless
+  Setting up a Kubernetes cluster in Proxmox using Talos Linux, a minimal OS build for running Kubernetes.
 ---
 
 If you're not using Talos Linux for Kubernetes, you're _probably_ doing it wrong. Read along and let me explain why.

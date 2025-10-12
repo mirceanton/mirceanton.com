@@ -1,12 +1,16 @@
 ---
 title: My Kubernetes Certification Journey
 slug: kubernetes-certification-journey
-date: "2024-12-10"
-tags: [certification, kubernetes]
 image: { path: featured.webp }
+date: "2024-12-10"
+
+categories: [ Blog Post ]
+tags:
+  - Kubernetes
+  - Certification
 
 description: |
-  A complete breakdown of my experience getting all five Kubernetes certifications - CKA, CKAD, CKS, KCNA, and KCSA - from the initial 3-week sprint to completing the Kubestronaut title.
+  A complete breakdown of my experience getting the Kubestronaut certification.
 ---
 
 Back in '22 (2022, that is), I decided to challenge myself and get all three Kubernetes certifications within 3 weeks. One week per exam. Looking back, I'm not entirely sure if this was ambitious or just plain stupid, but hey, I pulled it off! Let me walk you through my entire journey, exam by exam, and hopefully save you from some of the pain I went through.
