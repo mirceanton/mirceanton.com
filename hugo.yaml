@@ -51,6 +51,7 @@ params:
 # ===============================================================================================
 permalinks:
   post: /posts/:slug/
+  talks: /talks/:slug/
 
 taxonomies:
   tag: tags
