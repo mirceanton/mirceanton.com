@@ -3,6 +3,9 @@ title: From Zero to Website in 100 Minutes
 image: { path: featured.webp }
 date: "2025-10-17"
 
+url: /talks/omniopencon-2025
+aliases: [ "/posts/from-zero-to-website-in-100-minutes" ]
+
 categories: [ Talks ]
 tags:
   - Hugo
