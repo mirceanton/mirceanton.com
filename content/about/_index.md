@@ -3,7 +3,7 @@ title: About
 menu:
   main:
     name: About
-    weight: 5
+    weight: 6
     pre: fa-info-circle
 ---
 
