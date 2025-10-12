@@ -1,12 +1,18 @@
 ---
 title: "Terraform: No Backend? No Problem!"
 slug: terraform-state-git
-date: "2025-02-03"
-tags: [terraform, git, sops, age]
 image: { path: featured.webp }
+date: "2025-02-03"
+
+categories: [ Blog Post ]
+tags:
+  - Terraform
+  - Git
+  - SOPS
+  - age
 
 description: |
-  terraform-backend-git is a simple yet elegant solution for managing Terraform state by storing it directly in git. It comes built-in with state locking via branches, encryption via sops and much more!
+  terraform-backend-git is a simple yet elegant solution for managing Terraform state by storing it encrypted in git.
 ---
 
 ## Introduction

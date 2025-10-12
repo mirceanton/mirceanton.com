@@ -1,12 +1,17 @@
 ---
 title: Getting Started With Mikrotik and Terraform
 slug: mikrotik-terraform-getting-started
-date: "2025-02-19"
-tags: [terraform, mikrotik]
 image: { path: featured.webp }
+date: "2025-02-19"
+
+categories: [ Blog Post ]
+tags:
+  - Terraform
+  - Mikrotik
+  - Infrastructure as Code
 
 description: |
-  After upgrading my home router to a Mikrotik RB5009, I started thinking about what would be the best way to manage and configure it. In this blog post, I show you how I ended up configuring it with Terraform.
+  Oboard a brand-new Mikrotik device under Terraform for Infrastructure as Code.
 ---
 
 I "recently" (like... almost a year ago at this point 😅) upgraded from my DIY OPNsense setup to a MikroTik RB5009. You can watch my [YouTube Video](https://www.youtube.com/watch?v=k5eShv6l1ts) for the full story of the why, what and the how.

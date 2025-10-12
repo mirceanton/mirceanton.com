@@ -54,6 +54,7 @@ permalinks:
 
 taxonomies:
   tag: tags
+  category: categories
 
 enableGitInfo: true # Add git commit info to pages (last modified date)
 enableRobotsTXT: true # Generate robots.txt

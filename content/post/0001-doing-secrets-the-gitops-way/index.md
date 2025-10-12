@@ -1,11 +1,16 @@
 ---
 title: Doing Secrets The GitOps Way
-date: "2024-03-26"
-tags: [git, gitops, sops, age]
 image: { path: featured.webp }
+date: "2024-03-26"
+
+categories: [ Blog Post ]
+tags: 
+  - SOPS
+  - age
+  - Git
 
 description: |
-  Storing secrets in Git is generally a bad practice... Unless you encrypt them. In this blog post I explain how to do that easily.
+  Storing secrets in Git is generally a bad practice... Unless you encrypt them.
 ---
 
 Alrighty then, let's talk GitOps.
