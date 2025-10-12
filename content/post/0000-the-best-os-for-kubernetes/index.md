@@ -1,8 +1,9 @@
 ---
 title: The Best OS For Kubernetes
-slug: 2023-11-28-the-best-os-for-kubernetes
 image: { path: featured.webp }
 date: "2023-11-28"
+
+aliases: [ 2023-11-28-the-best-os-for-kubernetes ]
 
 categories: [ Blog Post ]
 tags:
