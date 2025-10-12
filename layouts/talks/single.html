@@ -1,6 +1,4 @@
 {{ define "main" }}
-{{ $enable_toc := and (.Params.toc | default site.Params.toc) (gt (len .TableOfContents) 100) }}
-{{ $lang := .Site.Language.Lang }}
 {{ $page := . }}
 
 <article class="px-1" id="talk" data-toc="true">
