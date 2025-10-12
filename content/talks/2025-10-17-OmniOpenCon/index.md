@@ -5,6 +5,11 @@ slug: omniopencon-2025
 date: "2025-10-17"
 event: "OmniOpenCon"
 location: Bucharest, Romania
+duration: 100min
+level: Beginner
+
+image: { path: featured.webp }
+toc: true
 
 description: |
   In this workshop, we'll go from zero to a fully functional personal site using Hugo and GitHub Pages. Together, we'll explore how static site generators work, how to automate deployment with GitHub Actions, and how to publisih your content online for free.
@@ -66,7 +71,7 @@ Hugo is a **fast** and **flexible** static site generator written in Go.
 
 - [Kubernetes documentation](https://kubernetes.io/) - [Repo](https://github.com/kubernetes/website)
 - [Let's Encrypt documentation](https://letsencrypt.org/) - [Repo](https://github.com/letsencrypt/website)
-- [My own personal blog](https://mirceanton.com) - [Repo](https://github.com/mirceanton/mirceanton.com)
+- [This very website!](https://mirceanton.com) - [Repo](https://github.com/mirceanton/mirceanton.com)
 - And thousands more!
 
 ---
