@@ -732,9 +732,11 @@ Then go to the **Actions** tab on GitHub to watch the workflow in real time.
 - The **build job** will install Hugo, build the site, and upload the files.
 - The **deploy job** will take those files and push them to GitHub Pages.
 
-<!-- markdownlint-disable-next-line MD034 -->
+<!-- markdownlint-disable MD034 -->
 
 Once the workflow shows a green checkmark, go back to **"Settings"** → **"Pages"** and you should see: **"Your site is live at https://YOUR-USERNAME.github.io/my-hugo-site/"**
+
+<!-- markdownlint-enable MD034 -->
 
 **🎉 Congratulations!** Your site is live on the internet!
 
@@ -780,7 +782,7 @@ From here, you can customize your theme, add new pages, and continue publishing 
 
 **DevContainers**: [DevContainers Beginner Guide](https://www.youtube.com/watch?v=X7guekGZM20) | [Docker in 100 seconds](https://www.youtube.com/watch?v=Gjnup-PuquQ) | [Docker in 5 minutes](https://www.youtube.com/watch?v=_dfLOzuIg2o)
 
-**Hugo**: [Official Documentation](https://gohugo.io/documentation/) | [Hugo Forum](https://discourse.gohugo.io/) | [Hugo Themes](https://themes.gohugo.io/) | [Hugo in 100 seconds](https://www.youtube.com/watch?v=0RKpf3rK57I) | [Full Hugo Tutorial Playlist](https://www.youtube.com/playlist?list=PLLAZ4kZ9dFpOnyRlyS-liKL5ReHDcj4G3) 
+**Hugo**: [Official Documentation](https://gohugo.io/documentation/) | [Hugo Forum](https://discourse.gohugo.io/) | [Hugo Themes](https://themes.gohugo.io/) | [Hugo in 100 seconds](https://www.youtube.com/watch?v=0RKpf3rK57I) | [Full Hugo Tutorial Playlist](https://www.youtube.com/playlist?list=PLLAZ4kZ9dFpOnyRlyS-liKL5ReHDcj4G3)
 
 **PaperMod Theme**: [Documentation](https://github.com/adityatelange/hugo-PaperMod/wiki) | [Features](https://github.com/adityatelange/hugo-PaperMod/wiki/Features) | [FAQs](https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs)
 
