@@ -175,7 +175,7 @@ That being said... If you're considering going for the full Kubestronaut title, 
 
 This way, you build up gradually instead of doing what I did and taking the hardest ones first. But hey, that wasn't an option _back in my days_. 🤷
 
-## Usefule Resources
+## Useful Resources
 
 For all five exams, I relied **heavily** on the **KodeKloud courses** and their labs. I think they are an amazing and invaluable resource for these certifications. Everything you need to know is covered in the course and labs.
 
