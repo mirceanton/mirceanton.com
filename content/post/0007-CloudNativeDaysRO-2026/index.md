@@ -232,7 +232,7 @@ Until next time!
 
 ## Useful Resources
 
-Talk slides: [GitOps_In_The_Wild.pptx](/static/docs/Mircea_Pavel_Anton_GitOps_In_The_Wild_CND_RO.pptx)
+Talk slides: [GitOps_In_The_Wild.pptx](/docs/Mircea_Pavel_Anton_GitOps_In_The_Wild_CND_RO.pptx)
 
 Tools referenced:
 
