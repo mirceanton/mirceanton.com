@@ -28,7 +28,7 @@ params:
   readingTime: true # Show estimated reading time
   wordCount: true # Show word count
   toc: true # Enable Table of Contents by default in posts
-  analytics: { google: { id: G-6C126MZNGT } }
+  analytics: { umami: { id: REPLACE_ME, host: https://analytics.mirceanton.com } }
   search: { enable: true, maxResults: 20 }
 
   comments:
@@ -71,12 +71,6 @@ sitemap:
   changefreq: weekly
   priority: 0.5
   filename: sitemap.xml
-
-# Privacy settings
-privacy:
-  googleAnalytics:
-    anonymizeIP: true
-    respectDoNotTrack: true
 
 # ===============================================================================================
 # Markup configuration
