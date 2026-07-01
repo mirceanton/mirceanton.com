@@ -44,24 +44,31 @@ version = "3.11.5"
 backend = "http:dart"
 
 [tools.dart."platforms.linux-arm64"]
+checksum = "sha256:50e9aba58f8717943854778a73074e63a80c42054355d35e2732a0cc0824a2fb"
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-linux-arm64-release.zip"
 
 [tools.dart."platforms.linux-arm64-musl"]
+checksum = "sha256:50e9aba58f8717943854778a73074e63a80c42054355d35e2732a0cc0824a2fb"
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-linux-arm64-release.zip"
 
 [tools.dart."platforms.linux-x64"]
+checksum = "sha256:57f3ab5ac24883060b1ff12bcdac472ed76563ec7364e88f8a6d41e4f0db075f"
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-linux-x64-release.zip"
 
 [tools.dart."platforms.linux-x64-musl"]
+checksum = "sha256:57f3ab5ac24883060b1ff12bcdac472ed76563ec7364e88f8a6d41e4f0db075f"
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-linux-x64-release.zip"
 
 [tools.dart."platforms.macos-arm64"]
+checksum = "sha256:3fd03deb3b0c7897a9896c3f5f3dda4a9fe63c43b14364ee928ec6db348be0ac"
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-macos-arm64-release.zip"
 
 [tools.dart."platforms.macos-x64"]
+checksum = "sha256:94de6a18049c354026f5422446b311cfc96b51db6d316eeb7ca46ff14c0b8aaa"
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-macos-x64-release.zip"
 
 [tools.dart."platforms.windows-x64"]
+checksum = "sha256:044b9c58f45c7e8b67467395eaad469f67cd8797a73fbd1d2bb8a89a53b2dcba"
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-windows-x64-release.zip"
 
 [[tools."github:sass/dart-sass"]]
@@ -175,7 +182,7 @@ checksum = "sha256:10ce84261773a52aa2dabb4f51b9fe86309592248dbeeef093c6b36b1dacf
 url = "https://github.com/gohugoio/hugo/releases/download/v0.163.3/hugo_extended_0.163.3_windows-amd64.zip"
 
 [[tools.markdownlint-cli2]]
-version = "0.22.1"
+version = "0.23.0"
 backend = "npm:markdownlint-cli2"
 
 [[tools.yamllint]]
