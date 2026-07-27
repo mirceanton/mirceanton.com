@@ -99,6 +99,7 @@ checksum = "sha256:2a2ce6036f94534b39356252b1a3d4aa7879ab139c73bf62f7c9b5beafcfc
 url = "https://github.com/sass/dart-sass/releases/download/1.102.0/dart-sass-1.102.0-linux-x64.tar.gz"
 url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/488974194"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:sass/dart-sass"."platforms.linux-x64-musl"]
 checksum = "sha256:74d09779a30e2f73fc9257f258f152a13a2756e76531d81db5e3ed06d7bb7782"
@@ -196,7 +197,7 @@ url = "https://github.com/gohugoio/hugo/releases/download/v0.164.0/hugo_extended
 url_api = "https://api.github.com/repos/gohugoio/hugo/releases/assets/468320305"
 
 [[tools.markdownlint-cli2]]
-version = "0.23.1"
+version = "0.23.2"
 backend = "npm:markdownlint-cli2"
 
 [[tools.yamllint]]
