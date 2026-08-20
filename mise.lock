@@ -79,50 +79,50 @@ checksum = "sha256:044b9c58f45c7e8b67467395eaad469f67cd8797a73fbd1d2bb8a89a53b2d
 url = "https://storage.googleapis.com/dart-archive/channels/stable/release/3.11.5/sdk/dartsdk-windows-x64-release.zip"
 
 [[tools."github:sass/dart-sass"]]
-version = "1.103.0"
+version = "1.103.1"
 backend = "github:sass/dart-sass"
 
 [tools."github:sass/dart-sass"."platforms.linux-arm64"]
-checksum = "sha256:213a165c1dc66f080a5ba0a0a21e9361fa78b04989a41d1251c1311a0f8211f0"
-url = "https://github.com/sass/dart-sass/releases/download/1.103.0/dart-sass-1.103.0-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/521517035"
+checksum = "sha256:2877de5942c8e99ed1e30fffefdcbef0fc47e64420831c06230abb54b17275e6"
+url = "https://github.com/sass/dart-sass/releases/download/1.103.1/dart-sass-1.103.1-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/522883827"
 provenance = "github-attestations"
 
 [tools."github:sass/dart-sass"."platforms.linux-arm64-musl"]
-checksum = "sha256:8d96201d8c381fde326e4b8df3f379ac848584026ae5e8b2e9b3e5e560a7b2a2"
-url = "https://github.com/sass/dart-sass/releases/download/1.103.0/dart-sass-1.103.0-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/521517039"
+checksum = "sha256:08354700b647570ae42226b33693f8e0c4499f5f3baec12ffc9f53e7dab5d157"
+url = "https://github.com/sass/dart-sass/releases/download/1.103.1/dart-sass-1.103.1-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/522883825"
 provenance = "github-attestations"
 
 [tools."github:sass/dart-sass"."platforms.linux-x64"]
-checksum = "sha256:b649fcb72f1aba696d80a07882777daa1403a740f694c585a3a6e17e5b8198ca"
-url = "https://github.com/sass/dart-sass/releases/download/1.103.0/dart-sass-1.103.0-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/521517045"
+checksum = "sha256:b33a7747fc41cb4f96dff09eaf02ada4dd47153f2e54cda915ff9310d9f8914a"
+url = "https://github.com/sass/dart-sass/releases/download/1.103.1/dart-sass-1.103.1-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/522883836"
 provenance = "github-attestations"
 provenance_verified = true
 
 [tools."github:sass/dart-sass"."platforms.linux-x64-musl"]
-checksum = "sha256:647acf0c3ec3c84a51c8ab417adfb1e79f3f8e830b397148e29512d4d14ad14d"
-url = "https://github.com/sass/dart-sass/releases/download/1.103.0/dart-sass-1.103.0-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/521517044"
+checksum = "sha256:7f3898ec11f8392f72bbf59e85e5183e0e20071a0b853816bee18e682568477c"
+url = "https://github.com/sass/dart-sass/releases/download/1.103.1/dart-sass-1.103.1-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/522883835"
 provenance = "github-attestations"
 
 [tools."github:sass/dart-sass"."platforms.macos-arm64"]
-checksum = "sha256:9ec2abef15fc88da2fe10b883044101e4d34072828b6a837aaada4bbb3a9b32c"
-url = "https://github.com/sass/dart-sass/releases/download/1.103.0/dart-sass-1.103.0-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/521517051"
+checksum = "sha256:7f48b426ed9ea77c2866c031e1b055cc4ecda7940b3500b630970ce37daef391"
+url = "https://github.com/sass/dart-sass/releases/download/1.103.1/dart-sass-1.103.1-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/522883837"
 provenance = "github-attestations"
 
 [tools."github:sass/dart-sass"."platforms.macos-x64"]
-checksum = "sha256:fbfb608053055b8898f7559859ed01119d09db6cd54b1141bdc058c9bbd2510b"
-url = "https://github.com/sass/dart-sass/releases/download/1.103.0/dart-sass-1.103.0-macos-x64.tar.gz"
-url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/521517055"
+checksum = "sha256:dbd5257cf503a56e8d0d693a6c47e07149769a45346538d07b4db0f702994f17"
+url = "https://github.com/sass/dart-sass/releases/download/1.103.1/dart-sass-1.103.1-macos-x64.tar.gz"
+url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/522883838"
 provenance = "github-attestations"
 
 [tools."github:sass/dart-sass"."platforms.windows-x64"]
-checksum = "sha256:9d8ce66bf06bedcc20656493d7e03b9f1969f0293d38789fd9cd60320c3722e4"
-url = "https://github.com/sass/dart-sass/releases/download/1.103.0/dart-sass-1.103.0-windows-x64.zip"
-url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/521517060"
+checksum = "sha256:c11bd2792015bf0fb514640ccfff8b3a469eed4506ccc29cec545f88ac7a2a55"
+url = "https://github.com/sass/dart-sass/releases/download/1.103.1/dart-sass-1.103.1-windows-x64.zip"
+url_api = "https://api.github.com/repos/sass/dart-sass/releases/assets/522883844"
 provenance = "github-attestations"
 
 [[tools.go]]
