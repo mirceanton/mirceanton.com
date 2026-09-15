@@ -1,18 +1,75 @@
-// Card grid: make the title a stretched-link covering the whole card
-// (instead of wrapping the card in one <a>, which would make the
-// independently-clickable GitHub icon below an invalid nested <a>).
-#post-list {
-  .card {
-    position: relative;
+// Two-column tile grid, collapsing to one column on narrow viewports.
+// Scoped to the projects list page only (data-page-type is set on that
+// template's root element) — #post-list is also used, unstyled here, by
+// the theme's own single-column post list on Home.
+//
+// NOTE ON SPECIFICITY: the theme's own #post-list-scoped rules (in the
+// theme's base/_base.scss and pages/_home.scss) use an ID selector
+// (#post-list .card-wrapper..., #post-list .card .card-body...), which
+// outranks any number of plain classes. Every override below that competes
+// with one of those rules is deliberately prefixed with #post-list too
+// (our own markup carries that same id), so it wins on specificity rather
+// than relying on stylesheet load order.
+article[data-page-type='projects'] .project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
 
-    .card-title a {
-      color: inherit;
-
-      &.stretched-link:hover {
-        text-decoration: none;
-      }
-    }
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
+}
+
+// #post-list .card-wrapper:not(:last-child) (theme) is #id + 2 classes-tier
+// selectors — tied with a plain "#post-list.project-grid .card-wrapper"
+// override, which would leave the winner up to stylesheet load order.
+// Compounding .card-wrapper.project-card here (our card carries both
+// classes) adds a third classes-tier selector so this wins outright.
+#post-list.project-grid .card-wrapper.project-card {
+  margin-bottom: 0; // grid `gap` replaces the list's own stacking margin
+}
+
+// The card has no title text of its own (the thumbnail already carries the
+// project name), so the whole card is made clickable via an empty trailing
+// stretched-link instead of a titled one — position: relative anchors its
+// ::after overlay. The GitHub icon sits above that overlay (z-index below)
+// so it stays independently clickable rather than triggering the card link.
+//
+// The theme's own card background/shadow/hover-overlay (base/_base.scss)
+// is scoped to `.post-preview`, a wrapper this layout no longer uses —
+// reproduced directly on the card here instead of reintroducing that div.
+#post-list .card.project-card {
+  position: relative;
+  border-radius: 10px; // matches the theme's $radius-lg
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  overflow: hidden; // clip the image to the card's rounded corners
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background-color: var(--card-hovor-bg);
+    opacity: 0;
+    transition: opacity 0.35s ease-in-out;
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    opacity: 0.3;
+  }
+
+  .card-body {
+    padding: 0rem 1.25rem 0.75rem;
+  }
+}
+
+.project-card-image {
+  width: 100%;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  display: block;
 }
 
 .project-github-link {
