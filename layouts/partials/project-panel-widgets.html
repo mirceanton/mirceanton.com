@@ -1,0 +1,79 @@
+{{/* Replaces the sitewide Recently-Updated/Trending-Tags panel widgets
+     (baseof.html renders those via partialCached with no variant key, so
+     they can't be branched on page type without caching one result for
+     every page on the site — see _projects.scss for how they're hidden
+     here instead) with project-specific ones: top projects by star count,
+     and the set of languages used across all projects. */}}
+
+{{/* .CurrentSection.RegularPages (not site.RegularPages) so this also
+     picks up placeholder/draft-style entries marked build: { list: local },
+     matching how the card grid in _default/projects.html already sources
+     its list — site.RegularPages deliberately excludes those. */}}
+{{ $projects := .CurrentSection.RegularPages }}
+
+{{ $MAX_SIZE := 5 }}
+{{ $ranked := slice }}
+{{ range $index, $p := $projects }}
+  {{ $stars := $p.Params.stars | default 0 }}
+  {{ $elem := printf "%020d::%s::%d" $stars ($p.Date.Format "20060102150405") $index }}
+  {{ $ranked = $ranked | append $elem }}
+{{ end }}
+{{ $ranked = sort $ranked "value" "desc" }}
+{{ $top := first $MAX_SIZE $ranked }}
+
+{{/* Wrapped in .project-panel-widgets (styled in _projects.scss to mirror
+     .access's own top margin and inter-section spacing, see _panel.scss in
+     the theme) since these sections render outside the theme's .access div
+     and don't inherit its spacing rules otherwise. */}}
+<div class="project-panel-widgets">
+  {{ if gt (len $top) 0 }}
+    <section id="access-top-projects">
+      <h2 class="panel-heading">Top Projects</h2>
+      <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+        {{ range $item := $top }}
+          {{ $parts := split $item "::" }}
+          {{ $index := index $parts 2 | int }}
+          {{ $p := index $projects $index }}
+          <li class="text-truncate lh-lg">
+            <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+            {{ with $p.Params.stars }}
+              <span class="text-muted">· <i class="fas fa-star fa-fw"></i>{{ . }}</span>
+            {{ end }}
+          </li>
+        {{ end }}
+      </ul>
+    </section>
+  {{ end }}
+
+{{ $langData := site.Data.languages }}
+{{ $seen := dict }}
+{{ $langs := slice }}
+{{ range $projects }}
+  {{ range .Params.languages }}
+    {{ if not (index $seen .) }}
+      {{ $seen = merge $seen (dict . true) }}
+      {{ $label := . | title }}
+      {{ $color := "var(--text-muted-color)" }}
+      {{ with index $langData . }}
+        {{ $label = .name | default $label }}
+        {{ $color = .color }}
+      {{ end }}
+      {{ $langs = $langs | append (dict "label" $label "color" $color) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ $langs = sort $langs "label" }}
+
+{{ if gt (len $langs) 0 }}
+  <section>
+    <h2 class="panel-heading">Languages</h2>
+    <div class="d-flex flex-wrap mt-3 mb-1 me-3">
+      {{ range $langs }}
+        <span class="post-tag lang-tag" style="--lang-color: {{ .color }};">
+          <span class="lang-dot"></span>{{ .label }}
+        </span>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}
+</div>

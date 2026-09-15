@@ -1,0 +1,84 @@
+// Card grid: make the title a stretched-link covering the whole card
+// (instead of wrapping the card in one <a>, which would make the
+// independently-clickable GitHub icon below an invalid nested <a>).
+#post-list {
+  .card {
+    position: relative;
+
+    .card-title a {
+      color: inherit;
+
+      &.stretched-link:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.project-github-link {
+  position: relative; // sit above .stretched-link::after
+  z-index: 2;
+  color: var(--text-muted-color);
+
+  &:hover {
+    color: var(--link-color);
+  }
+}
+
+// Language badges: reuse the theme's .post-tag pill (already themed for
+// light/dark) with a linguist-style colored dot. --lang-color is set
+// inline per badge by layouts/partials/project-languages.html.
+.project-languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.lang-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.3rem;
+}
+
+.lang-dot {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: var(--lang-color, var(--text-muted-color));
+  flex: none;
+}
+
+.project-meta-row {
+  row-gap: 0.3rem;
+}
+
+// Hide the sitewide "Recently Updated" / "Trending Tags" panel widgets on
+// Projects pages, in favor of the project-specific ones rendered through
+// the page's own "panel" block (see project-panel-widgets.html). Those two
+// widgets are rendered via `partialCached "name" .` with no variant key in
+// baseof.html, so overriding them with page-type branching would cache
+// whichever page renders first and serve that same result to every page on
+// the site — hiding them per page here avoids that trap entirely.
+.row:has(> main article[data-page-type='projects']) {
+  #panel-wrapper > .access {
+    display: none;
+  }
+}
+
+// project-panel-widgets.html's sections render outside .access (see above),
+// so they don't inherit its spacing — reproduce the same values here
+// (.access rules live in the theme's assets/scss/layout/_panel.scss).
+.project-panel-widgets {
+  margin-top: 3rem;
+
+  > section {
+    border-left: 1px solid var(--main-border-color);
+    padding-left: 1rem;
+
+    &:not(:first-child) {
+      margin-top: 4rem;
+    }
+  }
+}
