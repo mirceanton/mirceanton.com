@@ -32,18 +32,6 @@
       {{ end }}
 
       <div class="post-meta text-muted">
-        <span>
-          {{ i18n "post.posted" }}
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
-        </span>
-
-        {{ if and (ne .Lastmod .Date) (.Lastmod) }}
-          <span>
-            {{ i18n "post.updated" }}
-            <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "Jan 2, 2006" }}</time>
-          </span>
-        {{ end }}
-
         <div class="d-flex justify-content-between">
           <span>
             {{ $authors := .Params.author | default .Params.authors | default .Site.Params.author | default .Site.Params.authors }}

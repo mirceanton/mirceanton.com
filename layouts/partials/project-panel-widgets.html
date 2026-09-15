@@ -15,7 +15,7 @@
 {{ $ranked := slice }}
 {{ range $index, $p := $projects }}
   {{ $stars := $p.Params.stars | default 0 }}
-  {{ $elem := printf "%020d::%s::%d" $stars ($p.Date.Format "20060102150405") $index }}
+  {{ $elem := printf "%020d::%d" $stars $index }}
   {{ $ranked = $ranked | append $elem }}
 {{ end }}
 {{ $ranked = sort $ranked "value" "desc" }}
@@ -32,7 +32,7 @@
       <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
         {{ range $item := $top }}
           {{ $parts := split $item "::" }}
-          {{ $index := index $parts 2 | int }}
+          {{ $index := index $parts 1 | int }}
           {{ $p := index $projects $index }}
           <li class="text-truncate lh-lg">
             <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>

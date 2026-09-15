@@ -9,7 +9,7 @@
     {{ end }}
 
     <div id="post-list" class="flex-grow-1 px-xl-1">
-      {{ range .RegularPages }}
+      {{ range (.RegularPages.ByParam "stars").Reverse }}
         {{ $card_body_col := "12" }}
 
         <article class="card-wrapper card">
@@ -40,25 +40,22 @@
                   <p>{{ .Description | default .Summary | plainify }}</p>
                 </div>
 
-                {{ partial "project-languages.html" . }}
+                <div class="post-meta flex-grow-1 d-flex flex-column justify-content-end">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between">
+                    {{ partial "project-languages.html" . }}
 
-                <div class="post-meta flex-grow-1 d-flex align-items-end">
-                  <div class="me-auto">
-                    <i class="far fa-calendar fa-fw me-1"></i>
-                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+                    {{ with .Params.github }}
+                      <a
+                        href="{{ . }}"
+                        class="project-github-link ms-2"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="View source on GitHub"
+                      >
+                        <i class="fab fa-github fa-fw"></i>
+                      </a>
+                    {{ end }}
                   </div>
-
-                  {{ with .Params.github }}
-                    <a
-                      href="{{ . }}"
-                      class="project-github-link ms-1"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="View source on GitHub"
-                    >
-                      <i class="fab fa-github fa-fw"></i>
-                    </a>
-                  {{ end }}
                 </div>
               </div>
             </div>

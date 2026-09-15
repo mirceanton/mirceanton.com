@@ -1,6 +1,5 @@
 ---
 title: "[PLACEHOLDER] Terraform Proxmox Module"
-date: "2024-02-14"
 description: |
   PLACEHOLDER ENTRY — replace with a real project. A reusable Terraform module for declaratively provisioning VMs on Proxmox VE, used across the homelab's cluster nodes.
 image: { path: featured.svg, alt: "Terraform Proxmox Module placeholder image" }

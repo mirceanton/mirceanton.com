@@ -1,6 +1,5 @@
 ---
 title: "[PLACEHOLDER] Homelab GitOps Bootstrap"
-date: "2024-06-01"
 description: |
   PLACEHOLDER ENTRY — replace with a real project. A FluxCD-based bootstrap repo for standing up a fresh Kubernetes cluster from zero to fully GitOps-managed in one apply.
 image: { path: featured.svg, alt: "Homelab GitOps Bootstrap placeholder image" }
