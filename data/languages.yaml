@@ -1,0 +1,25 @@
+---
+go:
+  name: Go
+  color: "#00ADD8"
+python:
+  name: Python
+  color: "#3572A5"
+shell:
+  name: Shell
+  color: "#89e051"
+javascript:
+  name: JavaScript
+  color: "#f1e05a"
+typescript:
+  name: TypeScript
+  color: "#3178c6"
+yaml:
+  name: YAML
+  color: "#cb171e"
+hcl:
+  name: HCL
+  color: "#844FBA"
+dockerfile:
+  name: Dockerfile
+  color: "#384d54"
