@@ -1,0 +1,20 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="talstomize hero image">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3a1a00"/>
+      <stop offset="100%" stop-color="#ff7000"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.18" stroke="#ffffff" stroke-width="2.5" fill="none">
+    <polygon points="160,110 200,130 200,175 160,195 120,175 120,130" />
+    <polygon points="1060,460 1100,480 1100,525 1060,545 1020,525 1020,480" />
+    <line x1="160" y1="195" x2="1060" y2="460" stroke-dasharray="8 10"/>
+  </g>
+  <text x="600" y="300" font-family="'Source Sans Pro', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="58" font-weight="700" fill="#ffffff" text-anchor="middle">
+    talstomize
+  </text>
+  <text x="600" y="352" font-family="'Source Sans Pro', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" fill="#ffd2ad" text-anchor="middle" letter-spacing="3">
+    TALOS MACHINE CONFIG, KUSTOMIZE-STYLE
+  </text>
+</svg>
