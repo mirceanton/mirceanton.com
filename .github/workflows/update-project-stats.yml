@@ -1,0 +1,39 @@
+---
+name: Update Project Stats
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Generate Token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Fetch and update project stats
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: python3 .github/scripts/update-project-stats.py
+
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          commit-message: "chore(projects): sync star counts and languages from GitHub"
+          title: "chore(projects): sync star counts and languages from GitHub"
+          body: Automated sync of project star counts and language badges from the GitHub API.
+          branch: automation/project-stats
+          delete-branch: true

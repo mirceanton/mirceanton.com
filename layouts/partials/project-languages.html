@@ -1,0 +1,18 @@
+{{ with .Params.languages }}
+  {{ $langData := $.Site.Data.languages }}
+  <div class="project-languages">
+    {{ range . }}
+      {{ $key := . }}
+      {{ $entry := index $langData $key }}
+      {{ $color := "var(--text-muted-color)" }}
+      {{ $label := $key | title }}
+      {{ with $entry }}
+        {{ $color = .color }}
+        {{ $label = .name | default $label }}
+      {{ end }}
+      <span class="post-tag lang-tag" style="--lang-color: {{ $color }};">
+        <span class="lang-dot"></span>{{ $label }}
+      </span>
+    {{ end }}
+  </div>
+{{ end }}
