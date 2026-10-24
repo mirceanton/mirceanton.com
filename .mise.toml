@@ -10,4 +10,4 @@ hugo-extended = "0.168.0"
 # Linters
 actionlint = "1"
 yamllint = "1"
-markdownlint-cli2 = "0.23.3"
+markdownlint-cli2 = "0.24.0"

@@ -196,7 +196,7 @@ url = "https://github.com/gohugoio/hugo/releases/download/v0.168.0/hugo_extended
 url_api = "https://api.github.com/repos/gohugoio/hugo/releases/assets/637728763"
 
 [[tools.markdownlint-cli2]]
-version = "0.23.3"
+version = "0.24.0"
 backend = "npm:markdownlint-cli2"
 
 [[tools.yamllint]]
