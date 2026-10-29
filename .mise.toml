@@ -11,3 +11,7 @@ hugo-extended = "0.168.0"
 actionlint = "1"
 yamllint = "1"
 markdownlint-cli2 = "0.24.0"
+
+[settings]
+# Hold back freshly published tool releases (supply-chain protection).
+minimum_release_age = "3d"
