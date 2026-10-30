@@ -4,7 +4,7 @@ go = "latest"
 dart = "latest"
 
 # Static Site Generator
-hugo-extended = "0.168.0"
+hugo-extended = "0.169.0"
 "github:sass/dart-sass" = "1.106.1"
 
 # Linters
