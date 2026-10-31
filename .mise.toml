@@ -5,7 +5,7 @@ dart = "latest"
 
 # Static Site Generator
 hugo-extended = "0.169.0"
-"github:sass/dart-sass" = "1.106.1"
+"github:sass/dart-sass" = "1.107.0"
 
 # Linters
 actionlint = "1"
