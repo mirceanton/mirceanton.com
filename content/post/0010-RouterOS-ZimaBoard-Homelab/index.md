@@ -19,7 +19,7 @@ description: |
 
 I recently put MikroTik's RouterOS on a ZimaBoard 2 and gave it three jobs at once: router, NAS and application server. No Proxmox, no VMs, just RouterOS running the whole thing. You can watch the [YouTube video](https://www.youtube.com/watch?v=Q6FP4Vwik5U) for the full story and the test results.
 
-This post is the companion to that video. It's less narrative and more of the actual config, broken down section by section, plus a few things that didn't make the cut. If you just want the script, it's [at the bottom](#the-full-config), or you can [download it](zimarouter.rsc) as a `.rsc` file.
+This post is the companion to that video. It's less narrative and more of the actual config, broken down section by section, plus a few things that didn't make the cut. If you just want the script, you can [download it](zimarouter.rsc) as a `.rsc` file.
 
 > **Status, last checked against RouterOS 7.25.1:**
 >
@@ -32,10 +32,10 @@ This post is the companion to that video. It's less narrative and more of the ac
 ## The Hardware
 
 > IceWhale sent me this ZimaBoard 2 for free and I get to keep it. They didn't pay me, had no editorial input, and didn't see the video or this post before they went live.
-{.prompt-warning}
+{.prompt-info}
 
 - **ZimaBoard 2** with the Intel N150, 16 GB of RAM, dual 2.5 GbE, two SATA ports and a PCIe slot
-- **The dual drive bay from the Zima NAS kit**, with two random 240 GB SATA SSDs I had laying around
+- **The dual drive bay from the Zima NAS kit**, with two random 240 GB SATA SSDs I had lying around
 - **A 16 GB Optane drive** on an M.2 adapter in the PCIe slot, as the boot drive (more on why below)
 
 > 🎁 Want one? Get a ZimaBoard 2 through [my affiliate link](https://shop.zimaspace.com?sca_ref=12733878.lOmnN3gX3AgmQn) and use code **`mirceanton_15`** for a discount. I get a small commission at no extra cost to you.
@@ -51,10 +51,8 @@ The problem shows up at the disk picker. The two SATA SSDs are there, but the bo
 
 For packages, I picked **container** (for the apps) and **rose-storage** (for RAID, the filesystem features and so on). You can add them after installing, but it's simpler to do it here.
 
-> RouterOS on x86 isn't free. You get a 24-hour trial, after which you need a license. A **Level 4 license is $45** and covers everything in this post. The license is tied to the install, so if a future release adds the eMMC driver and you want to move the OS over, check how that affects your license first.
-{.prompt-tip}
-
-<!-- TODO: verify the license-transfer note against MikroTik's x86 licensing docs before publishing. -->
+> RouterOS on x86 isn't free. You get a 24-hour trial, after which you need a license. A **Level 4 license is $45** and covers everything in this post. The license is bound to the drive RouterOS is installed on and [can't be moved to another one](https://help.mikrotik.com/docs/spaces/ROS/pages/328149/RouterOS+license+keys), so if a future release adds the eMMC driver, moving the OS over means buying a new license.
+{.prompt-info}
 
 On first boot, log in as `admin` with a blank password and it immediately asks you to set a new one. A fresh x86 install comes with **no default configuration**: no IP, no DHCP, no firewall. So I connected with WinBox over MAC address and pasted everything below into the terminal.
 
@@ -100,7 +98,7 @@ On input I accept established and related traffic, drop invalid, allow ping for 
 
 On forward I accept established and related traffic, drop invalid, and drop any new connection coming from the WAN unless it was explicitly port-forwarded (`connection-nat-state=!dstnat`).
 
-> About the fasttrack rule: on MikroTik hardware, fasttrack can hand traffic off to the switch chip. The ZimaBoard has no switch chip, so there's no hardware offloading here. Fasttrack still gives eligible connections a shorter path through the CPU, so I kept it.
+> About the fasttrack rule: on some MikroTik switches, fasttracked connections can be offloaded to the switch chip. The ZimaBoard has no switch chip, so there's no hardware offloading here. Fasttrack still gives eligible connections a shorter path through the CPU, so I kept it.
 {.prompt-info}
 
 ```bash {file="2.3 firewall: NAT"}
@@ -133,7 +131,7 @@ Controversial, I know. I'm not using IPv6 in this setup, and every firewall rule
 
 `ether1` is a DHCP client toward the upstream network. On the LAN side, the bridge gets `192.168.88.1` (the usual MikroTik default). Clients get leases from `.100` to `.254` and use the ZimaBoard as both their gateway and DNS server. `allow-remote-requests` is what lets the router answer DNS for them, and the input rules above keep that LAN-only.
 
-### Housekeeping
+### Hardening
 
 ```bash {file="6. hardening"}
 /ip service disable telnet,ftp,www,www-ssl,api,api-ssl
@@ -177,7 +175,7 @@ This creates a software RAID 1 device and adds both SATA disks to it. I went wit
 The folder layout matters a bit: `Media` is what gets shared over SMB, while `Containers` (app data) and `tmp` (image downloads) live on the same mirror but **outside** the share. The Optane drive has exactly one job, which is booting RouterOS.
 
 > The obligatory reminder: **RAID is not a backup.** A mirror survives a dead disk. If I delete my music collection, or it gets corrupted, the mirror will very efficiently do the same to both copies.
-{.prompt-tip}
+{.prompt-warning}
 
 ### SMB Share
 
@@ -230,8 +228,8 @@ Every container follows the same pattern: a **veth** interface with `dhcp=yes`, 
 /container/mounts add list=nav-data src=raid1/Containers/navidrome-data dst=/data
 /container/mounts add list=nav-music src=raid1/Media/Music dst=/music
 
-/container/envs/add list=nav-env key=ND_MUSICFOLDER value=/music
-/container/envs/add list=nav-env key=TZ value=Europe/Bucharest
+/container/envs add list=nav-env key=ND_MUSICFOLDER value=/music
+/container/envs add list=nav-env key=TZ value=Europe/Bucharest
 
 /container/add name=navidrome remote-image=deluan/navidrome:latest \
     interface=veth-navi root-dir=raid1/Containers/navidrome \
@@ -255,7 +253,7 @@ I copied over about 40 GB of music (around 1,700 files) and triggered a full lib
 /container/envs add list=ha-env key=TZ value=Europe/Bucharest
 
 /container/add name=homeassistant remote-image=homeassistant/home-assistant:stable \
-    interface=veth-ha root-dir=raid1/Containers/homeassistant \
+    interface=veth-ha root-dir=raid1/Containers/homeassistant-root \
     mountlists=ha-config envlists=ha-env \
     devices=usb2:/dev/ttyACM0 \
     logging=yes start-on-boot=yes
@@ -263,7 +261,7 @@ I copied over about 40 GB of music (around 1,700 files) and triggered a full lib
 /container/start homeassistant
 ```
 
-The interesting part is the `devices` line. I have a Sonoff Zigbee dongle plugged into the board, and to find what to put there, run:
+The interesting part is the `devices` line. I have a Sonoff Zigbee dongle plugged into the board. To find what goes there, run:
 
 ```bash
 /system/resource/hardware/print detail
@@ -304,7 +302,7 @@ RouterOS can list the PCI device, but it doesn't ship the graphics driver needed
 
 Jellyfin itself runs fine on port **8096**. A library scan peaked around 45–50% CPU and finished in a few seconds. Playing Big Buck Bunny was smooth, with surprisingly low resource usage, because it was a **direct play**: the client already understands the file, so Jellyfin serves it without converting anything.
 
-Before anyone writes in the comments: yes, hardware transcoding matters for a media server, but only if your clients need it. My real Jellyfin instance has an NVIDIA GPU, and I don't think it has transcoded once in the past six months, because everything in my library plays directly on my clients. So this doesn't automatically rule it out for me. If you regularly need video transcoding, though, it may be a deal breaker for you.
+Before anyone writes in the comments: yes, hardware transcoding matters for a media server, but only if your clients need it. My real Jellyfin instance has an NVIDIA GPU, and I don't think it has transcoded once in the past six months, because everything in my library plays directly on my clients.
 
 ## Everything at Once
 
@@ -342,246 +340,12 @@ Would I trust it to replace my RB5009 and the rest of my homelab? That's going t
 
 ## The Full Config
 
-Here's everything in one block, or [download it as a `.rsc` file](zimarouter.rsc). It assumes a fresh install with no default config, `ether1` as WAN and `ether2` as LAN.
+The whole thing lives in one file: [download `zimarouter.rsc`](zimarouter.rsc). It's the same config as the sections above, in the same order and with the same numbering.
+
+It assumes a fresh install with no default config, `ether1` as WAN and `ether2` as LAN.
 
 > Section 7 **wipes both SATA drives**. Change the SMB password, and check your USB device before the Home Assistant section.
 {.prompt-warning}
-
-```bash {file="zimarouter.rsc"}
-# --- 1. Interfaces and LAN bridge ---
-/interface list add name=WAN
-/interface list add name=LAN
-
-/interface bridge add name=br0
-/interface bridge port add \
-    bridge=br0 \
-    interface=ether2
-
-/interface list member add \
-    list=LAN \
-    interface=br0
-/interface list member add \
-    list=WAN \
-    interface=ether1
-
-# --- 2.1 Firewall: input chain ---
-/ip firewall filter add chain=input \
-    action=accept \
-    connection-state=established,related,untracked
-
-/ip firewall filter add chain=input \
-    action=drop \
-    connection-state=invalid
-
-/ip firewall filter add chain=input \
-    action=accept \
-    protocol=icmp
-
-/ip firewall filter add chain=input \
-    action=drop \
-    in-interface-list=!LAN \
-    comment="input: drop everything not from LAN"
-
-# --- 2.2 Firewall: forward chain ---
-/ip firewall filter add chain=forward \
-    action=fasttrack-connection \
-    connection-state=established,related
-
-/ip firewall filter add chain=forward \
-    action=accept \
-    connection-state=established,related,untracked
-
-/ip firewall filter add chain=forward \
-    action=drop \
-    connection-state=invalid
-
-/ip firewall filter add chain=forward \
-    action=drop \
-    connection-state=new \
-    connection-nat-state=!dstnat \
-    in-interface-list=WAN \
-    comment="forward: drop WAN-initiated unless port-forwarded"
-
-# --- 2.3 Firewall: NAT ---
-/ip firewall nat add \
-    chain=srcnat \
-    out-interface-list=WAN \
-    action=masquerade \
-    comment="NAT: masquerade LAN traffic out the WAN"
-
-# --- 3. IPv6 off ---
-/ipv6 settings set disable-ipv6=yes
-/ipv6 nd set [find] disabled=yes
-
-# --- 4. WAN: DHCP client ---
-/ip dhcp-client add interface=ether1
-
-# --- 5. LAN: address, pool, DHCP server, DNS ---
-/ip address add \
-    address=192.168.88.1/24 \
-    interface=br0
-
-/ip pool add \
-    name=lan-pool \
-    ranges=192.168.88.100-192.168.88.254
-
-/ip dhcp-server network add \
-    address=192.168.88.0/24 \
-    gateway=192.168.88.1 \
-    dns-server=192.168.88.1
-
-/ip dhcp-server add \
-    name=lan-dhcp \
-    interface=br0 \
-    address-pool=lan-pool \
-    disabled=no
-
-/ip dns set allow-remote-requests=yes
-
-# --- 6. Hardening: services and discovery ---
-/ip service disable telnet,ftp,www,www-ssl,api,api-ssl
-/tool bandwidth-server set enabled=no
-
-/ip neighbor discovery-settings set discover-interface-list=LAN
-/tool mac-server set allowed-interface-list=LAN
-/tool mac-server mac-winbox set allowed-interface-list=LAN
-
-# --- 7. Storage: RAID ---
-/disk add type=raid raid-type=1 raid-device-count=2 slot=raid1
-
-/disk set sata1 raid-master=raid1 raid-role=0
-/disk set sata2 raid-master=raid1 raid-role=1
-
-/disk format raid1 file-system=ext4
-
-/file add name=raid1/Media type=directory
-/file add name=raid1/Media/Movies type=directory
-/file add name=raid1/Media/Music type=directory
-
-/file add name=raid1/Containers type=directory
-/file add name=raid1/tmp/ type=directory
-
-# --- 8. Storage: SMB shares ---
-
-/ip smb users add \
-    name=testuser \
-    password=ChangeMe123 \
-    read-only=no
-
-/ip smb shares add \
-    name=Media \
-    directory=raid1/Media \
-    valid-users=testuser
-
-/ip smb set enabled=yes
-
-# --- 9. Containers ---
-
-/container/config/set \
-    registry-url=https://registry-1.docker.io \
-    tmpdir=raid1/tmp
-
-# --- 9.1 Navidrome ---
-/interface/veth add name=veth-navi dhcp=yes
-
-/interface/bridge/port add \
-    bridge=br0 \
-    interface=veth-navi
-
-/container/mounts add \
-    list=nav-data \
-    src=raid1/Containers/navidrome-data \
-    dst=/data
-/container/mounts add \
-    list=nav-music \
-    src=raid1/Media/Music \
-    dst=/music
-
-/container/envs/add \
-    list=nav-env \
-    key=ND_MUSICFOLDER \
-    value=/music
-
-/container/envs/add \
-    list=nav-env \
-    key=TZ \
-    value=Europe/Bucharest
-
-/container/add \
-    name=navidrome \
-    remote-image=deluan/navidrome:latest \
-    interface=veth-navi \
-    root-dir=raid1/Containers/navidrome \
-    mountlists=nav-data,nav-music \
-    envlists=nav-env \
-    logging=yes \
-    start-on-boot=yes
-
-/container/start navidrome
-
-# --- 9.2 Home Assistant ---
-/interface/veth add \
-    name=veth-ha \
-    dhcp=yes
-/interface/bridge/port add \
-    bridge=br0 \
-    interface=veth-ha
-
-/container/mounts add \
-    list=ha-config \
-    src=raid1/Containers/homeassistant \
-    dst=/config
-
-/container/envs add \
-    list=ha-env \
-    key=TZ \
-    value=Europe/Bucharest
-
-/container/add \
-    name=homeassistant \
-    remote-image=homeassistant/home-assistant:stable \
-    interface=veth-ha \
-    root-dir=raid1/Containers/homeassistant \
-    mountlists=ha-config \
-    envlists=ha-env \
-    devices=usb2:/dev/ttyACM0 \
-    logging=yes \
-    start-on-boot=yes
-
-/container/start homeassistant
-
-# --- 9.3 Jellyfin ---
-/interface/veth add name=veth-jelly dhcp=yes
-/interface/bridge/port add \
-    bridge=br0 \
-    interface=veth-jelly
-
-/container/mounts add \
-    list=jelly-config \
-    src=raid1/Containers/jellyfin \
-    dst=/config
-
-/container/mounts add \
-    list=jelly-cache \
-    src=raid1/Containers/jellyfin-cache \
-    dst=/cache
-
-/container/mounts add \
-    list=jelly-media \
-    src=raid1/Media/Movies \
-    dst=/media
-
-/container/add \
-    name=jellyfin \
-    remote-image=jellyfin/jellyfin:latest \
-    interface=veth-jelly \
-    root-dir=raid1/Containers/jellyfin-root \
-    mountlists=jelly-config,jelly-cache,jelly-media \
-    logging=yes \
-    start-on-boot=yes
-
-/container/start jellyfin
-```
 
 ## Changelog
 

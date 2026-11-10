@@ -4,9 +4,9 @@
 #
 # Before you paste this:
 #   - It assumes a fresh install with no default config. ether1 = WAN, ether2 = LAN.
-#   - Sections 7+ WIPE AND FORMAT sata1 and sata2.
+#   - Section 7 WIPES AND FORMATS sata1 and sata2.
 #   - Change the SMB password in section 8.
-#   - Home Assistant expects a USB serial device at usb2. Check yours under /system/resource/usb.
+#   - Home Assistant expects a USB serial device at usb2. Check yours with /system/resource/hardware/print detail.
 
 # --- 1. Interfaces and LAN bridge ---
 /interface list add name=WAN
@@ -157,12 +157,12 @@
     src=raid1/Media/Music \
     dst=/music
 
-/container/envs/add \
+/container/envs add \
     list=nav-env \
     key=ND_MUSICFOLDER \
     value=/music
 
-/container/envs/add \
+/container/envs add \
     list=nav-env \
     key=TZ \
     value=Europe/Bucharest
@@ -201,7 +201,7 @@
     name=homeassistant \
     remote-image=homeassistant/home-assistant:stable \
     interface=veth-ha \
-    root-dir=raid1/Containers/homeassistant \
+    root-dir=raid1/Containers/homeassistant-root \
     mountlists=ha-config \
     envlists=ha-env \
     devices=usb2:/dev/ttyACM0 \
