@@ -3,7 +3,7 @@ title: "RouterOS as a Whole Homelab: Router, NAS and Apps on a ZimaBoard 2"
 slug: routeros-zimaboard-2-homelab
 image: { path: featured.webp }
 date: "2026-11-10"
-draft: true
+draft: false
 
 categories: [ Blog Post ]
 tags:
