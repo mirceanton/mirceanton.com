@@ -49,7 +49,13 @@ The install itself is the usual x86 routine: flash the RouterOS installer to a U
 
 The problem shows up at the disk picker. The two SATA SSDs are there, but the board's built-in 64 GB eMMC isn't. On 7.25.1 RouterOS simply has no driver for it, so you can't install the OS there. My workaround was the Optane drive in the PCIe slot. It works, and both SATA ports stay free for the mirror, but it costs you the PCIe slot. That means no 10 gig NIC or extra SATA controller later, unless you start getting creative with adapters.
 
+![RouterOS installer disk picker: the 13 GB Optane, two 223 GB SSDs and the 28 GB USB stick, but no 64 GB eMMC](./img/installer-disk-picker.webp)
+
+That's the Optane (13 GB, selected), the two SATA SSDs (223 GB each) and the USB stick I booted the installer from (28 GB). No sign of the 64 GB eMMC.
+
 For packages, I picked **container** (for the apps) and **rose-storage** (for RAID, the filesystem features and so on). You can add them after installing, but it's simpler to do it here.
+
+![RouterOS installer package selection with system, container and rose-storage ticked](./img/installer-packages.webp)
 
 > RouterOS on x86 isn't free. You get a 24-hour trial, after which you need a license. A **Level 4 license is $45** and covers everything in this post. The license is bound to the drive RouterOS is installed on and [can't be moved to another one](https://help.mikrotik.com/docs/spaces/ROS/pages/328149/RouterOS+license+keys), so if a future release adds the eMMC driver, moving the OS over means buying a new license.
 {.prompt-info}
@@ -150,12 +156,32 @@ I ran an iperf server on my TrueNAS box, which is connected at 10 Gbit to the CR
 
 **Result: about 2.3–2.4 Gbit/s**, basically filling the 2.5 GbE link, with the ZimaBoard using **less than 25% CPU**. The missing hardware offload doesn't hold this config back from the link's practical limit.
 
+![iperf3 holding 2.35 Gbit/s through the ZimaBoard, with WinBox showing 2.4 Gbps on ether1 and ether2 and the CPU at 14%](./img/routing-iperf-test.webp)
+
+On the left, the iperf3 server on TrueNAS (top) and the client on my Mac (bottom). On the right, WinBox on the ZimaBoard: the same traffic coming in on `ether2` and going out on `ether1`, with the CPU at 14% in the status bar.
+
 ## Job Two: The NAS
 
 ### RAID 1
 
 > This wipes and formats both SATA drives. Mine were spares with nothing on them. Double-check yours under **System → Disks** first.
 {.prompt-warning}
+
+Before building the array, I gave both SSDs a quick wipe to clear whatever was left on them. In WinBox that's **System → Disks**, select a disk, **Format Drive**, set **File System** to `wipe quick` and hit **Start**. Then the same again for the second disk:
+
+![Wiping both SATA disks from System → Disks → Format Drive in WinBox](./img/nas-winbox-wipe-disks.gif)
+
+Or from the terminal. Check the slot names first, since yours may differ:
+
+```bash
+/disk print
+/disk format sata1 file-system=wipe-quick
+/disk format sata2 file-system=wipe-quick
+```
+
+Each format asks you to confirm with `y`. `wipe-quick` is done in seconds. Plain `wipe` overwrites the whole disk, which takes a lot longer and isn't needed for spare drives like these.
+
+Then the array itself:
 
 ```bash {file="7. storage: RAID"}
 /disk add type=raid raid-type=1 raid-device-count=2 slot=raid1
@@ -193,6 +219,10 @@ I copied a 6 GB file from my Mac to the share while watching the interface traff
 
 - **Writing to the ZimaBoard:** basically saturating the 2.5 GbE link, with the CPU **well under 10%**
 - **Reading back:** peaks around **1.6–1.7 Gbit/s**
+
+![WinBox during the SMB test: writing, 2.3 Gbps in on ether2 at 7.1% CPU; reading back, 1685 Mbps out on ether2 at 2.8% CPU](./img/nas-smb-test.webp)
+
+In both directions the SMB server (`ksmbd`) is most of the CPU it uses.
 
 The difference is most likely the SSDs. These are not exactly fancy drives. Either way, well over a gigabit is plenty for a basic shared folder.
 
@@ -317,6 +347,10 @@ With all three jobs set up, I ran them together:
 My internet connection is gigabit, and the file copy, the speed test and both streams all share the same 2.5 GbE link to the board. So I wasn't expecting every test to hit its standalone maximum. What I wanted to know was whether any one job makes the others unpleasant to use. Do the streams stop? Does the speed test fall apart? Does Home Assistant still respond?
 
 Everything just kept working. The music kept playing, Big Buck Bunny didn't drop any frames I could see, and the file copy kept going.
+
+![WinBox during the combined test: 941.6 Mbps in on ether1, 2.4 Gbps in on ether2, CPU at 22% and 2173 MiB of RAM in use](./img/everything-at-once-winbox.webp)
+
+`ether1` carries the speed test at about 940 Mbit/s, `ether2` takes in 2.4 Gbit/s from the laptop, and the CPU sits at 22%.
 
 | Metric | Result |
 | --- | --- |
