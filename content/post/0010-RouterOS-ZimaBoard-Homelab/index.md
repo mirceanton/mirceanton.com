@@ -17,7 +17,7 @@ description: |
   The full RouterOS config from my ZimaBoard 2 video (router, mirrored SMB NAS and three containers), section by section, plus what didn't fit in the video.
 ---
 
-I recently put MikroTik's RouterOS on a ZimaBoard 2 and gave it three jobs at once: router, NAS and application server. No Proxmox, no VMs, just RouterOS running the whole thing. You can watch the [YouTube video](https://www.youtube.com/watch?v=VIDEO_ID) for the full story and the test results.
+I recently put MikroTik's RouterOS on a ZimaBoard 2 and gave it three jobs at once: router, NAS and application server. No Proxmox, no VMs, just RouterOS running the whole thing. You can watch the [YouTube video](https://www.youtube.com/watch?v=Q6FP4Vwik5U) for the full story and the test results.
 
 This post is the companion to that video. It's less narrative and more of the actual config, broken down section by section, plus a few things that didn't make the cut. If you just want the script, it's [at the bottom](#the-full-config), or you can [download it](zimarouter.rsc) as a `.rsc` file.
 
@@ -591,8 +591,8 @@ Here's everything in one block, or [download it as a `.rsc` file](zimarouter.rsc
 
 <center>
 
-📹 [Watch Video](https://www.youtube.com/watch?v=VIDEO_ID)
+📹 [Watch Video](https://www.youtube.com/watch?v=Q6FP4Vwik5U)
 
 </center>
 
-{{< youtube VIDEO_ID >}}
+{{< youtube Q6FP4Vwik5U >}}
