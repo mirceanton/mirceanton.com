@@ -220,9 +220,9 @@ I copied a 6 GB file from my Mac to the share while watching the interface traff
 - **Writing to the ZimaBoard:** basically saturating the 2.5 GbE link, with the CPU **well under 10%**
 - **Reading back:** peaks around **1.6–1.7 Gbit/s**
 
-![WinBox during the SMB write: 2.3 Gbps coming in on ether2, with the CPU profile at 7.1% total and ksmbd at 5.1%](./img/nas-smb-write-test.webp)
+![WinBox during the SMB test: writing, 2.3 Gbps in on ether2 at 7.1% CPU; reading back, 1685 Mbps out on ether2 at 2.8% CPU](./img/nas-smb-test.webp)
 
-That's the write: 2.3 Gbps coming in on `ether2`, and the profiler shows the CPU at 7.1% in total, most of it the SMB server (`ksmbd`).
+In both directions the SMB server (`ksmbd`) is most of the CPU it uses.
 
 The difference is most likely the SSDs. These are not exactly fancy drives. Either way, well over a gigabit is plenty for a basic shared folder.
 
@@ -348,11 +348,9 @@ My internet connection is gigabit, and the file copy, the speed test and both st
 
 Everything just kept working. The music kept playing, Big Buck Bunny didn't drop any frames I could see, and the file copy kept going.
 
-![Everything at once: Jellyfin playing Big Buck Bunny, a file copy to the SMB share, Home Assistant with the Zigbee bulb, and a speed test at 860 Mbit/s](./img/everything-at-once-desktop.webp)
+![WinBox during the combined test: 941.6 Mbps in on ether1, 2.4 Gbps in on ether2, CPU at 22% and 2173 MiB of RAM in use](./img/everything-at-once-winbox.webp)
 
-And the ZimaBoard's side of it. `ether1` carries the speed test at about 940 Mbit/s, `ether2` takes in 2.4 Gbit/s from the laptop, and the status bar shows the CPU at 22% with 2,173 MiB of RAM in use:
-
-![WinBox during the combined test: 941.6 Mbps in on ether1, 2.4 Gbps in on ether2, CPU at 22%](./img/everything-at-once-winbox.webp)
+`ether1` carries the speed test at about 940 Mbit/s, `ether2` takes in 2.4 Gbit/s from the laptop, and the CPU sits at 22%.
 
 | Metric | Result |
 | --- | --- |
