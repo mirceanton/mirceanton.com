@@ -179,7 +179,7 @@ data:
 
 > The metadata servers do not show up in the status command until there is a CephFS pool created in the cluster.  
 > They are running but currently inactive. Their status can be checked by verifying the underlying service using the `systemctl status` command.
-> {.prompt-info}
+{.prompt-info}
 
 At this point, we have the control plane up and running, though it is managing nothing. Time to give it some disks! This is where **Object Storage Daemons (OSDs)** come in.
 
