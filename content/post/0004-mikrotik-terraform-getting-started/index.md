@@ -69,7 +69,7 @@ _Initializing the Terraform workspace_
 
 > By default, Mikrotik routers use an IP of `192.168.88.1` and a username of `admin`.
 > Depending on your model, the password _might_ be blank or it _might_ be randomized. If it's blank, well... you'll know. If it's randomized, it will be written on your device, on the label next to the serial number and whatnot.
-> {.prompt-info}
+{.prompt-info}
 
 With the provider installed, I need to configure it to tell it how it can connect to my router to manage it. It needs to know the IP address and the credentials to authenticate against the RouterOS API.
 
@@ -124,7 +124,7 @@ mikrotik_insecure = true
 ```
 
 > While you can continue using the `admin` user, it is best practice to log in and create a dedicated user for terraform.
-> {.prompt-tip}
+{.prompt-tip}
 
 ### Validating the Connection
 
@@ -661,7 +661,7 @@ resource "routeros_ip_firewall_filter" "drop_all_wan_not_dstnat" {
 ```
 
 > Note that, since ordering is important, we do have the `place_before` argument for each rule to ensure they end up in the correct order.
-> {.prompt-info}
+{.prompt-info}
 
 There probably is a way to make this code more efficient/clean using a loop block or a similar approach. Given how critical firewall rules are, however, and especially given the risk of locking myself out due to misconfigurations, I’ve decided to keep things dumb and define each rule as a separate resource.
 

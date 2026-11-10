@@ -71,7 +71,7 @@ Either flash this onto a USB drive, or upload it into your hypervisor. For this 
 For this demo, I will be setting up 3 virtual machines, each of them with 8 CPU cores, 16 gigabytes of RAM and a 32 gigabyte boot disk. There's nothing special about the VM creation process for Talos as opposed to any other OS, so I will not go through it step by step.
 
 > Make sure you have to set the CPU type either to `host` or to `x86-64v2` if you are on PVE version `8.0` or newer.
-> {.prompt-warning}
+{.prompt-warning}
 
 - `[optional]`: DHCP reservations for your virtual machines
 
@@ -292,7 +292,7 @@ export TALOSCONFIG=./rendered/talosconfig
 Either option works fine, I just personally dislike using the CLI flag as it involves too much typing 😅
 
 > If you end up managing multiple Talos clusters and want a talosconfig-file manager, you might want to take a look at [`talswitcher`](github.com/mirceanton/talswitcher)
-> {.prompt-tip}
+{.prompt-tip}
 
 ```bash
 mike@talos-demo-ctl:~/workspace$ talosctl config contexts
