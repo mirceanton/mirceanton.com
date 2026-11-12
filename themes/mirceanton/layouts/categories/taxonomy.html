@@ -1,0 +1,37 @@
+{{- /* Categories: one tile per category, coloured header, its newest posts with thumbnails. */ -}}
+{{ define "main" }}
+{{- $palette := slice "sky" "lavender" "mint" "amber" }}
+<header class="list-head">
+  <h1 class="page-title">{{ .Title }}</h1>
+  <p class="lede">{{ len .Data.Terms }} {{ cond (eq (len .Data.Terms) 1) "category" "categories" }}, {{ len (where site.RegularPages "Section" "in" site.Params.mainSections) }} posts.</p>
+</header>
+<div class="shelves">
+  {{- range $i, $t := .Data.Terms.ByCount }}
+  {{- $p := $t.Page }}
+  {{- $n := $t.Count }}
+  <section class="shelf" data-tone="{{ index $palette (mod $i (len $palette)) }}">
+    <a class="shelf-head" href="{{ $p.RelPermalink }}">
+      <span class="shelf-kicker">Category</span>
+      <span class="shelf-name">{{ $p.LinkTitle }}</span>
+      <span class="shelf-count"><b>{{ $n }}</b> {{ cond (eq $n 1) "post" "posts" }}</span>
+    </a>
+    {{- with $p.Description }}<p class="shelf-desc">{{ . }}</p>{{ end }}
+    <ul class="shelf-list">
+      {{- range first 3 $t.Pages }}
+      {{- $img := partial "cover.html" (dict "page" . "spec" "240x135 Center webp q75") }}
+      <li>
+        <a href="{{ .RelPermalink }}">
+          {{- with $img }}<img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-empty" aria-hidden="true"></span>{{ end }}
+          <span class="shelf-item">
+            <span class="shelf-title">{{ .Title }}</span>
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+          </span>
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+    <a class="shelf-more" href="{{ $p.RelPermalink }}">{{ if gt $n 3 }}All {{ $n }} posts{{ else }}Open {{ $p.LinkTitle }}{{ end }} <span aria-hidden="true">→</span></a>
+  </section>
+  {{- end }}
+</div>
+{{ end }}

@@ -3,7 +3,7 @@
   <header class="list-head">
     <span class="kicker">{{ .Parent.LinkTitle }}</span>
     <h1 class="page-title">{{ .Title }}</h1>
-    <p class="lede">{{ len .Pages }} {{ cond (eq (len .Pages) 1) "post" "posts" }}</p>
+    <p class="lede">{{ with .Description }}{{ . }} {{ end }}{{ len .Pages }} {{ cond (eq (len .Pages) 1) "post" "posts" }}.</p>
   </header>
   <ul class="rows">
     {{- range .Pages }}

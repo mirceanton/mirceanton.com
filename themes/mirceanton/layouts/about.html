@@ -1,0 +1,29 @@
+{{- /* About: banner on top, the story (page content) on the left, quick facts and links on the right.
+       Everything comes from the page's front matter and content: banner, heading, lede, facts, links, resume. */ -}}
+{{ define "main" }}
+<article class="sheet about">
+  {{- with .Params.banner }}{{ with resources.Get . }}{{ with (.Crop "2560x1150 Center").Resize "1600x webp q82" }}
+  <img class="about-banner" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="mirceanton: DevOps by day, HomeOps by night">
+  {{- end }}{{ end }}{{ end }}
+  <div class="about-grid">
+    <div class="prose">
+      <h1 class="page-title">{{ .Params.heading | default .Title }}</h1>
+      {{- with .Params.lede }}<p class="lede">{{ . }}</p>{{ end }}
+      {{ .Content }}
+    </div>
+    <aside class="about-facts">
+      {{- with .Params.facts }}
+      <h2>Quick facts</h2>
+      <dl>{{ range . }}<dt>{{ .k }}</dt><dd>{{ .v }}</dd>{{ end }}</dl>
+      {{- end }}
+      {{- with .Params.links }}
+      <h2>Find me</h2>
+      <ul class="about-links">
+        {{- range . }}<li><a href="{{ .url }}"{{ if hasPrefix .url "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" .icon }}<span>{{ .label }}</span></a></li>{{ end }}
+      </ul>
+      {{- end }}
+      {{- with .Params.resume }}<a class="btn press" href="{{ . }}">{{ partial "icon.html" "download" }} Resume (PDF)</a>{{ end }}
+    </aside>
+  </div>
+</article>
+{{ end }}

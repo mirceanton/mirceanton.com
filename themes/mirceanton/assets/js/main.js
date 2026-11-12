@@ -303,6 +303,10 @@ document.addEventListener("click", (e) => {
         return copyCode(action);
       case "search-open":
         return openSearch();
+      case "search-focus":
+        e.preventDefault();
+        if (mobile.matches) root.classList.add("search-open");
+        return searchInput?.focus();
     }
   }
   const img = e.target.closest(".prose img");
