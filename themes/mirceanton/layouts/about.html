@@ -16,6 +16,15 @@
       <h2>Quick facts</h2>
       <dl>{{ range . }}<dt>{{ .k }}</dt><dd>{{ .v }}</dd>{{ end }}</dl>
       {{- end }}
+      {{- /* Built from the site, so it stays current without editing this page. */}}
+      {{- with site.Taxonomies.tags }}
+      <h2>Writes about</h2>
+      <div class="about-topics">{{ range first 10 .ByCount }}<a class="chip" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a>{{ end }}</div>
+      {{- end }}
+      {{- with first 1 (where site.RegularPages "Section" "in" site.Params.mainSections) }}{{ with index . 0 }}
+      <h2>Latest post</h2>
+      <a class="about-latest" href="{{ .RelPermalink }}"><span>{{ .LinkTitle }}</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_medium" }}</time></a>
+      {{- end }}{{ end }}
       {{- with .Params.links }}
       <h2>Find me</h2>
       <ul class="about-links">

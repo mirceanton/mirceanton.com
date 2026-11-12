@@ -563,6 +563,11 @@ a.cat:hover { filter: brightness(0.95); }
 .about-links { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 8px 0; list-style: none; border-top: 2px solid color-mix(in srgb, var(--line) 18%, transparent); border-bottom: 2px solid color-mix(in srgb, var(--line) 18%, transparent); }
 .about-links a { display: flex; align-items: center; gap: 12px; padding: 8px 10px; margin: 0 -10px; border-radius: 8px; color: var(--text); font-weight: 700; font-size: 15px; text-decoration: none; overflow-wrap: anywhere; }
 .about-links a:hover { background: var(--accent-soft); }
+.about-topics { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.about-latest { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; padding: 12px 14px; background: var(--chip); border: 2px solid var(--line); border-radius: 8px; color: var(--text); text-decoration: none; }
+.about-latest span { font-weight: 800; font-size: 15px; line-height: 1.35; }
+.about-latest time { font: 700 12px/1.4 var(--label); color: var(--muted); }
+.about-latest:hover { background: var(--accent-soft); }
 
 @media (max-width: 1100px) {
   .about-grid { grid-template-columns: minmax(0, 1fr); }

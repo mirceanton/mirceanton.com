@@ -15,9 +15,6 @@ lede: DevOps engineer from Bucharest, Romania. I automate infrastructure for a l
 facts:
   - { k: Based in, v: "Bucharest, Romania" }
   - { k: Day job, v: "Platform team, Raiffeisen Bank" }
-  - { k: Certified, v: "Kubestronaut" }
-  - { k: Speaking, v: "CloudNativeDays Romania 2026, OmniOpenCon 2025" }
-  - { k: Homelab, v: "Proxmox + Ceph, Talos, MikroTik" }
 
 links:
   - { icon: youtube, url: "https://www.youtube.com/@mirceanton", label: "@mirceanton" }
