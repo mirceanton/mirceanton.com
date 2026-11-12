@@ -1,0 +1,87 @@
+{{- $title := cond .IsHome site.Title (printf "%s | %s" .Title site.Title) -}}
+{{- $desc := or .Description (cond .IsPage (.Summary | plainify | truncate 160) "") site.Params.description | plainify | strings.TrimSpace -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<meta name="author" content="{{ site.Params.social.name | default site.Title }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<meta name="theme-color" content="#0F1A24">
+<meta name="color-scheme" content="light dark">
+
+{{- /* Apply saved theme, sidebar and contents state before first paint */}}
+<script>
+(function () {
+  var d = document.documentElement, g = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  var t = g("theme"); if (t === "light" || t === "dark") d.dataset.theme = t;
+  if (g("sidebar") === "collapsed") d.dataset.sidebar = "collapsed";
+  if (g("toc") === "collapsed") d.dataset.toc = "collapsed";
+})();
+</script>
+
+{{- $fonts := slice "fonts/Inter-Regular.woff2" "fonts/Inter-Black.woff2" }}
+{{- range $fonts }}
+<link rel="preload" href="{{ (resources.Get .).RelPermalink }}" as="font" type="font/woff2" crossorigin>
+{{- end }}
+{{- $css := resources.Get "css/main.css" | resources.ExecuteAsTemplate "css/main.css" . | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- $js := resources.Get "js/main.js" | js.Build (dict "minify" hugo.IsProduction "target" "es2020") | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+
+{{- /* Favicons */}}
+{{- with resources.Get "img/favicons/apple-touch-icon.png" }}<link rel="apple-touch-icon" sizes="180x180" href="{{ .RelPermalink }}">{{ end }}
+{{- with resources.Get "img/favicons/favicon-32x32.png" }}<link rel="icon" type="image/png" sizes="32x32" href="{{ .RelPermalink }}">{{ end }}
+{{- with resources.Get "img/favicons/favicon-16x16.png" }}<link rel="icon" type="image/png" sizes="16x16" href="{{ .RelPermalink }}">{{ end }}
+{{- with resources.Get "img/favicons/favicon.ico" }}<link rel="icon" href="{{ .RelPermalink }}" sizes="any">{{ end }}
+
+{{- with .OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">
+{{- end }}
+{{- with site.Home.OutputFormats.Get "rss" }}{{ if not $.IsHome }}
+<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">
+{{- end }}{{ end }}
+
+{{- /* Open Graph and Twitter cards */}}
+{{- $og := partial "cover.html" (dict "page" . "spec" "1200x630 Center jpg q82") }}
+{{- if not $og }}{{ with resources.Get (index (site.Params.images | default (slice "img/icon.png")) 0) }}{{ $og = .Resize "630x jpg q85 #FFFFFF" }}{{ end }}{{ end }}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ cond .IsHome site.Title .Title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="{{ replace (site.Language.Locale | default "en-us") "-" "_" }}">
+<meta property="og:type" content="{{ cond .IsPage "article" "website" }}">
+{{- with $og }}
+<meta property="og:image" content="{{ .Permalink }}">
+<meta property="og:image:width" content="{{ .Width }}">
+<meta property="og:image:height" content="{{ .Height }}">
+{{- end }}
+{{- if .IsPage }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- range .Params.tags }}
+<meta property="article:tag" content="{{ . }}">
+{{- end }}
+{{- end }}
+<meta name="twitter:card" content="{{ cond (and $og .Params.image) "summary_large_image" "summary" }}">
+<meta name="twitter:title" content="{{ cond .IsHome site.Title .Title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+{{- with $og }}<meta name="twitter:image" content="{{ .Permalink }}">{{ end }}
+
+{{- $ogURL := "" }}{{ with $og }}{{ $ogURL = .Permalink }}{{ end }}
+{{- if .IsPage }}
+<script type="application/ld+json">
+{{ dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "description" $desc
+  "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "url" .Permalink
+  "image" $ogURL
+  "author" (dict "@type" "Person" "name" (site.Params.social.name | default site.Title) "url" (site.Params.social.url | default site.BaseURL))
+  | jsonify | safeJS }}
+</script>
+{{- end }}
+
+{{- partial "analytics.html" . }}

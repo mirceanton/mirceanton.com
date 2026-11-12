@@ -1,0 +1,8 @@
+{{- /* Analytics load in production builds only, so local previews don't count as visits. */ -}}
+{{- if hugo.IsProduction -}}
+  {{- with site.Params.analytics.umami -}}
+    {{- if and .id .host -}}
+<script defer src="{{ .host }}/script.js" data-website-id="{{ .id }}"></script>
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

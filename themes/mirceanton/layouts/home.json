@@ -1,0 +1,14 @@
+{{- /* Search index, fetched by the search box on first focus. */ -}}
+{{- $items := slice -}}
+{{- range where site.RegularPages "Section" "in" site.Params.mainSections -}}
+  {{- $items = $items | append (dict
+    "title" .Title
+    "url" .RelPermalink
+    "date" (.Date.Format "2006-01-02")
+    "description" (.Description | plainify | strings.TrimSpace)
+    "tags" (.Params.tags | default slice)
+    "categories" (.Params.categories | default slice)
+    "content" (.Plain | strings.TrimSpace)
+  ) -}}
+{{- end -}}
+{{- $items | jsonify -}}

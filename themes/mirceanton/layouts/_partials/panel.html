@@ -1,0 +1,24 @@
+{{- /* Home page side panel: recently updated posts and the most used tags. */ -}}
+{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections -}}
+<aside class="panel" aria-label="More">
+  {{- with first 5 ($posts.ByLastmod.Reverse) }}
+  <section>
+    <h2>Recently Updated</h2>
+    <ul class="links">
+      {{- range . }}
+      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+  {{- with site.Taxonomies.tags }}
+  <section>
+    <h2>Trending Tags</h2>
+    <div class="tag-cloud">
+      {{- range first 10 .ByCount }}
+      <a class="chip" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a>
+      {{- end }}
+    </div>
+  </section>
+  {{- end }}
+</aside>

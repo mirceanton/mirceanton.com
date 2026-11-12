@@ -1,0 +1,14 @@
+{{ define "main" }}
+<section class="sheet" style="max-width: 760px">
+  <div class="code" style="margin-bottom: 28px">
+    <div class="code-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-label">404</span></div>
+    <pre><code><span style="color: var(--mint)">$</span> kubectl get page <span id="nf-path">this-one</span>
+Error from server (NotFound): pages "<span id="nf-path2">this-one</span>" not found</code></pre>
+    <script>(function () { var p = location.pathname; document.getElementById("nf-path").textContent = p; document.getElementById("nf-path2").textContent = p; })();</script>
+  </div>
+  <h1 class="page-title">Page not found</h1>
+  <div class="prose" style="margin-top: 16px">
+    <p>Whatever was here has moved or never existed. Try the search above, or head back to the <a href="{{ "/" | relURL }}">home page</a>.</p>
+  </div>
+</section>
+{{ end }}

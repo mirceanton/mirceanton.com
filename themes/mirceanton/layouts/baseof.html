@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale | default "en" }}">
+<head>
+{{- partial "head.html" . }}
+</head>
+<body class="kind-{{ .Kind }}{{ if .IsPage }} is-article{{ end }}">
+<a class="skip" href="#content">Skip to content</a>
+<div class="shell">
+  {{- partial "sidebar.html" . }}
+  <div class="main">
+    {{- partial "bars.html" . }}
+    <main id="content" class="content">
+      {{- block "main" . }}{{ end }}
+    </main>
+    {{- partial "footer.html" . }}
+  </div>
+</div>
+<div class="scrim" data-action="nav-close" hidden></div>
+<dialog class="lightbox" aria-label="Image"><img alt=""></dialog>
+</body>
+</html>

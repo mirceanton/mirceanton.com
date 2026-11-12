@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections -}}
+{{- $latest := index $posts 0 -}}
+{{- $pager := .Paginate (after 1 $posts) -}}
+<h1 class="visually-hidden">{{ site.Title }}</h1>
+<div class="cols">
+  <div class="stack">
+    {{- if eq $pager.PageNumber 1 }}
+    {{- with $latest }}{{ partial "featured.html" . }}{{ end }}
+    {{- if $pager.Pages }}<h2 class="section-label">Earlier posts</h2>{{ end }}
+    {{- end }}
+    {{- range $pager.Pages }}
+    {{- partial "card.html" . }}
+    {{- end }}
+    {{- partial "pager.html" $pager }}
+  </div>
+  {{- partial "panel.html" . }}
+</div>
+{{ end }}

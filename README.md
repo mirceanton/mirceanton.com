@@ -5,8 +5,8 @@ My personal website, built with Hugo and hosted on GitHub pages.
 ## Tech Stack
 
 - **Static Site Generator**: [Hugo](https://gohugo.io/) (extended)
-- **Theme**: [Chirpy](https://github.com/mirceanton/hugo-theme-chirpy)
-- **Styling**: Custom CSS with Dart Sass
+- **Theme**: `mirceanton`, a custom theme in [`themes/mirceanton/`](themes/mirceanton/) built on the channel's brand kit
+- **Styling**: Plain CSS, bundled and fingerprinted by Hugo Pipes (no Sass, no Node)
 - **Hosting**: GitHub Pages
 - **CI/CD**: GitHub Actions
 
@@ -27,11 +27,11 @@ sudo apt install -y imagemagick webp
 ## Local Development
 
 ```bash
-# Start the development server
-hugo server -D
+# Start the development server (mise pins Hugo, so use the pinned version)
+mise exec -- hugo server -D
 
 # Build for production
-hugo --minify
+mise exec -- hugo --minify
 ```
 
 ## Project Structure
@@ -46,6 +46,7 @@ hugo --minify
 │   └── categories/      # Categories taxonomy
 ├── data/                # Data files (authors.yaml)
 ├── static/docs/         # Static documents (Resume)
+├── themes/mirceanton/   # The site's theme (layouts, CSS, JS, fonts)
 └── hugo.yaml            # Hugo configuration
 ```
 
@@ -58,6 +59,13 @@ Blog posts are located in `content/post/`. Each post is a directory with:
 - `index.md` - Post content
 - `featured.webp` - Featured image (1200x630 recommended)
 - `img/` - Additional images for the post
+
+### Markdown extras
+
+- Callouts: end a blockquote with `{.prompt-info}`, `{.prompt-tip}`, `{.prompt-warning}` or `{.prompt-danger}`, or use GitHub alerts (`> [!NOTE]`, `> [!TIP]`, ...)
+- Code blocks: ` ```routeros {file="1. interfaces"} ` shows a file label in the block header
+- Image captions: an _italic line_ directly below an image, or `{caption="..."}`
+- Cover image: `image.path` in front matter (a page-bundle file)
 
 ### Image Guidelines
 
