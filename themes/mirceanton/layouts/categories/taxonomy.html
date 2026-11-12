@@ -21,7 +21,7 @@
       {{- $img := partial "cover.html" (dict "page" . "spec" "240x135 Center webp q75") }}
       <li>
         <a href="{{ .RelPermalink }}">
-          {{- with $img }}<img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-empty" aria-hidden="true"></span>{{ end }}
+          {{- with $img }}<img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }} alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-empty" aria-hidden="true"></span>{{ end }}
           <span class="shelf-item">
             <span class="shelf-title">{{ .Title }}</span>
             <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>

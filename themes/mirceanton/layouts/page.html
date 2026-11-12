@@ -18,7 +18,7 @@
         </div>
       </header>
       {{- with $hero }}
-      <img class="hero" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" fetchpriority="high" decoding="async">
+      <img class="hero" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }} alt="" fetchpriority="high" decoding="async">
       {{- end }}
       {{- if $tocOn }}
       <details class="toc-inline">

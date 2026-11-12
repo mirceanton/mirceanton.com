@@ -3,7 +3,7 @@
 {{ define "main" }}
 <article class="sheet about">
   {{- with .Params.banner }}{{ with resources.Get . }}{{ with (.Crop "2560x1150 Center").Resize "1600x webp q82" }}
-  <img class="about-banner" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="mirceanton: DevOps by day, HomeOps by night">
+  <img class="about-banner" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }} alt="mirceanton: DevOps by day, HomeOps by night">
   {{- end }}{{ end }}{{ end }}
   <div class="about-grid">
     <div class="prose">

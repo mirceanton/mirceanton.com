@@ -13,7 +13,7 @@
     </div>
   </div>
   {{- with $img }}
-  <img class="card-img" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" loading="lazy" decoding="async">
+  <img class="card-img" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }} alt="" loading="lazy" decoding="async">
   {{- else }}
   <div class="card-img empty" aria-hidden="true"></div>
   {{- end }}

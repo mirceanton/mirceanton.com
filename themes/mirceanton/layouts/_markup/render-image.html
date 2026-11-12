@@ -11,6 +11,6 @@
 {{- end -}}
 <img src="{{ $src }}" alt="{{ .PlainText }}"
   {{- with .Title }} title="{{ . }}"{{ end }}
-  {{- with $res }}{{ if and (ne .MediaType.SubType "svg") (ne .MediaType.SubType "svg+xml") }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}{{ end }}
+  {{- with $res }}{{ if and (ne .MediaType.SubType "svg") (ne .MediaType.SubType "svg+xml") }} width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }}{{ end }}{{ end }}
   {{- range $k, $v := .Attributes }}{{ if and $v (ne $k "caption") }}{{ printf " %s=%q" $k (string $v) | safeHTMLAttr }}{{ end }}{{ end }} loading="lazy" decoding="async">
 {{- with .Attributes.caption }}<em class="caption">{{ . }}</em>{{ end -}}

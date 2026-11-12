@@ -283,6 +283,14 @@ function zoom(img) {
 }
 lightbox?.addEventListener("click", () => lightbox.close());
 
+// ------------------------------------------------------------- image placeholders
+
+// Images carry a tiny blurred copy as a background (data-lqip). Drop it once the real image is in,
+// so it never shows through transparent PNGs. Load events don't bubble, hence the capture listener.
+const lqipDone = (img) => { if (img.dataset.lqip !== "done" && img.complete && img.naturalWidth) img.dataset.lqip = "done"; };
+document.addEventListener("load", (e) => { if (e.target.dataset?.lqip !== undefined) lqipDone(e.target); }, true);
+document.querySelectorAll("img[data-lqip]").forEach(lqipDone);
+
 // ------------------------------------------------------------- wiring
 
 document.addEventListener("click", (e) => {

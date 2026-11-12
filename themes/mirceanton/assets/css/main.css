@@ -290,6 +290,10 @@ a.cat:hover { filter: brightness(0.95); }
 .panel .links a:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--sky); text-decoration-thickness: 3px; text-underline-offset: 3px; }
 .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 
+/* Image placeholders: a blurred 24px copy fills the box until the real image loads (see lqip.html) */
+img[data-lqip] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+img[data-lqip="done"] { background-image: none !important; }
+
 /* Press-down hover: the one place a shadow is allowed to change */
 .press { transition: transform 90ms ease-out, box-shadow 90ms ease-out; }
 .press:hover, .press:focus-within { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--shadow) !important; }
@@ -537,7 +541,7 @@ a.cat:hover { filter: brightness(0.95); }
 .shelf-list { margin: 0; padding: 8px 12px; list-style: none; }
 .shelf-list a { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 14px; align-items: center; padding: 10px; border-radius: 8px; color: var(--text); text-decoration: none; }
 .shelf-list a:hover { background: var(--surface-2); }
-.shelf-list img, .shelf-list .thumb-empty { display: block; width: 112px; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 2px solid var(--line); border-radius: 6px; background: var(--surface-2); }
+.shelf-list img, .shelf-list .thumb-empty { display: block; width: 112px; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 2px solid var(--line); border-radius: 6px; background-color: var(--surface-2); }
 .shelf-item { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .shelf-title { font-weight: 800; font-size: 15px; line-height: 1.3; }
 .shelf-list time { font: 700 11.5px/1.3 var(--label); color: var(--faint); }
