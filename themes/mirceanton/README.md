@@ -12,7 +12,7 @@ The site's own Hugo theme, built from the mirceanton channel brand kit (Inter + 
 ## Files
 
 | Path | What |
-|---|---|
+| --- | --- |
 | `layouts/` | Templates (`baseof`, `home`, `page`, `section`, `taxonomy`, `term`, `archives`, `404`, `home.json` search index) |
 | `layouts/_partials/` | Sidebar, bars, cards, panel, head/SEO, icons, cover image helper |
 | `layouts/_markup/` | Render hooks: code blocks (terminal window + copy + `file=` label), blockquotes (callouts), headings (anchors), images (bundle/assets lookup, captions), tables |

@@ -14,6 +14,7 @@ on:
       - themes/**
       - hugo.yaml
       - Dockerfile
+      - docker/**
   pull_request:
     branches: [main]
     paths:
@@ -25,6 +26,7 @@ on:
       - themes/**
       - hugo.yaml
       - Dockerfile
+      - docker/**
   workflow_dispatch:
     inputs:
       dry-run:
