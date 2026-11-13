@@ -1,4 +1,5 @@
-{{- /* About: banner on top, the story (page content) on the left, quick facts and links on the right.
+{{- /* About: banner on top, the story (page content) on the left, quick facts and links on the right
+       (right below the heading on phones).
        Everything comes from the page's front matter and content: banner, heading, lede, facts, links, resume. */ -}}
 {{ define "main" }}
 <article class="sheet about">
@@ -6,12 +7,11 @@
   <img class="about-banner" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }} alt="mirceanton: DevOps by day, HomeOps by night">
   {{- end }}{{ end }}{{ end }}
   <div class="about-grid">
-    <div class="prose">
+    <header class="about-head">
       <h1 class="page-title">{{ .Params.heading | default .Title }}</h1>
       {{- with .Params.lede }}<p class="lede">{{ . }}</p>{{ end }}
-      {{ .Content }}
-    </div>
-    <aside class="about-facts">
+    </header>
+    <aside class="about-facts" aria-label="Quick facts and links">
       {{- with .Params.facts }}
       <h2>Quick facts</h2>
       <dl>{{ range . }}<dt>{{ .k }}</dt><dd>{{ .v }}</dd>{{ end }}</dl>
@@ -33,6 +33,9 @@
       {{- end }}
       {{- with .Params.resume }}<a class="btn press" href="{{ . }}">{{ partial "icon.html" "download" }} Resume (PDF)</a>{{ end }}
     </aside>
+    <div class="prose about-body">
+      {{ .Content }}
+    </div>
   </div>
 </article>
 {{ end }}

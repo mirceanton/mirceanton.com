@@ -3,7 +3,9 @@
 <head>
 {{- partial "head.html" . }}
 </head>
-<body class="kind-{{ .Kind }}{{ if and .IsPage (in site.Params.mainSections .Section) }} is-article{{ end }}">
+{{- /* is-flat: reads edge to edge on phones, without the sheet. Posts (is-article) and About. */}}
+{{- $article := and .IsPage (in site.Params.mainSections .Section) }}
+<body class="kind-{{ .Kind }}{{ if $article }} is-article{{ end }}{{ if or $article (eq .Layout "about") }} is-flat{{ end }}">
 <a class="skip" href="#content">Skip to content</a>
 <div class="shell">
   {{- partial "sidebar.html" . }}

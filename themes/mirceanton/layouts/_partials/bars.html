@@ -3,8 +3,8 @@
 {{- /* Phone bar: menu, brand, search, theme. Hidden on wide screens. */}}
 <header class="mbar">
   <button class="btn-ink" type="button" data-action="nav-open" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu">{{ partial "icon.html" "menu" }}</button>
-  <a class="mbrand" href="{{ "/" | relURL }}">{{ with $avatar }}<img src="{{ .RelPermalink }}" width="36" height="36" alt="">{{ end }}{{ site.Params.author | default site.Title }}</a>
-  <button class="btn-ink" type="button" data-action="search-open" aria-label="Search">{{ partial "icon.html" "search" }}</button>
+  <a class="mbrand" href="{{ "/" | relURL }}">{{ with $avatar }}<img src="{{ .RelPermalink }}" width="36" height="36" alt="">{{ end }}<span>{{ site.Params.author | default site.Title }}</span></a>
+  <button class="btn-ink" type="button" data-action="search-open" aria-controls="search-input" aria-expanded="false" aria-label="Search">{{ partial "icon.html" "search" }}</button>
   <button class="btn-ink theme-btn" type="button" data-action="theme" aria-label="Toggle dark mode">
     {{- partial "icon.html" (dict "name" "moon" "class" "i-moon") -}}
     {{- partial "icon.html" (dict "name" "sun" "class" "i-sun") -}}
