@@ -1,0 +1,25 @@
+{{- /* The newest post, showcased at the top of the home page. */ -}}
+{{- $img := partial "cover.html" (dict "page" . "spec" "1440x720 Center webp q80") -}}
+{{- $cat := index (.GetTerms "categories") 0 -}}
+<article class="featured press">
+  <div class="featured-media">
+    {{- with $img }}
+    <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }} alt="" fetchpriority="high" decoding="async">
+    {{- end }}
+    <span class="badge">LATEST {{ if eq (lower ($cat.LinkTitle | default "")) "talks" }}TALK{{ else }}POST{{ end }}</span>
+  </div>
+  <div class="featured-body">
+    <div class="meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+      {{- with $cat }}<span class="cat" data-cat="{{ .LinkTitle | urlize }}">{{ .LinkTitle }}</span>{{ end }}
+      <span class="dot"></span><span>{{ .ReadingTime }} min read</span>
+    </div>
+    <h2 class="featured-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    {{- with .Description | default .Summary | plainify | strings.TrimSpace }}
+    <p class="featured-desc">{{ . }}</p>
+    {{- end }}
+    {{- with .Params.tags }}
+    <div class="tags">{{ range . }}<span class="chip">{{ . }}</span>{{ end }}</div>
+    {{- end }}
+  </div>
+</article>

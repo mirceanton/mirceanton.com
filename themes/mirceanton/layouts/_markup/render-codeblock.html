@@ -1,0 +1,13 @@
+{{- /* Fenced code as a terminal window: traffic lights, file name or language, copy button.
+       ```yaml {file="hugo.yaml"} puts the file name in the title bar. */ -}}
+{{- $names := dict "sh" "shell" "bash" "bash" "zsh" "zsh" "console" "terminal" "yaml" "yaml" "yml" "yaml" "tf" "terraform" "terraform" "terraform" "hcl" "hcl" "txt" "text" "text" "text" "toml" "toml" "json" "json" "go" "go" "py" "python" "python" "python" "js" "javascript" "ts" "typescript" "md" "markdown" "dockerfile" "dockerfile" "rsc" "routeros" -}}
+{{- $label := or .Attributes.file (index $names .Type) .Type "text" -}}
+<div class="code">
+  <div class="code-bar">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="code-label">{{ $label }}</span>
+    <button class="code-copy" type="button" data-action="copy" aria-label="Copy code{{ with .Attributes.file }} from {{ . }}{{ end }}">{{ partial "icon.html" (dict "name" "copy" "class" "icon-sm") }}<span>copy</span></button>
+  </div>
+  {{- $result := transform.HighlightCodeBlock . }}
+  {{ $result.Wrapped }}
+</div>

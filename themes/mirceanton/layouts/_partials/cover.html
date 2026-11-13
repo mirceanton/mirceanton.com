@@ -1,0 +1,27 @@
+{{- /*
+  Returns a page's cover image, processed. Accepts front matter `image: { path: featured.webp }`
+  or `image: featured.webp`, looked up in the page bundle, then in assets.
+  Call: {{ $img := partial "cover.html" (dict "page" . "spec" "640x360 Center webp q78" "op" "fill") }}
+  op: "fill" (crop to spec), "fit" (resize to width in spec), or "raw" (unprocessed).
+*/ -}}
+{{- $res := false -}}
+{{- $path := "" -}}
+{{- with .page.Params.image -}}
+  {{- if reflect.IsMap . -}}{{- $path = .path | default "" -}}{{- else -}}{{- $path = . -}}{{- end -}}
+{{- end -}}
+{{- if $path -}}
+  {{- $path = strings.TrimPrefix "./" $path -}}
+  {{- $res = or (.page.Resources.Get $path) (resources.Get $path) -}}
+{{- end -}}
+{{- $out := false -}}
+{{- with $res -}}
+  {{- if eq $.op "raw" -}}
+    {{- $out = . -}}
+  {{- else if eq $.op "fit" -}}
+    {{- $w := math.Min .Width ($.width | default 1600) | int -}}
+    {{- $out = .Resize (printf "%dx %s" $w ($.format | default "webp q82")) -}}
+  {{- else -}}
+    {{- $out = .Fill $.spec -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

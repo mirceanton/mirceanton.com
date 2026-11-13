@@ -1,15 +1,16 @@
 ---
 baseURL: https://mirceanton.com/
-languageCode: en-us
+locale: en-us
 isMultilingual: false
-theme: github.com/mirceanton/hugo-theme-chirpy
+theme: mirceanton # themes/mirceanton
 
 title: Mircea Anton
 params:
   author: mirceanton
   tagline: DevOps by day, HomeOps by night!
   description: In this blog I share my insights and experiences in the realm of devops and the tools and technologies I use in my home lab.
-  avatar: img/icon.png # the avatar on sidebar, should be a relative path to /assets.
+  avatar: img/icon.png # sidebar avatar, a path under assets/
+  mainSections: [post] # what the home page, archives and search list
   images: ["img/icon.png"] # Default social media share image
 
   social:
@@ -43,7 +44,8 @@ params:
       input_position: bottom
       lang: en
       reactions_enabled: 1
-      theme: noborder_gray # noborder_dark
+      theme: noborder_gray # light mode
+      theme_dark: noborder_dark # dark mode
 
 
 # ===============================================================================================
@@ -59,6 +61,9 @@ taxonomies:
 enableGitInfo: true # Add git commit info to pages (last modified date)
 enableRobotsTXT: true # Generate robots.txt
 enableEmoji: true # Enable emoji support in content
+
+pagination:
+  pagerSize: 10
 
 # Output formats (for RSS, sitemap, etc)
 outputs:
@@ -79,7 +84,7 @@ markup:
   goldmark:
     parser:
       attribute:
-        block: true # Allow {.prompt-info} etc. under blockquotes (Chirpy callouts)
+        block: true # Allow {.prompt-info} etc. under blockquotes (rendered as callouts)
     renderer:
       unsafe: true # Allow HTML in markdown
   highlight:
@@ -89,7 +94,6 @@ markup:
     lineNos: true
     lineNumbersInTable: true
     noClasses: false
-    style: monokai
     tabWidth: 2
   tableOfContents:
     endLevel: 4

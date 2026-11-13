@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{- if and .Content (not .RegularPages) }}
+{{- /* A section that is really a page, such as About */}}
+<article class="sheet" style="max-width: 900px">
+  <header class="post-head"><h1 class="page-title">{{ .Title }}</h1></header>
+  <div class="prose">{{ .Content }}</div>
+</article>
+{{- else }}
+{{- $pager := .Paginate .RegularPages }}
+<header class="list-head"><h1 class="page-title">{{ .Title }}</h1></header>
+<div class="cols">
+  <div class="stack">
+    {{- range $pager.Pages }}{{ partial "card.html" . }}{{ end }}
+    {{- partial "pager.html" $pager }}
+  </div>
+  {{- partial "panel.html" . }}
+</div>
+{{- end }}
+{{ end }}

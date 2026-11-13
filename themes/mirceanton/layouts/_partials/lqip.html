@@ -1,0 +1,16 @@
+{{- /*
+  Low-quality image placeholder. Returns ` data-lqip style="background-image:url(data:...)"` attributes
+  for an <img>: a tiny blurred copy of the image, inlined, that shows until the real one loads.
+  main.js sets data-lqip="done" on load and the CSS drops the background, so transparent images stay clean.
+  Call: <img src="..."{{ partial "lqip.html" $resource }}>
+  Pass the resource that is actually displayed (after Fill/Resize) so the placeholder matches its crop.
+  Returns nothing for SVG, GIF or anything Hugo can't process.
+*/ -}}
+{{- $out := "" -}}
+{{- with . -}}
+  {{- if in (slice "jpeg" "png" "webp" "tiff" "bmp") .MediaType.SubType -}}
+    {{- $tiny := .Resize "24x webp q50" | images.Filter (images.GaussianBlur 1.2) -}}
+    {{- $out = printf ` data-lqip style="background-image:url(data:image/webp;base64,%s)"` ($tiny.Content | base64Encode) -}}
+  {{- end -}}
+{{- end -}}
+{{- return ($out | safeHTMLAttr) -}}

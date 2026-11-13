@@ -1,0 +1,14 @@
+{{ define "main" }}
+<section class="sheet" style="max-width: 900px">
+  <header class="list-head">
+    <span class="kicker">{{ .Parent.LinkTitle }}</span>
+    <h1 class="page-title">{{ .Title }}</h1>
+    <p class="lede">{{ with .Description }}{{ . }} {{ end }}{{ len .Pages }} {{ cond (eq (len .Pages) 1) "post" "posts" }}.</p>
+  </header>
+  <ul class="rows">
+    {{- range .Pages }}
+    <li><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{- end }}
+  </ul>
+</section>
+{{ end }}

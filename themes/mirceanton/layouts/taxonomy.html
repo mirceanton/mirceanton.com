@@ -1,0 +1,13 @@
+{{ define "main" }}
+<section class="sheet" style="max-width: 900px">
+  <header class="list-head">
+    <h1 class="page-title">{{ .Title }}</h1>
+    <p class="lede">{{ len .Data.Terms }} {{ lower .Title }} across {{ len (where site.RegularPages "Section" "in" site.Params.mainSections) }} posts.</p>
+  </header>
+  <ul class="term-cloud">
+    {{- range .Data.Terms.ByCount }}
+    <li><a class="chip press" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <span class="count">{{ .Count }}</span></a></li>
+    {{- end }}
+  </ul>
+</section>
+{{ end }}

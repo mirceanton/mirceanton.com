@@ -1,0 +1,6 @@
+<footer class="site-foot">
+  <div>
+    <span>© {{ now.Year }} {{ with site.Params.social.url }}<a href="{{ . }}">{{ site.Params.social.name | default site.Title }}</a>{{ else }}{{ site.Params.social.name | default site.Title }}{{ end }}. Some rights reserved.</span>
+    <span>{{ with site.Home.OutputFormats.Get "rss" }}<a href="{{ .RelPermalink }}">RSS</a> · {{ end }}Built with <a href="https://gohugo.io/">Hugo</a></span>
+  </div>
+</footer>

@@ -1,0 +1,58 @@
+{{- /* Older and newer post links, then comments. */ -}}
+{{- $posts := (where site.RegularPages "Section" .Section).ByDate.Reverse -}}
+{{- $older := $posts.Next . -}}
+{{- $newer := $posts.Prev . -}}
+{{- if or $older $newer }}
+<nav class="post-nav" aria-label="More posts">
+  {{- with $older }}
+  <a class="press" href="{{ .RelPermalink }}"><span class="dir">← OLDER</span><span class="t">{{ .Title }}</span></a>
+  {{- else }}
+  <span class="none"><span class="dir">← OLDER</span><span class="t">This is the first post</span></span>
+  {{- end }}
+  {{- with $newer }}
+  <a class="press newer" href="{{ .RelPermalink }}"><span class="dir">NEWER →</span><span class="t">{{ .Title }}</span></a>
+  {{- else }}
+  <span class="none"><span class="dir">NEWER →</span><span class="t">This is the latest post</span></span>
+  {{- end }}
+</nav>
+{{- end }}
+
+{{- $c := site.Params.comments -}}
+{{- if and $c.enable (eq $c.provider "giscus") (ne .Params.comments false) }}
+{{- with $c.giscus }}
+{{- $light := .theme | default "noborder_light" -}}
+{{- $dark := .theme_dark | default "noborder_dark" -}}
+<section class="comments" aria-labelledby="comments-title">
+  <h2 id="comments-title">Comments</h2>
+  <div class="giscus" data-giscus-light="{{ $light }}" data-giscus-dark="{{ $dark }}"></div>
+  <script>
+  (function () {
+    var holder = document.currentScript.previousElementSibling;
+    var dark = document.documentElement.dataset.theme
+      ? document.documentElement.dataset.theme === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var s = document.createElement("script");
+    var attrs = {
+      src: "https://giscus.app/client.js",
+      "data-repo": {{ .repo }},
+      "data-repo-id": {{ .repo_id }},
+      "data-category": {{ .category }},
+      "data-category-id": {{ .category_id }},
+      "data-mapping": {{ .mapping | default "pathname" }},
+      "data-strict": "0",
+      "data-reactions-enabled": {{ printf "%v" (.reactions_enabled | default 1) }},
+      "data-emit-metadata": "0",
+      "data-input-position": {{ .input_position | default "bottom" }},
+      "data-theme": dark ? {{ $dark }} : {{ $light }},
+      "data-lang": {{ .lang | default "en" }},
+      "data-loading": "lazy",
+      crossorigin: "anonymous",
+      async: ""
+    };
+    for (var k in attrs) s.setAttribute(k, attrs[k]);
+    holder.appendChild(s);
+  })();
+  </script>
+</section>
+{{- end }}
+{{- end }}

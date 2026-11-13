@@ -1,0 +1,16 @@
+{{- /* Images resolve from the page bundle first, then from assets/. They get real dimensions and
+       lazy loading; the theme's script opens them full size on click.
+       A caption comes from an {caption="..."} attribute, or from an _italic line_ right below. */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $src := $u.String -}}
+{{- $res := false -}}
+{{- if not $u.IsAbs -}}
+  {{- $path := strings.TrimPrefix "./" $u.Path -}}
+  {{- $res = or (.PageInner.Resources.Get $path) (resources.Get $path) -}}
+  {{- with $res }}{{ $src = .RelPermalink }}{{ end -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ .PlainText }}"
+  {{- with .Title }} title="{{ . }}"{{ end }}
+  {{- with $res }}{{ if and (ne .MediaType.SubType "svg") (ne .MediaType.SubType "svg+xml") }} width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }}{{ end }}{{ end }}
+  {{- range $k, $v := .Attributes }}{{ if and $v (ne $k "caption") }}{{ printf " %s=%q" $k (string $v) | safeHTMLAttr }}{{ end }}{{ end }} loading="lazy" decoding="async">
+{{- with .Attributes.caption }}<em class="caption">{{ . }}</em>{{ end -}}

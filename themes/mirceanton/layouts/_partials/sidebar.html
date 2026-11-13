@@ -1,0 +1,41 @@
+{{- $avatar := false -}}
+{{- with resources.Get (site.Params.avatar | default "img/icon.png") -}}{{- $avatar = .Resize "248x webp q85" -}}{{- end -}}
+{{- $tagline := strings.TrimSuffix "!" (site.Params.tagline | default "") | strings.TrimSpace -}}
+{{- $parts := split $tagline ", " -}}
+{{- $labels := dict "github" "GitHub" "youtube" "YouTube" "link" "All links" "mail" "Email" "rss" "RSS" -}}
+<aside class="sidebar" id="sidebar" aria-label="Site">
+  <button class="side-toggle" type="button" data-action="sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Collapse sidebar">
+    {{- partial "icon.html" (dict "name" "panel-close" "class" "i-close") -}}
+    {{- partial "icon.html" (dict "name" "panel-open" "class" "i-open") -}}
+    {{- partial "icon.html" (dict "name" "x" "class" "i-close-x") -}}
+  </button>
+
+  <a class="avatar" href="{{ "/" | relURL }}" aria-label="{{ site.Params.author | default site.Title }}, home">
+    {{- with $avatar }}<img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="">{{ end -}}
+  </a>
+  <a class="brand" href="{{ "/" | relURL }}">{{ site.Params.author | default site.Title }}</a>
+  {{- with $tagline }}
+  <p class="tagline"><span class="prompt">&gt;</span> {{ if gt (len $parts) 1 }}{{ index $parts 0 }},<br>&nbsp; {{ delimit (after 1 $parts) ", " }}{{ else }}{{ . }}{{ end }}<span class="cursor" aria-hidden="true"></span></p>
+  {{- end }}
+
+  <nav class="side-nav" aria-label="Main">
+    <ul>
+      {{- range site.Menus.main }}
+      {{- $current := $.IsMenuCurrent "main" . }}
+      {{- $active := or $current ($.HasMenuCurrent "main" .) }}
+      <li><a class="nav-link{{ if $active }} active{{ end }}" href="{{ .URL }}" title="{{ .Name }}"{{ if $current }} aria-current="page"{{ end }}>
+        {{- partial "icon.html" (.Pre | string | default "dot") -}}
+        <span class="label">{{ .Name }}</span></a></li>
+      {{- end }}
+    </ul>
+  </nav>
+
+  {{- with site.Params.social.links }}
+  <ul class="social" aria-label="Elsewhere">
+    {{- range . }}
+    {{- $name := index (dict "fab fa-github" "github" "fab fa-youtube" "youtube" "fas fa-link" "link" "fas fa-envelope" "mail" "fas fa-rss" "rss") .icon | default "link" }}
+    <li><a href="{{ .url }}" aria-label="{{ index $labels $name }}" title="{{ index $labels $name }}"{{ if hasPrefix .url "http" }} rel="me noopener"{{ end }}>{{ partial "icon.html" .icon }}</a></li>
+    {{- end }}
+  </ul>
+  {{- end }}
+</aside>

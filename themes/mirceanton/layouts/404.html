@@ -1,0 +1,16 @@
+{{ define "main" }}
+{{- /* Just a terminal. The message and the ways out are terminal lines; the path fills in from the URL. */ -}}
+<h1 class="visually-hidden">Page not found</h1>
+<div class="code nf-term">
+  <div class="code-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-label">404 · not found</span></div>
+  <pre><code><span class="p">$</span> kubectl get page <span class="nf-path">this-one</span>
+<span class="e">Error from server (NotFound): pages "<span class="nf-path">this-one</span>" not found</span>
+
+<span class="c"># It moved, or it never existed. Try one of these:</span>
+<span class="p">$</span> <a href="{{ "/" | relURL }}">cd ~</a><span class="c ic">                  # home page</span>
+<span class="p">$</span> <a href="{{ "/archives/" | relURL }}">ls archives/</a><span class="c ic">          # every post, newest first</span>
+<span class="p">$</span> <a href="#" data-action="search-focus">grep -ri "..." posts/</a><span class="c ic">  # search (or press /)</span>
+<span class="p">$</span> <span class="cur" aria-hidden="true"></span></code></pre>
+  <script>(function () { var p = location.pathname; document.querySelectorAll(".nf-path").forEach(function (e) { e.textContent = p; }); })();</script>
+</div>
+{{ end }}

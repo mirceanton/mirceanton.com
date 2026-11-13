@@ -1,0 +1,8 @@
+name = "mirceanton"
+license = "MIT"
+description = "The mirceanton brand theme: Ink sidebar, outlined cards with hard shadows, Inter and DejaVu Sans Mono."
+min_version = "0.146.0"
+
+[author]
+  name = "Mircea-Pavel Anton"
+  homepage = "https://mirceanton.com/"

@@ -1,0 +1,23 @@
+{{- /* Callouts. Two ways to write one:
+       > text           and           > [!WARNING]
+       {.prompt-warning}              > text
+       Kinds: info, tip, warning, danger (GitHub's note/important map to info, caution to danger). */ -}}
+{{- $kind := "" -}}
+{{- if eq .Type "alert" -}}
+  {{- $kind = index (dict "note" "info" "tip" "tip" "important" "info" "warning" "warning" "caution" "danger") (lower .AlertType) | default "info" -}}
+{{- else -}}
+  {{- $classes := split (.Attributes.class | default "") " " -}}
+  {{- range slice "info" "tip" "warning" "danger" -}}
+    {{- if in $classes (printf "prompt-%s" .) -}}{{- $kind = . -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $kind -}}
+<aside class="callout callout-{{ $kind }}" aria-label="{{ title $kind }}">
+  <p class="callout-label">{{ upper (or .AlertTitle $kind) }}</p>
+  {{ .Text }}
+</aside>
+{{- else -}}
+<blockquote{{ with .Attributes.class }} class="{{ . }}"{{ end }}>
+  {{ .Text }}
+</blockquote>
+{{- end -}}

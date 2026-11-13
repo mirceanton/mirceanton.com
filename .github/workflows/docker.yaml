@@ -10,9 +10,9 @@ on:
       - assets/**
       - static/**
       - data/**
+      - layouts/**
+      - themes/**
       - hugo.yaml
-      - go.mod
-      - go.sum
       - Dockerfile
   pull_request:
     branches: [main]
@@ -21,9 +21,9 @@ on:
       - assets/**
       - static/**
       - data/**
+      - layouts/**
+      - themes/**
       - hugo.yaml
-      - go.mod
-      - go.sum
       - Dockerfile
   workflow_dispatch:
     inputs:
