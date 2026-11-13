@@ -1,0 +1,13 @@
+{{- /* A link to a file in the page bundle ([download](config.rsc)) resolves to that file and publishes
+       it. Posts publish only the files they use (see content/post/_index.md), so a bundle file
+       linked this way would otherwise be missing. Every other link renders as usual. */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $href := .Destination -}}
+{{- if and (not $u.IsAbs) $u.Path (not (hasPrefix $u.Path "/")) -}}
+  {{- with .PageInner.Resources.Get (strings.TrimPrefix "./" $u.Path) -}}
+    {{- $href = .RelPermalink -}}
+    {{- with $u.Fragment }}{{ $href = printf "%s#%s" $href . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
+{{- /**/ -}}

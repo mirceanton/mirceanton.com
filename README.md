@@ -44,7 +44,6 @@ mise exec -- hugo --minify
 │   ├── post/            # Blog posts
 │   ├── tags/            # Tags taxonomy
 │   └── categories/      # Categories taxonomy
-├── data/                # Data files (authors.yaml)
 ├── resume/              # Resume source (.docx); not published
 ├── static/docs/         # Published documents (Resume PDF, talk slides)
 ├── themes/mirceanton/   # The site's theme (layouts, CSS, JS, fonts)

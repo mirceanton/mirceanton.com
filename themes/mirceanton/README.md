@@ -23,7 +23,7 @@ The site's own Hugo theme, built from the mirceanton channel brand kit (Inter + 
 
 ## Site params it reads
 
-`params.mainSections`, `params.description`, `params.avatar`, `params.tagline`, `params.images`, `params.toc`, `params.social.*`, `params.comments` (giscus, with `theme` / `theme_dark`, `mapping` and `strict`; a post can pin its thread with `discussion: <number>` in front matter, or turn comments off with `comments: false`), `params.analytics.umami.*`, `menus.main` (with Font Awesome names in `pre`, mapped to built-in SVG icons in `_partials/icon.html`).
+`params.mainSections`, `params.description`, `params.avatar`, `params.tagline`, `params.images`, `params.toc`, `params.search.enable` / `params.search.maxResults`, `params.social.*`, `params.comments` (giscus, with `theme` / `theme_dark`, `mapping` and `strict`; a post can pin its thread with `discussion: <number>` in front matter, or turn comments off with `comments: false`), `params.analytics.umami.*`, `menus.main` (with Font Awesome names in `pre`, mapped to built-in SVG icons in `_partials/icon.html`).
 
 ## Fonts
 

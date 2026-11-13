@@ -11,7 +11,6 @@
 {{- if not $u.IsAbs -}}
   {{- $path := strings.TrimPrefix "./" $u.Path -}}
   {{- $res = or (.PageInner.Resources.Get $path) (resources.Get $path) -}}
-  {{- with $res }}{{ $src = .RelPermalink }}{{ end -}}
 {{- end -}}
 {{- $shown := false -}}
 {{- $dims := "" -}}
@@ -31,8 +30,13 @@
       {{- $srcset = printf "%s 800w, %s %dw" $small.RelPermalink $shown.RelPermalink $shown.Width -}}
     {{- end -}}
     {{- $src = $shown.RelPermalink -}}
-  {{- else if eq .MediaType.SubType "gif" -}}
-    {{- $dims = printf ` width="%d" height="%d"` .Width .Height | safeHTMLAttr -}}
+  {{- else -}}
+    {{- /* Asking for the permalink is what publishes a file, so the original is only asked for here,
+           where it is the one being served. */ -}}
+    {{- $src = .RelPermalink -}}
+    {{- if eq .MediaType.SubType "gif" -}}
+      {{- $dims = printf ` width="%d" height="%d"` .Width .Height | safeHTMLAttr -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 <img src="{{ $src }}" alt="{{ .PlainText }}"

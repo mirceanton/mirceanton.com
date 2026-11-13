@@ -255,7 +255,7 @@ function runSearch() {
     if (all) scored.push({ item, score });
   }
   scored.sort((a, b) => b.score - a.score || b.item.date.localeCompare(a.item.date));
-  const top = scored.slice(0, 8);
+  const top = scored.slice(0, Number(searchInput.dataset.max) || 8);
   if (!top.length) {
     searchResults.innerHTML = `<li class="r-empty" role="option" aria-disabled="true" aria-selected="false">No posts match “${escapeHtml(searchInput.value.trim())}”.</li>`;
   } else {
