@@ -2,6 +2,7 @@
 title: Setting Up Ceph in My Proxmox Cluster
 image: { path: featured.webp }
 date: "2025-10-04"
+discussion: 279 # giscus thread, pinned so a title or URL change keeps the comments
 
 categories: [ Blog Post ]
 tags:

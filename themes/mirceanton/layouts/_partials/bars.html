@@ -1,10 +1,14 @@
 {{- $avatar := false -}}
 {{- with resources.Get (site.Params.avatar | default "img/icon.png") -}}{{- $avatar = .Resize "96x webp q85" -}}{{- end -}}
+{{- /* params.search.enable turns the search box off; it is on unless set to false. */}}
+{{- $search := ne site.Params.search.enable false -}}
 {{- /* Phone bar: menu, brand, search, theme. Hidden on wide screens. */}}
 <header class="mbar">
   <button class="btn-ink" type="button" data-action="nav-open" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu">{{ partial "icon.html" "menu" }}</button>
-  <a class="mbrand" href="{{ "/" | relURL }}">{{ with $avatar }}<img src="{{ .RelPermalink }}" width="36" height="36" alt="">{{ end }}{{ site.Params.author | default site.Title }}</a>
-  <button class="btn-ink" type="button" data-action="search-open" aria-label="Search">{{ partial "icon.html" "search" }}</button>
+  <a class="mbrand" href="{{ "/" | relURL }}">{{ with $avatar }}<img src="{{ .RelPermalink }}" width="36" height="36" alt="">{{ end }}<span>{{ site.Params.author | default site.Title }}</span></a>
+  {{- if $search }}
+  <button class="btn-ink" type="button" data-action="search-open" aria-controls="search-input" aria-expanded="false" aria-label="Search">{{ partial "icon.html" "search" }}</button>
+  {{- end }}
   <button class="btn-ink theme-btn" type="button" data-action="theme" aria-label="Toggle dark mode">
     {{- partial "icon.html" (dict "name" "moon" "class" "i-moon") -}}
     {{- partial "icon.html" (dict "name" "sun" "class" "i-sun") -}}
@@ -27,17 +31,19 @@
     </ol>
   </nav>
   <div class="tools">
+    {{- if $search }}
     <div class="search" role="search">
       <label class="search-box">
         {{ partial "icon.html" (dict "name" "search" "class" "icon-sm") }}
         <span class="visually-hidden">Search posts</span>
         <input id="search-input" type="search" placeholder="Search..." autocomplete="off" spellcheck="false"
           role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list"
-          data-index="{{ with site.Home.OutputFormats.Get "json" }}{{ .RelPermalink }}{{ end }}">
+          data-index="{{ with site.Home.OutputFormats.Get "json" }}{{ .RelPermalink }}{{ end }}" data-max="{{ site.Params.search.maxResults | default 8 }}">
         <kbd aria-hidden="true">/</kbd>
       </label>
       <ul class="search-results" id="search-results" role="listbox" aria-label="Search results" hidden></ul>
     </div>
+    {{- end }}
     <button class="btn-sq theme-btn" type="button" data-action="theme" aria-label="Toggle dark mode">
       {{- partial "icon.html" (dict "name" "moon" "class" "i-moon") -}}
       {{- partial "icon.html" (dict "name" "sun" "class" "i-sun") -}}

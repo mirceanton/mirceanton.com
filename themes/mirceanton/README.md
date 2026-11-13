@@ -12,10 +12,12 @@ The site's own Hugo theme, built from the mirceanton channel brand kit (Inter + 
 ## Files
 
 | Path | What |
-|---|---|
+| --- | --- |
 | `layouts/` | Templates (`baseof`, `home`, `page`, `section`, `taxonomy`, `term`, `archives`, `404`, `home.json` search index) |
 | `layouts/_partials/` | Sidebar, bars, cards, panel, head/SEO, icons, cover image helper |
-| `layouts/_markup/` | Render hooks: code blocks (terminal window + copy + `file=` label), blockquotes (callouts), headings (anchors), images (bundle/assets lookup, captions), tables |
+| `layouts/_markup/` | Render hooks: code blocks (terminal window + copy + `file=` label), blockquotes (callouts), headings (anchors), images (bundle/assets lookup, resizing, captions), links (bundle files), tables |
+| `layouts/_shortcodes/` | `video` (looping clip in place of a GIF) and `youtube` (lazy, cookie-less embed) |
+| `layouts/robots.txt` | robots.txt with the sitemap line |
 | `assets/css/main.css` | All styles; tokens at the top. Run through `ExecuteAsTemplate` for font URLs |
 | `assets/js/main.js` | Theme, sidebar, contents, scroll-spy, copy, search, lightbox |
 | `assets/fonts/` | Subset woff2 fonts |
@@ -23,7 +25,7 @@ The site's own Hugo theme, built from the mirceanton channel brand kit (Inter + 
 
 ## Site params it reads
 
-`params.mainSections`, `params.description`, `params.avatar`, `params.tagline`, `params.images`, `params.toc`, `params.social.*`, `params.comments` (giscus, with `theme` / `theme_dark`), `params.analytics.umami.*`, `menus.main` (with Font Awesome names in `pre`, mapped to built-in SVG icons in `_partials/icon.html`).
+`params.mainSections`, `params.description`, `params.avatar`, `params.tagline`, `params.images`, `params.toc`, `params.search.enable` / `params.search.maxResults`, `params.social.*`, `params.comments` (giscus, with `theme` / `theme_dark`, `mapping` and `strict`; a post can pin its thread with `discussion: <number>` in front matter, or turn comments off with `comments: false`), `params.analytics.umami.*`, `menus.main` (with Font Awesome names in `pre`, mapped to built-in SVG icons in `_partials/icon.html`).
 
 ## Fonts
 

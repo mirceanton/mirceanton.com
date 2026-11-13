@@ -1,3 +1,6 @@
+{{ define "init" }}
+{{- if .RegularPages }}{{ .Store.Set "pager" (.Paginate .RegularPages) }}{{ end -}}
+{{ end }}
 {{ define "main" }}
 {{- if and .Content (not .RegularPages) }}
 {{- /* A section that is really a page, such as About */}}
@@ -6,11 +9,11 @@
   <div class="prose">{{ .Content }}</div>
 </article>
 {{- else }}
-{{- $pager := .Paginate .RegularPages }}
+{{- $pager := .Store.Get "pager" }}
 <header class="list-head"><h1 class="page-title">{{ .Title }}</h1></header>
 <div class="cols">
   <div class="stack">
-    {{- range $pager.Pages }}{{ partial "card.html" . }}{{ end }}
+    {{- range $pager.Pages }}{{ partial "card.html" (dict "page" . "level" 2) }}{{ end }}
     {{- partial "pager.html" $pager }}
   </div>
   {{- partial "panel.html" . }}

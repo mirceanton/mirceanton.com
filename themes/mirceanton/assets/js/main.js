@@ -49,10 +49,18 @@ function syncSidebarLabels() {
   }
 }
 
+// On phones the open drawer is a modal dialog: the page behind it is inert, so focus and screen
+// readers stay inside until it closes.
+const behindDrawer = document.querySelectorAll(".main, .skip");
+
 function openNav() {
   root.classList.add("nav-open");
   scrim.hidden = false;
   menuButton?.setAttribute("aria-expanded", "true");
+  sidebar.setAttribute("role", "dialog");
+  sidebar.setAttribute("aria-modal", "true");
+  sidebar.setAttribute("aria-label", "Menu");
+  behindDrawer.forEach((el) => (el.inert = true));
   sidebar.querySelector("a, button")?.focus();
 }
 
@@ -61,6 +69,10 @@ function closeNav() {
   root.classList.remove("nav-open");
   scrim.hidden = true;
   menuButton?.setAttribute("aria-expanded", "false");
+  sidebar.setAttribute("role", "complementary");
+  sidebar.removeAttribute("aria-modal");
+  sidebar.setAttribute("aria-label", "Site");
+  behindDrawer.forEach((el) => (el.inert = false));
   menuButton?.focus();
 }
 
@@ -91,10 +103,12 @@ function toggleToc() {
   target?.focus();
 }
 
-// Highlight the section being read in every contents list on the page
+// Highlight the section being read in every contents list on the page: the last heading that has
+// passed the top third of the screen. Recomputed from positions on scroll, so jumps (Home, End,
+// back/forward) can't leave a stale highlight.
 (function scrollSpy() {
-  const links = [...document.querySelectorAll("#TableOfContents a[href^='#']")];
-  if (!links.length || !("IntersectionObserver" in window)) return;
+  const links = [...document.querySelectorAll(".toc a[href^='#']")];
+  if (!links.length) return;
   const byId = new Map();
   links.forEach((a) => {
     const id = decodeURIComponent(a.hash.slice(1));
@@ -102,21 +116,48 @@ function toggleToc() {
     byId.get(id).push(a);
   });
   const headings = [...byId.keys()].map((id) => document.getElementById(id)).filter(Boolean);
-  const visible = new Set();
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
-      let current = headings.find((h) => visible.has(h));
-      if (!current) {
-        // Between headings: keep the last one above the viewport
-        current = [...headings].reverse().find((h) => h.getBoundingClientRect().top < 0) || headings[0];
-      }
-      links.forEach((a) => a.classList.remove("active"));
-      (byId.get(current.id) || []).forEach((a) => a.classList.add("active"));
-    },
-    { rootMargin: "0px 0px -65% 0px" }
-  );
-  headings.forEach((h) => observer.observe(h));
+  if (!headings.length) return;
+  let active = null;
+  let queued = false;
+  function update() {
+    queued = false;
+    const line = window.innerHeight * 0.35;
+    let current = headings[0];
+    for (const h of headings) {
+      if (h.getBoundingClientRect().top > line) break;
+      current = h;
+    }
+    // At the very bottom the last sections may never reach the line
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+      const last = headings[headings.length - 1];
+      if (last.getBoundingClientRect().top < window.innerHeight) current = last;
+    }
+    if (current === active) return;
+    active = current;
+    links.forEach((a) => a.classList.remove("active"));
+    (byId.get(current.id) || []).forEach((a) => a.classList.add("active"));
+    follow();
+  }
+  // A long contents panel scrolls on its own; keep the highlighted entry inside it.
+  const panel = document.querySelector(".toc-panel");
+  function follow() {
+    const link = panel?.querySelector("a.active");
+    if (!link || panel.scrollHeight <= panel.clientHeight) return;
+    const box = panel.getBoundingClientRect();
+    const at = link.getBoundingClientRect();
+    if (at.top < box.top + 8 || at.bottom > box.bottom - 8) {
+      panel.scrollTop += at.top - box.top - (panel.clientHeight - at.height) / 2;
+    }
+  }
+  const schedule = () => {
+    if (!queued) {
+      queued = true;
+      requestAnimationFrame(update);
+    }
+  };
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  update();
 })();
 
 // ------------------------------------------------------------- code copy
@@ -214,14 +255,14 @@ function runSearch() {
     if (all) scored.push({ item, score });
   }
   scored.sort((a, b) => b.score - a.score || b.item.date.localeCompare(a.item.date));
-  const top = scored.slice(0, 8);
+  const top = scored.slice(0, Number(searchInput.dataset.max) || 8);
   if (!top.length) {
-    searchResults.innerHTML = `<li class="r-empty">No posts match “${escapeHtml(searchInput.value.trim())}”.</li>`;
+    searchResults.innerHTML = `<li class="r-empty" role="option" aria-disabled="true" aria-selected="false">No posts match “${escapeHtml(searchInput.value.trim())}”.</li>`;
   } else {
     searchResults.innerHTML = top
       .map(
         ({ item }, i) =>
-          `<li><a id="sr-${i}" role="option" aria-selected="false" href="${escapeHtml(item.url)}">` +
+          `<li role="presentation"><a id="sr-${i}" role="option" aria-selected="false" href="${escapeHtml(item.url)}">` +
           `<span class="r-title">${highlight(item.title, terms)}</span>` +
           `<span class="r-snip">${highlight(snippet(item.description || item.content, terms), terms)}</span></a></li>`
       )
@@ -258,17 +299,28 @@ if (searchInput) {
       searchInput.value = "";
       runSearch();
       searchInput.blur();
-      root.classList.remove("search-open");
+      setSearchRow(false);
     }
   });
   document.addEventListener("click", (e) => {
-    if (!e.target.closest(".search")) searchResults.hidden = true;
+    if (e.target.closest(".search")) return;
+    searchResults.hidden = true;
+    searchInput.setAttribute("aria-expanded", "false");
+    // On phones a tap anywhere else also puts the search row away
+    if (!e.target.closest('[data-action^="search"]')) setSearchRow(false);
   });
 }
 
+// The search row on phones (the desktop bar always shows it)
+function setSearchRow(open) {
+  root.classList.toggle("search-open", open);
+  document.querySelector('[data-action="search-open"]')?.setAttribute("aria-expanded", String(open));
+}
+
 function openSearch() {
-  root.classList.toggle("search-open");
-  if (root.classList.contains("search-open")) searchInput.focus();
+  setSearchRow(!root.classList.contains("search-open"));
+  // preventScroll: the row is sticky and already in view, so the page must stay where it is
+  if (root.classList.contains("search-open")) searchInput.focus({ preventScroll: true });
 }
 
 // ------------------------------------------------------------- image zoom
@@ -276,12 +328,82 @@ function openSearch() {
 const lightbox = document.querySelector(".lightbox");
 function zoom(img) {
   if (!lightbox || typeof lightbox.showModal !== "function") return;
-  const big = lightbox.querySelector("img");
-  big.src = img.currentSrc || img.src;
+  const big = lightbox.querySelector("img") || lightbox.appendChild(document.createElement("img"));
+  big.src = img.dataset.zoom || img.currentSrc || img.src;
   big.alt = img.alt;
   lightbox.showModal();
 }
 lightbox?.addEventListener("click", () => lightbox.close());
+
+// Content images open the zoom view from the keyboard too (Enter or Space; Escape closes it)
+const zoomable = (img) => !img.closest("a");
+document.querySelectorAll(".prose img").forEach((img) => {
+  if (!zoomable(img) || !lightbox) return;
+  img.tabIndex = 0;
+  img.setAttribute("role", "button");
+  img.setAttribute("aria-label", img.alt ? `Zoom image: ${img.alt}` : "Zoom image");
+});
+document.addEventListener("keydown", (e) => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches?.(".prose img[role='button']")) {
+    e.preventDefault();
+    zoom(e.target);
+  }
+});
+
+// ------------------------------------------------------------- sideways scrollers
+
+// Code blocks and tables that overflow can be scrolled with the arrow keys once focused. Only the
+// ones that actually overflow become tab stops, so a post full of short snippets adds none.
+(function scrollers() {
+  const boxes = [...document.querySelectorAll(".code .highlight, .code > pre, .table-wrap")];
+  if (!boxes.length) return;
+  function sync() {
+    boxes.forEach((box) => {
+      const overflows = box.scrollWidth > box.clientWidth + 1;
+      if (overflows === box.hasAttribute("tabindex")) return;
+      if (overflows) {
+        const name = box.classList.contains("table-wrap") ? "Table" : `Code: ${box.closest(".code")?.querySelector(".code-label")?.textContent || "snippet"}`;
+        box.tabIndex = 0;
+        box.setAttribute("role", "group"); // not "region": that is a landmark, and a post can have dozens
+        box.setAttribute("aria-label", `${name} (scrolls sideways)`);
+      } else {
+        box.removeAttribute("tabindex");
+        box.removeAttribute("role");
+        box.removeAttribute("aria-label");
+      }
+    });
+  }
+  let timer;
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = setTimeout(sync, 150);
+  });
+  window.addEventListener("load", sync);
+  sync();
+})();
+
+// ------------------------------------------------------------- clips
+
+// Looping clips (the video shortcode) play only while on screen and load nothing before that.
+// With reduced motion they stay paused and keep their controls.
+(function clips() {
+  const videos = document.querySelectorAll("video.clip");
+  if (!videos.length || !("IntersectionObserver" in window)) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) e.target.play().catch(() => (e.target.controls = true));
+        else e.target.pause();
+      });
+    },
+    { threshold: 0.25 }
+  );
+  videos.forEach((v) => {
+    v.controls = false;
+    observer.observe(v);
+  });
+})();
 
 // ------------------------------------------------------------- image placeholders
 
@@ -313,13 +435,13 @@ document.addEventListener("click", (e) => {
         return openSearch();
       case "search-focus":
         e.preventDefault();
-        if (mobile.matches) root.classList.add("search-open");
-        return searchInput?.focus();
+        if (mobile.matches) setSearchRow(true);
+        return searchInput?.focus({ preventScroll: mobile.matches });
     }
   }
   const img = e.target.closest(".prose img");
-  if (img && !img.closest("a")) zoom(img);
-  if (e.target.closest(".toc-inline #TableOfContents a")) e.target.closest("details").open = false;
+  if (img && zoomable(img)) zoom(img);
+  if (e.target.closest(".toc-inline .toc a")) e.target.closest("details").open = false;
   if (mobile.matches && e.target.closest(".sidebar a")) closeNav();
 });
 
@@ -328,7 +450,7 @@ document.addEventListener("keydown", (e) => {
   const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;
   if (e.key === "/" && !typing && searchInput) {
     e.preventDefault();
-    if (mobile.matches) root.classList.add("search-open");
-    searchInput.focus();
+    if (mobile.matches) setSearchRow(true);
+    searchInput.focus({ preventScroll: mobile.matches });
   }
 });

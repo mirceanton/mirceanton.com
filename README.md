@@ -44,8 +44,8 @@ mise exec -- hugo --minify
 │   ├── post/            # Blog posts
 │   ├── tags/            # Tags taxonomy
 │   └── categories/      # Categories taxonomy
-├── data/                # Data files (authors.yaml)
-├── static/docs/         # Static documents (Resume)
+├── resume/              # Resume source (.docx); not published
+├── static/docs/         # Published documents (Resume PDF, talk slides)
 ├── themes/mirceanton/   # The site's theme (layouts, CSS, JS, fonts)
 └── hugo.yaml            # Hugo configuration
 ```
@@ -66,11 +66,18 @@ Blog posts are located in `content/post/`. Each post is a directory with:
 - Code blocks: ` ```routeros {file="1. interfaces"} ` shows a file label in the block header
 - Image captions: an _italic line_ directly below an image, or `{caption="..."}`
 - Cover image: `image.path` in front matter (a page-bundle file)
+- Centred line: put `{.center}` on the line below it
+- Clips: `{{< video src="img/demo.mp4" poster="img/demo-poster.webp" width="1600" height="656" alt="..." >}}` plays a short silent MP4 in a loop, in place of a GIF
+- YouTube: `{{< youtube VIDEO_ID >}}` (loads when scrolled into view, from youtube-nocookie.com)
+- Downloads: link a file in the post's folder with Markdown, `[download](config.rsc)`
+- Comments: `discussion: 123` in front matter pins the post to that GitHub discussion; `comments: false` turns them off
 
 ### Image Guidelines
 
 - Featured images should be **1200x630** pixels
 - Use `.webp` format for optimal performance
+- Content images are resized at build time (WebP, at most 1600px wide), so a large original is fine
+- Only files a post uses are published: reference them with Markdown or the shortcodes above, not raw HTML
 
 ## Deployment
 

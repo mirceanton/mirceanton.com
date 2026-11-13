@@ -1,0 +1,11 @@
+{{- /*
+  YouTube embed. Replaces Hugo's built-in shortcode with one that loads the player only when it
+  scrolls into view, from the cookie-less youtube-nocookie.com domain.
+  {{< youtube Q6FP4Vwik5U >}}   or   {{< youtube id="Q6FP4Vwik5U" title="What the video is" start="90" >}}
+*/ -}}
+{{- $id := .Get "id" | default (.Get 0) -}}
+{{- with $id -}}
+<iframe class="yt" src="https://www.youtube-nocookie.com/embed/{{ . }}{{ with $.Get "start" }}?start={{ . }}{{ end }}" title="{{ $.Get "title" | default "YouTube video" }}" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+{{- else -}}
+{{- errorf "The youtube shortcode needs a video id: %s" .Position -}}
+{{- end -}}

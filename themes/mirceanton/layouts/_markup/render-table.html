@@ -5,7 +5,12 @@
       {{- range .THead }}
       <tr>
         {{- range . }}
-        <th{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</th>
+        {{- /* An empty header cell is the corner of a table that also labels its rows */}}
+        {{- if .Text }}
+        <th scope="col"{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</th>
+        {{- else }}
+        <td></td>
+        {{- end }}
         {{- end }}
       </tr>
       {{- end }}

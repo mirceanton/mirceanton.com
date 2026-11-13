@@ -2,6 +2,17 @@
 {{- $tocOn := and (ne .Params.toc false) (or .Params.toc site.Params.toc) (gt (len .Fragments.Headings) 0) (strings.Contains .TableOfContents "<li>") -}}
 {{- $hero := partial "cover.html" (dict "page" . "op" "fit" "width" 1600) -}}
 {{- $cat := index (.GetTerms "categories") 0 -}}
+{{- /* The contents list is printed twice (side panel, and a dropdown on narrow screens), so it gets a
+       class in place of Hugo's id, which would repeat. */ -}}
+{{- $toc := replace .TableOfContents `<nav id="TableOfContents">` `<nav class="toc" aria-label="Contents">` | safeHTML -}}
+{{- /* A caption that only repeats the image's alt text is hidden from screen readers, which would
+       otherwise read the same words twice. */ -}}
+{{- $content := .Content -}}
+{{- range findRESubmatch `(<img [^>]*alt="([^"]*)"[^>]*>\s*)<em>([^<]*)</em>` $content -}}
+  {{- if eq (index . 2) (index . 3) -}}
+    {{- $content = replace $content (index . 0) (printf `%s<em aria-hidden="true">%s</em>` (index . 1) (index . 3)) -}}
+  {{- end -}}
+{{- end -}}
 <div class="cols post-cols{{ if $tocOn }} has-toc{{ end }}">
   <div class="stack">
     <article class="sheet">
@@ -11,9 +22,9 @@
         <div class="meta">
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
           {{- if gt (sub .Lastmod.Unix .Date.Unix) 86400 }}
-          <span class="dot"></span><span>Updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "Jan 2, 2006" }}</time></span>
+          <span class="sep">Updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "Jan 2, 2006" }}</time></span>
           {{- end }}
-          <span class="dot"></span><span>{{ .ReadingTime }} min read</span>
+          <span class="sep">{{ .ReadingTime }} min read</span>
           {{- with $cat }}<a class="cat" data-cat="{{ .LinkTitle | urlize }}" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
         </div>
       </header>
@@ -23,11 +34,11 @@
       {{- if $tocOn }}
       <details class="toc-inline">
         <summary>{{ partial "icon.html" "list" }}Contents{{ partial "icon.html" (dict "name" "chevron-down" "class" "chev") }}</summary>
-        {{ .TableOfContents }}
+        {{ $toc }}
       </details>
       {{- end }}
       <div class="prose">
-        {{ .Content }}
+        {{ $content | safeHTML }}
       </div>
       {{- with .GetTerms "tags" }}
       <footer class="post-tags" aria-label="Tags">
@@ -38,16 +49,16 @@
     {{- partial "post-extras.html" . }}
   </div>
   {{- if $tocOn }}
-  <aside class="toc-panel" aria-label="Contents">
+  <div class="toc-panel">
     <div class="toc-open">
       <div class="toc-head">
         <h2>Contents</h2>
         <button class="btn-line" type="button" data-action="toc" aria-expanded="true" aria-label="Collapse contents">{{ partial "icon.html" "panel-right-close" }}</button>
       </div>
-      {{ .TableOfContents }}
+      {{ $toc }}
     </div>
     <button class="btn-line toc-reopen" type="button" data-action="toc" aria-expanded="false" aria-label="Show contents" title="Contents">{{ partial "icon.html" "list" }}</button>
-  </aside>
+  </div>
   {{- end }}
 </div>
 {{ end }}
