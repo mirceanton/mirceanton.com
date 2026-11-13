@@ -45,7 +45,8 @@ mise exec -- hugo --minify
 │   ├── tags/            # Tags taxonomy
 │   └── categories/      # Categories taxonomy
 ├── data/                # Data files (authors.yaml)
-├── static/docs/         # Static documents (Resume)
+├── resume/              # Resume source (.docx); not published
+├── static/docs/         # Published documents (Resume PDF, talk slides)
 ├── themes/mirceanton/   # The site's theme (layouts, CSS, JS, fonts)
 └── hugo.yaml            # Hugo configuration
 ```
