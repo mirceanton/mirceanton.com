@@ -54,6 +54,9 @@
   --rail-w: 80px;
   --panel-w: 250px;
   --mbar-h: 67px; /* phone top bar: 44px buttons, 10px padding, 3px border */
+  /* The page draws under the notch (viewport-fit=cover), so the edges keep clear of it in landscape. */
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
   --radius: 12px;
   --shadow-sm: 5px 5px 0 var(--shadow);
   --shadow-lg: 8px 8px 0 var(--shadow);
@@ -133,9 +136,9 @@ button { cursor: pointer; }
 
 /* ---------------------------------------------------------------- shell */
 
-.shell { display: grid; grid-template-columns: var(--side-w) minmax(0, 1fr); min-height: 100vh; }
-:root[data-sidebar="collapsed"] .shell { grid-template-columns: var(--rail-w) minmax(0, 1fr); }
-.main { display: flex; flex-direction: column; min-width: 0; }
+.shell { display: grid; grid-template-columns: calc(var(--side-w) + var(--safe-l)) minmax(0, 1fr); min-height: 100vh; }
+:root[data-sidebar="collapsed"] .shell { grid-template-columns: calc(var(--rail-w) + var(--safe-l)) minmax(0, 1fr); }
+.main { display: flex; flex-direction: column; min-width: 0; padding-right: var(--safe-r); }
 .content { flex-grow: 1; width: 100%; max-width: 1240px; padding: 0 48px; }
 :root[data-sidebar="collapsed"] .content { max-width: 1320px; }
 
@@ -145,7 +148,7 @@ button { cursor: pointer; }
   position: sticky; top: 0; align-self: start;
   display: flex; flex-direction: column; align-items: center;
   height: 100vh; overflow-y: auto;
-  padding: 44px 22px 28px;
+  padding: 44px 22px 28px calc(22px + var(--safe-l));
   background: var(--side-bg); color: var(--on-ink);
   border-right: 3px solid var(--outline);
 }
@@ -195,7 +198,7 @@ button { cursor: pointer; }
 .social a:hover { background: var(--mint); }
 
 /* Collapsed: an icon rail */
-:root[data-sidebar="collapsed"] .sidebar { padding: 14px 0 24px; }
+:root[data-sidebar="collapsed"] .sidebar { padding: 14px 0 24px var(--safe-l); }
 :root[data-sidebar="collapsed"] .side-toggle { position: static; margin-bottom: 18px; }
 :root[data-sidebar="collapsed"] .side-toggle .i-close { display: none; }
 :root[data-sidebar="collapsed"] .side-toggle .i-open { display: block; }
@@ -640,13 +643,15 @@ img[data-lqip="done"] { background-image: none !important; }
 @media (max-width: 860px) {
   html { scroll-padding-top: var(--mbar-h); }
   .shell, :root[data-sidebar="collapsed"] .shell { grid-template-columns: minmax(0, 1fr); }
+  .main { padding-right: 0; }
+  .content, .site-foot { border-left: var(--safe-l) solid transparent; border-right: var(--safe-r) solid transparent; }
 
   /* Sidebar becomes a drawer */
   .sidebar, :root[data-sidebar="collapsed"] .sidebar {
     position: fixed; z-index: 40; top: 0; left: 0; bottom: 0;
     /* align-self must go back to stretch: "start" (for the sticky desktop column) also applies to a
        fixed box and would shrink the drawer to the height of its content. */
-    align-self: stretch; width: min(300px, 86vw); height: auto; padding: 44px 22px 28px;
+    align-self: stretch; width: calc(min(300px, 86vw) + var(--safe-l)); height: auto; padding: 44px 22px 28px calc(22px + var(--safe-l));
     padding-bottom: max(28px, env(safe-area-inset-bottom));
     overscroll-behavior: contain;
     transform: translateX(-105%); transition: transform 180ms ease-out;
@@ -672,7 +677,7 @@ img[data-lqip="done"] { background-image: none !important; }
   .mbar {
     position: sticky; top: 0; z-index: 20;
     display: flex; align-items: center; gap: 10px;
-    min-height: var(--mbar-h); padding: 10px 12px; background: var(--side-bg); color: #FFFFFF; border-bottom: 3px solid var(--outline);
+    min-height: var(--mbar-h); padding: 10px calc(12px + var(--safe-r)) 10px calc(12px + var(--safe-l)); background: var(--side-bg); color: #FFFFFF; border-bottom: 3px solid var(--outline);
   }
   .mbrand { display: flex; align-items: center; gap: 10px; flex-grow: 1; min-width: 0; color: #FFFFFF; font-weight: 900; font-size: 20px; letter-spacing: -0.03em; text-decoration: none; }
   .mbrand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -685,13 +690,14 @@ img[data-lqip="done"] { background-image: none !important; }
   /* It sticks under the phone bar, so opening search mid-article doesn't jump back to the top. */
   .topbar, :root[data-sidebar="collapsed"] .topbar {
     display: none; position: sticky; top: var(--mbar-h); z-index: 19;
-    max-width: none; padding: 10px 12px;
+    max-width: none; padding: 10px calc(12px + var(--safe-r)) 10px calc(12px + var(--safe-l));
     background: var(--side-bg); border-bottom: 3px solid var(--outline);
   }
   :root.search-open .topbar { display: flex; }
   .topbar .crumbs, .topbar .theme-btn { display: none; }
   .tools, .search { flex: 1 1 auto; min-width: 0; }
   .search-box { border-color: var(--outline); }
+  .search-box input { font-size: 16px; } /* under 16px, iOS Safari zooms the page when the field is focused */
   .search-box { width: 100%; }
   .search-box kbd { display: none; }
   .search-results { left: 0; right: 0; width: auto; max-height: calc(100vh - var(--mbar-h) - 90px); max-height: calc(100dvh - var(--mbar-h) - 90px); }
@@ -740,7 +746,7 @@ img[data-lqip="done"] { background-image: none !important; }
 }
 
 @media (max-width: 360px) {
-  .mbar { gap: 6px; padding-left: 8px; padding-right: 8px; }
+  .mbar { gap: 6px; padding-left: calc(8px + var(--safe-l)); padding-right: calc(8px + var(--safe-r)); }
   .mbrand { gap: 8px; font-size: 18px; }
   .mbrand img { width: 32px; height: 32px; }
 }
