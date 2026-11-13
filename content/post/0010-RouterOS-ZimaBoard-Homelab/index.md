@@ -387,10 +387,7 @@ It assumes a fresh install with no default config, `ether1` as WAN and `ether2` 
 
 ---
 
-<center>
-
 📹 [Watch Video](https://www.youtube.com/watch?v=Q6FP4Vwik5U)
-
-</center>
+{.center}
 
 {{< youtube Q6FP4Vwik5U >}}

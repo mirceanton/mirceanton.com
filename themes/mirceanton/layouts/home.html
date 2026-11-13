@@ -13,8 +13,10 @@
     {{- with $latest }}{{ partial "featured.html" . }}{{ end }}
     {{- if $pager.Pages }}<h2 class="section-label">Earlier posts</h2>{{ end }}
     {{- end }}
+    {{- /* Page 1 lists the cards under "Earlier posts"; later pages have only the page title above them */}}
+    {{- $level := cond (eq $pager.PageNumber 1) 3 2 }}
     {{- range $pager.Pages }}
-    {{- partial "card.html" . }}
+    {{- partial "card.html" (dict "page" . "level" $level) }}
     {{- end }}
     {{- partial "pager.html" $pager }}
   </div>

@@ -13,7 +13,7 @@
 <header class="list-head"><h1 class="page-title">{{ .Title }}</h1></header>
 <div class="cols">
   <div class="stack">
-    {{- range $pager.Pages }}{{ partial "card.html" . }}{{ end }}
+    {{- range $pager.Pages }}{{ partial "card.html" (dict "page" . "level" 2) }}{{ end }}
     {{- partial "pager.html" $pager }}
   </div>
   {{- partial "panel.html" . }}

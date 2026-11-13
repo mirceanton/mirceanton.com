@@ -409,14 +409,14 @@ img[data-lqip="done"] { background-image: none !important; }
 .toc-reopen { display: none; background: var(--surface); border-width: 3px; box-shadow: 3px 3px 0 var(--shadow); }
 :root[data-toc="collapsed"] .toc-open { display: none; }
 :root[data-toc="collapsed"] .toc-reopen { display: inline-flex; }
-#TableOfContents ul { margin: 0; padding: 0; list-style: none; }
-#TableOfContents ul ul a { padding-left: 26px; font-size: 13.5px; }
-#TableOfContents a {
+.toc ul { margin: 0; padding: 0; list-style: none; }
+.toc ul ul a { padding-left: 26px; font-size: 13.5px; }
+.toc a {
   display: block; padding: 6px 12px; border-left: 3px solid transparent;
   font-weight: 600; font-size: 14.5px; line-height: 1.35; color: var(--muted); text-decoration: none;
 }
-#TableOfContents a:hover { color: var(--text); border-left-color: var(--sky); }
-#TableOfContents a.active { color: var(--text); font-weight: 800; border-left-color: var(--sky); background: var(--accent-soft); }
+.toc a:hover { color: var(--text); border-left-color: var(--sky); }
+.toc a.active { color: var(--text); font-weight: 800; border-left-color: var(--sky); background: var(--accent-soft); }
 
 .toc-inline { display: none; }
 
@@ -442,6 +442,7 @@ img[data-lqip="done"] { background-image: none !important; }
 .prose li + li, .prose li > ul, .prose li > ol { margin-top: 8px; }
 .prose li::marker { font-weight: 800; }
 .prose strong { font-weight: 800; }
+.prose .center { text-align: center; }
 .prose hr { height: 0; margin: 40px 0; border: 0; border-top: 3px dashed var(--faint); }
 .prose img { display: block; margin: 0 auto; border: 3px solid var(--line); border-radius: 10px; cursor: zoom-in; }
 .prose video { display: block; width: 100%; height: auto; margin: 0 auto; background: var(--code-bg); border: 3px solid var(--line); border-radius: 10px; }
@@ -638,8 +639,8 @@ img[data-lqip="done"] { background-image: none !important; }
   .toc-inline summary::-webkit-details-marker { display: none; }
   .toc-inline summary .chev { margin-left: auto; transition: transform 120ms; }
   .toc-inline[open] summary .chev { transform: rotate(180deg); }
-  .toc-inline #TableOfContents { padding: 0 0 10px; }
-  .toc-inline #TableOfContents a { padding: 9px 16px; font-size: 15px; }
+  .toc-inline .toc { padding: 0 0 10px; }
+  .toc-inline .toc a { padding: 9px 16px; font-size: 15px; }
 }
 
 @media (max-width: 860px) {

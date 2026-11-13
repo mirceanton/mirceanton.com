@@ -1,9 +1,13 @@
-{{- /* A post in a list: text on the left, thumbnail on the right (on top on phones). */ -}}
+{{- /* A post in a list: text on the left, thumbnail on the right (on top on phones).
+       Call with (dict "page" . "level" 2). level is the heading level of the title: 3 under a section
+       heading, 2 when the cards sit right under the page title. */ -}}
+{{- $level := .level | default 3 -}}
+{{- with .page -}}
 {{- $img := partial "cover.html" (dict "page" . "spec" "640x360 Center webp q78") -}}
 {{- $cat := index (.GetTerms "categories") 0 -}}
 <article class="card press">
   <div class="card-body">
-    <h3 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <h{{ $level }} class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h{{ $level }}>
     {{- with .Description | default .Summary | plainify | strings.TrimSpace }}
     <p class="card-desc">{{ . | truncate 200 }}</p>
     {{- end }}
@@ -18,3 +22,4 @@
   <div class="card-img empty" aria-hidden="true"></div>
   {{- end }}
 </article>
+{{- end -}}

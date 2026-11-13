@@ -457,10 +457,7 @@ It all depends on how lazy I'm feeling, really 😆
 
 ---
 
-<center>
-
 📹 [Watch Video](https://www.youtube.com/watch?v=wqD7k5iNvqs)
-
-</center>
+{.center}
 
 {{< youtube wqD7k5iNvqs >}}

@@ -450,10 +450,7 @@ Until next time, happy clustering!
 
 ---
 
-<center>
-
 📹 [Watch Video](https://www.youtube.com/watch?v=4_U0KK-blXQ)
-
-</center>
+{.center}
 
 {{< youtube 4_U0KK-blXQ >}}

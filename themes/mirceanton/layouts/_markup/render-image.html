@@ -14,6 +14,7 @@
   {{- with $res }}{{ $src = .RelPermalink }}{{ end -}}
 {{- end -}}
 {{- $shown := false -}}
+{{- $dims := "" -}}
 {{- $srcset := "" -}}
 {{- $zoom := "" -}}
 {{- with $res -}}
@@ -30,12 +31,14 @@
       {{- $srcset = printf "%s 800w, %s %dw" $small.RelPermalink $shown.RelPermalink $shown.Width -}}
     {{- end -}}
     {{- $src = $shown.RelPermalink -}}
+  {{- else if eq .MediaType.SubType "gif" -}}
+    {{- $dims = printf ` width="%d" height="%d"` .Width .Height | safeHTMLAttr -}}
   {{- end -}}
 {{- end -}}
 <img src="{{ $src }}" alt="{{ .PlainText }}"
   {{- with $srcset }} srcset="{{ . }}" sizes="(max-width: 860px) 100vw, 800px"{{ end }}
   {{- with $zoom }} data-zoom="{{ . }}"{{ end }}
   {{- with .Title }} title="{{ . }}"{{ end }}
-  {{- with $shown }} width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }}{{ end }}
+  {{- with $shown }} width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }}{{ end }}{{ $dims }}
   {{- range $k, $v := .Attributes }}{{ if and $v (ne $k "caption") }}{{ printf " %s=%q" $k (string $v) | safeHTMLAttr }}{{ end }}{{ end }} loading="lazy" decoding="async">
 {{- with .Attributes.caption }}<em class="caption">{{ . }}</em>{{ end -}}

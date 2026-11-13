@@ -107,7 +107,7 @@ function toggleToc() {
 // passed the top third of the screen. Recomputed from positions on scroll, so jumps (Home, End,
 // back/forward) can't leave a stale highlight.
 (function scrollSpy() {
-  const links = [...document.querySelectorAll("#TableOfContents a[href^='#']")];
+  const links = [...document.querySelectorAll(".toc a[href^='#']")];
   if (!links.length) return;
   const byId = new Map();
   links.forEach((a) => {
@@ -328,7 +328,7 @@ function openSearch() {
 const lightbox = document.querySelector(".lightbox");
 function zoom(img) {
   if (!lightbox || typeof lightbox.showModal !== "function") return;
-  const big = lightbox.querySelector("img");
+  const big = lightbox.querySelector("img") || lightbox.appendChild(document.createElement("img"));
   big.src = img.dataset.zoom || img.currentSrc || img.src;
   big.alt = img.alt;
   lightbox.showModal();
@@ -441,7 +441,7 @@ document.addEventListener("click", (e) => {
   }
   const img = e.target.closest(".prose img");
   if (img && zoomable(img)) zoom(img);
-  if (e.target.closest(".toc-inline #TableOfContents a")) e.target.closest("details").open = false;
+  if (e.target.closest(".toc-inline .toc a")) e.target.closest("details").open = false;
   if (mobile.matches && e.target.closest(".sidebar a")) closeNav();
 });
 
