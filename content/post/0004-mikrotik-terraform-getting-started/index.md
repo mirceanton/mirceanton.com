@@ -49,7 +49,7 @@ If you want to follow along you don't really need much for this one:
 
 The provider I'm going to use is [terraform-routeros](https://registry.terraform.io/providers/terraform-routeros/routeros/latest). I will install the latest version which, at the time of writing, is `1.76.3`. To do that, I typically create a `providers.tf` file in the root of my project and configure the `required_providers` block there:
 
-```terraform {file="provider.tf"}
+```terraform {file="providers.tf"}
 terraform {
   required_providers {
     routeros = {
@@ -75,7 +75,7 @@ With the provider installed, I need to configure it to tell it how it can connec
 
 This is done by adding a `provider` block with the required parameters which you can find in the [official documentation](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs#example-usage) of the provider. I typically dump that config in my `providers.tf` file as well:
 
-```terraform {file="providerss.tf"}
+```terraform {file="providers.tf"}
 # ...
 provider "routeros" {
   hosturl  = var.mikrotik_host_url

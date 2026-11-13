@@ -17,7 +17,7 @@ description: |
 
 ## Introduction
 
-So I've been terraforming quite a bit lately. Since my post about [migrating from OPNsense to MikroTik](https://mirceanton.com/posts/migrating-from-opnsense-to-mikrotik/), where I began automating my entire network setup, I have actually moved to a new apartment! This has pushed me to rework my **entire** network configuration, and along the way, I started rethinking how I manage Terraform state.
+So I've been terraforming quite a bit lately. Since migrating from OPNsense to MikroTik, where I began automating my entire network setup, I have actually moved to a new apartment! This has pushed me to rework my **entire** network configuration, and along the way, I started rethinking how I manage Terraform state.
 
 ## Traditional State Backends
 
@@ -635,7 +635,7 @@ backblaze on  main via 💠 default
 }
 ```
 
-There we go! An encrypted state file :teardrop:
+There we go! An encrypted state file 🥲
 
 ## Decrypting the State File
 

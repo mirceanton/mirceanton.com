@@ -291,7 +291,7 @@ export TALOSCONFIG=./rendered/talosconfig
 
 Either option works fine, I just personally dislike using the CLI flag as it involves too much typing 😅
 
-> If you end up managing multiple Talos clusters and want a talosconfig-file manager, you might want to take a look at [`talswitcher`](github.com/mirceanton/talswitcher)
+> If you end up managing multiple Talos clusters and want a talosconfig-file manager, you might want to take a look at [`talswitcher`](https://github.com/mirceanton/talswitcher)
 {.prompt-tip}
 
 ```bash
