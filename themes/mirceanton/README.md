@@ -15,7 +15,9 @@ The site's own Hugo theme, built from the mirceanton channel brand kit (Inter + 
 | --- | --- |
 | `layouts/` | Templates (`baseof`, `home`, `page`, `section`, `taxonomy`, `term`, `archives`, `404`, `home.json` search index) |
 | `layouts/_partials/` | Sidebar, bars, cards, panel, head/SEO, icons, cover image helper |
-| `layouts/_markup/` | Render hooks: code blocks (terminal window + copy + `file=` label), blockquotes (callouts), headings (anchors), images (bundle/assets lookup, captions), tables |
+| `layouts/_markup/` | Render hooks: code blocks (terminal window + copy + `file=` label), blockquotes (callouts), headings (anchors), images (bundle/assets lookup, resizing, captions), links (bundle files), tables |
+| `layouts/_shortcodes/` | `video` (looping clip in place of a GIF) and `youtube` (lazy, cookie-less embed) |
+| `layouts/robots.txt` | robots.txt with the sitemap line |
 | `assets/css/main.css` | All styles; tokens at the top. Run through `ExecuteAsTemplate` for font URLs |
 | `assets/js/main.js` | Theme, sidebar, contents, scroll-spy, copy, search, lightbox |
 | `assets/fonts/` | Subset woff2 fonts |
