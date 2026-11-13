@@ -124,6 +124,18 @@ function toggleToc() {
     active = current;
     links.forEach((a) => a.classList.remove("active"));
     (byId.get(current.id) || []).forEach((a) => a.classList.add("active"));
+    follow();
+  }
+  // A long contents panel scrolls on its own; keep the highlighted entry inside it.
+  const panel = document.querySelector(".toc-panel");
+  function follow() {
+    const link = panel?.querySelector("a.active");
+    if (!link || panel.scrollHeight <= panel.clientHeight) return;
+    const box = panel.getBoundingClientRect();
+    const at = link.getBoundingClientRect();
+    if (at.top < box.top + 8 || at.bottom > box.bottom - 8) {
+      panel.scrollTop += at.top - box.top - (panel.clientHeight - at.height) / 2;
+    }
   }
   const schedule = () => {
     if (!queued) {
