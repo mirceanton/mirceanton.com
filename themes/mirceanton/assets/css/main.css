@@ -782,7 +782,16 @@ img[data-lqip="done"] { background-image: none !important; }
 }
 
 @media print {
-  .sidebar, .mbar, .topbar, .toc-panel, .toc-inline, .post-nav, .comments, .code-copy, .site-foot { display: none !important; }
-  .shell { display: block; }
+  .sidebar, .mbar, .topbar, .toc-panel, .toc-inline, .post-nav, .comments, .code-copy, .site-foot, .scrim, .anchor, .prose iframe, .prose video { display: none !important; }
+  .shell, .cols { display: block; }
+  .content { max-width: none; padding: 0; }
   .sheet { border: 0; box-shadow: none; padding: 0; }
+  /* Paper can't scroll: long code lines wrap, and the line numbers (which would no longer line up) go. */
+  .code .highlight, .code pre, .table-wrap { overflow: visible; }
+  .code pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .code .lntd:first-child { display: none; }
+  .code .lntd:last-child pre { padding-left: 18px; }
+  .code, .callout, .prose img, .prose tr { break-inside: avoid; }
+  .prose h2, .prose h3, .prose h4 { break-after: avoid; }
+  .code, .code-bar, .callout, .cat, .prose th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
