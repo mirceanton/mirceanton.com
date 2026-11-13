@@ -3,6 +3,7 @@ title: Getting Started With Mikrotik and Terraform
 slug: mikrotik-terraform-getting-started
 image: { path: featured.webp }
 date: "2025-02-19"
+discussion: 250 # giscus thread, pinned so a title or URL change keeps the comments
 
 categories: [ Blog Post ]
 tags:

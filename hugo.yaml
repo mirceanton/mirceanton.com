@@ -40,7 +40,10 @@ params:
       repo_id: R_kgDOLUY-RA
       category: Announcements
       category_id: DIC_kwDOLUY-RM4CdWUH
-      mapping: title
+      # Threads are matched by URL path, so renaming a post keeps its comments. Threads that were
+      # created under the old title mapping are pinned in the post's front matter (discussion: N).
+      mapping: pathname
+      strict: 1 # exact match on the path, never a fuzzy title search
       input_position: bottom
       lang: en
       reactions_enabled: 1

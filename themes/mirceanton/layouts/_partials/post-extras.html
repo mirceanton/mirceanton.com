@@ -38,8 +38,15 @@
       "data-repo-id": {{ .repo_id }},
       "data-category": {{ .category }},
       "data-category-id": {{ .category_id }},
+      {{- /* A post can pin its thread with `discussion: 123` in front matter (the GitHub discussion
+             number). Otherwise the thread is found through the site's mapping. */}}
+      {{- with $.Params.discussion }}
+      "data-mapping": "number",
+      "data-term": {{ string . }},
+      {{- else }}
       "data-mapping": {{ .mapping | default "pathname" }},
-      "data-strict": "0",
+      {{- end }}
+      "data-strict": {{ printf "%v" (.strict | default 0) }},
       "data-reactions-enabled": {{ printf "%v" (.reactions_enabled | default 1) }},
       "data-emit-metadata": "0",
       "data-input-position": {{ .input_position | default "bottom" }},
