@@ -1,11 +1,41 @@
+{{- /* Title: "Page | Site", or the page title alone when that would run past what search results show. */ -}}
 {{- $title := cond .IsHome site.Title (printf "%s | %s" .Title site.Title) -}}
-{{- $desc := or .Description (cond .IsPage (.Summary | plainify | truncate 160) "") site.Params.description | plainify | strings.TrimSpace -}}
+{{- if and (not .IsHome) (gt (strings.RuneCount $title) 65) }}{{ $title = .Title }}{{ end -}}
+{{- /* Lists set their paginator in the "init" block (see baseof.html); later pages say which they are. */ -}}
+{{- $pager := .Store.Get "pager" -}}
+{{- $canonical := .Permalink -}}
+{{- with $pager }}{{ if gt .PageNumber 1 }}
+  {{- $title = printf "%s (page %d)" $title .PageNumber -}}
+  {{- $canonical = .URL | absURL -}}
+{{- end }}{{ end -}}
+{{- /* Description: the page's own, else one written from what the page lists, else the site's. */ -}}
+{{- $auto := "" -}}
+{{- if .IsPage -}}
+  {{- $auto = .Summary | plainify | truncate 160 -}}
+{{- else if and (eq .Kind "term") .Pages -}}
+  {{- $names := slice }}{{ range first 3 .Pages }}{{ $names = $names | append .Title }}{{ end -}}
+  {{- $auto = printf "%d %s under %s on %s: %s" (len .Pages) (cond (eq (len .Pages) 1) "post" "posts") .Title site.Title (delimit $names "; ") | truncate 160 -}}
+{{- else if and (eq .Kind "section") .RegularPages -}}
+  {{- $auto = printf "All %d %s on %s, newest first." (len .RegularPages) (lower .Title) site.Title -}}
+{{- end -}}
+{{- $desc := or .Description $auto site.Params.description | plainify | strings.TrimSpace -}}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $desc }}">
 <meta name="author" content="{{ site.Params.social.name | default site.Title }}">
-<link rel="canonical" href="{{ .Permalink }}">
+<link rel="canonical" href="{{ $canonical }}">
+{{- with $pager }}
+{{- with .Prev }}
+<link rel="prev" href="{{ .URL | absURL }}">
+{{- end }}
+{{- with .Next }}
+<link rel="next" href="{{ .URL | absURL }}">
+{{- end }}
+{{- end }}
+{{- if eq .Kind "404" }}
+<meta name="robots" content="noindex">
+{{- end }}
 <meta name="theme-color" content="#0F1A24">
 <meta name="color-scheme" content="light dark">
 
@@ -47,7 +77,7 @@
 <meta property="og:site_name" content="{{ site.Title }}">
 <meta property="og:title" content="{{ cond .IsHome site.Title .Title }}">
 <meta property="og:description" content="{{ $desc }}">
-<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:url" content="{{ $canonical }}">
 <meta property="og:locale" content="{{ replace (site.Language.Locale | default "en-us") "-" "_" }}">
 <meta property="og:type" content="{{ cond .IsPage "article" "website" }}">
 {{- with $og }}

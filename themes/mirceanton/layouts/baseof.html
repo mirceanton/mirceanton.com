@@ -1,3 +1,6 @@
+{{- /* "init" runs before <head>. Lists build their paginator there and keep it in .Store as "pager",
+       so the head can give later pages their own title and canonical URL. */ -}}
+{{- block "init" . }}{{ end -}}
 <!doctype html>
 <html lang="{{ site.Language.Locale | default "en" }}">
 <head>

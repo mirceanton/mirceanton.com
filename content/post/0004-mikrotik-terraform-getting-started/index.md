@@ -12,7 +12,7 @@ tags:
   - Infrastructure as Code
 
 description: |
-  Oboard a brand-new Mikrotik device under Terraform for Infrastructure as Code.
+  Onboard a brand-new Mikrotik device under Terraform for Infrastructure as Code.
 ---
 
 I "recently" (like... almost a year ago at this point 😅) upgraded from my DIY OPNsense setup to a MikroTik RB5009. You can watch my [YouTube Video](https://www.youtube.com/watch?v=k5eShv6l1ts) for the full story of the why, what and the how.

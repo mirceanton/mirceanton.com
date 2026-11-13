@@ -1,7 +1,11 @@
+{{ define "init" }}
+{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections -}}
+{{- .Store.Set "pager" (.Paginate (after 1 $posts)) -}}
+{{ end }}
 {{ define "main" }}
 {{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections -}}
 {{- $latest := index $posts 0 -}}
-{{- $pager := .Paginate (after 1 $posts) -}}
+{{- $pager := .Store.Get "pager" -}}
 <h1 class="visually-hidden">{{ site.Title }}</h1>
 <div class="cols">
   <div class="stack">
