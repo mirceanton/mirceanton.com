@@ -456,6 +456,7 @@ img[data-lqip="done"] { background-image: none !important; }
 .prose blockquote { margin: 22px 0 0; padding: 4px 0 4px 20px; border-left: 4px solid var(--sky); color: var(--muted); }
 .prose blockquote > :first-child { margin-top: 0; }
 .prose iframe { display: block; max-width: 100%; border: 3px solid var(--line); border-radius: 10px; }
+.prose .yt { width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--code-bg); }
 .prose kbd { padding: 1px 6px; border: 2px solid var(--line); border-bottom-width: 3px; border-radius: 6px; font: 700 0.8em var(--label); }
 .table-wrap { overflow-x: auto; border: 3px solid var(--line); border-radius: 10px; }
 .prose table { width: 100%; border-collapse: collapse; font-size: 15.5px; line-height: 1.45; }
