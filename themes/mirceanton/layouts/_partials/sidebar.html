@@ -3,7 +3,8 @@
 {{- $tagline := strings.TrimSuffix "!" (site.Params.tagline | default "") | strings.TrimSpace -}}
 {{- $parts := split $tagline ", " -}}
 {{- $labels := dict "github" "GitHub" "youtube" "YouTube" "link" "All links" "mail" "Email" "rss" "RSS" -}}
-<aside class="sidebar" id="sidebar" aria-label="Site">
+{{- /* A div with a role, not <aside>: on phones the script makes it a modal dialog while it is open. */}}
+<div class="sidebar" id="sidebar" role="complementary" aria-label="Site">
   <button class="side-toggle" type="button" data-action="sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Collapse sidebar">
     {{- partial "icon.html" (dict "name" "panel-close" "class" "i-close") -}}
     {{- partial "icon.html" (dict "name" "panel-open" "class" "i-open") -}}
@@ -38,4 +39,4 @@
     {{- end }}
   </ul>
   {{- end }}
-</aside>
+</div>

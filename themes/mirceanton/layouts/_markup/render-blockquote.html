@@ -12,10 +12,11 @@
   {{- end -}}
 {{- end -}}
 {{- if $kind -}}
-<aside class="callout callout-{{ $kind }}" aria-label="{{ title $kind }}">
-  <p class="callout-label">{{ upper (or .AlertTitle $kind) }}</p>
+{{- /* role="note", not <aside>: an aside is a page landmark, and a post can hold a dozen of these. */ -}}
+<div class="callout callout-{{ $kind }}" role="note" aria-label="{{ title $kind }}">
+  <p class="callout-label" aria-hidden="true">{{ upper (or .AlertTitle $kind) }}</p>
   {{ .Text }}
-</aside>
+</div>
 {{- else -}}
 <blockquote{{ with .Attributes.class }} class="{{ . }}"{{ end }}>
   {{ .Text }}

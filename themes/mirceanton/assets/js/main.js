@@ -49,10 +49,18 @@ function syncSidebarLabels() {
   }
 }
 
+// On phones the open drawer is a modal dialog: the page behind it is inert, so focus and screen
+// readers stay inside until it closes.
+const behindDrawer = document.querySelectorAll(".main, .skip");
+
 function openNav() {
   root.classList.add("nav-open");
   scrim.hidden = false;
   menuButton?.setAttribute("aria-expanded", "true");
+  sidebar.setAttribute("role", "dialog");
+  sidebar.setAttribute("aria-modal", "true");
+  sidebar.setAttribute("aria-label", "Menu");
+  behindDrawer.forEach((el) => (el.inert = true));
   sidebar.querySelector("a, button")?.focus();
 }
 
@@ -61,6 +69,10 @@ function closeNav() {
   root.classList.remove("nav-open");
   scrim.hidden = true;
   menuButton?.setAttribute("aria-expanded", "false");
+  sidebar.setAttribute("role", "complementary");
+  sidebar.removeAttribute("aria-modal");
+  sidebar.setAttribute("aria-label", "Site");
+  behindDrawer.forEach((el) => (el.inert = false));
   menuButton?.focus();
 }
 
@@ -245,12 +257,12 @@ function runSearch() {
   scored.sort((a, b) => b.score - a.score || b.item.date.localeCompare(a.item.date));
   const top = scored.slice(0, 8);
   if (!top.length) {
-    searchResults.innerHTML = `<li class="r-empty">No posts match “${escapeHtml(searchInput.value.trim())}”.</li>`;
+    searchResults.innerHTML = `<li class="r-empty" role="option" aria-disabled="true" aria-selected="false">No posts match “${escapeHtml(searchInput.value.trim())}”.</li>`;
   } else {
     searchResults.innerHTML = top
       .map(
         ({ item }, i) =>
-          `<li><a id="sr-${i}" role="option" aria-selected="false" href="${escapeHtml(item.url)}">` +
+          `<li role="presentation"><a id="sr-${i}" role="option" aria-selected="false" href="${escapeHtml(item.url)}">` +
           `<span class="r-title">${highlight(item.title, terms)}</span>` +
           `<span class="r-snip">${highlight(snippet(item.description || item.content, terms), terms)}</span></a></li>`
       )
@@ -323,6 +335,53 @@ function zoom(img) {
 }
 lightbox?.addEventListener("click", () => lightbox.close());
 
+// Content images open the zoom view from the keyboard too (Enter or Space; Escape closes it)
+const zoomable = (img) => !img.closest("a");
+document.querySelectorAll(".prose img").forEach((img) => {
+  if (!zoomable(img) || !lightbox) return;
+  img.tabIndex = 0;
+  img.setAttribute("role", "button");
+  img.setAttribute("aria-label", img.alt ? `Zoom image: ${img.alt}` : "Zoom image");
+});
+document.addEventListener("keydown", (e) => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches?.(".prose img[role='button']")) {
+    e.preventDefault();
+    zoom(e.target);
+  }
+});
+
+// ------------------------------------------------------------- sideways scrollers
+
+// Code blocks and tables that overflow can be scrolled with the arrow keys once focused. Only the
+// ones that actually overflow become tab stops, so a post full of short snippets adds none.
+(function scrollers() {
+  const boxes = [...document.querySelectorAll(".code .highlight, .code > pre, .table-wrap")];
+  if (!boxes.length) return;
+  function sync() {
+    boxes.forEach((box) => {
+      const overflows = box.scrollWidth > box.clientWidth + 1;
+      if (overflows === box.hasAttribute("tabindex")) return;
+      if (overflows) {
+        const name = box.classList.contains("table-wrap") ? "Table" : `Code: ${box.closest(".code")?.querySelector(".code-label")?.textContent || "snippet"}`;
+        box.tabIndex = 0;
+        box.setAttribute("role", "group"); // not "region": that is a landmark, and a post can have dozens
+        box.setAttribute("aria-label", `${name} (scrolls sideways)`);
+      } else {
+        box.removeAttribute("tabindex");
+        box.removeAttribute("role");
+        box.removeAttribute("aria-label");
+      }
+    });
+  }
+  let timer;
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = setTimeout(sync, 150);
+  });
+  window.addEventListener("load", sync);
+  sync();
+})();
+
 // ------------------------------------------------------------- clips
 
 // Looping clips (the video shortcode) play only while on screen and load nothing before that.
@@ -381,7 +440,7 @@ document.addEventListener("click", (e) => {
     }
   }
   const img = e.target.closest(".prose img");
-  if (img && !img.closest("a")) zoom(img);
+  if (img && zoomable(img)) zoom(img);
   if (e.target.closest(".toc-inline #TableOfContents a")) e.target.closest("details").open = false;
   if (mobile.matches && e.target.closest(".sidebar a")) closeNav();
 });
