@@ -305,11 +305,34 @@ const lightbox = document.querySelector(".lightbox");
 function zoom(img) {
   if (!lightbox || typeof lightbox.showModal !== "function") return;
   const big = lightbox.querySelector("img");
-  big.src = img.currentSrc || img.src;
+  big.src = img.dataset.zoom || img.currentSrc || img.src;
   big.alt = img.alt;
   lightbox.showModal();
 }
 lightbox?.addEventListener("click", () => lightbox.close());
+
+// ------------------------------------------------------------- clips
+
+// Looping clips (the video shortcode) play only while on screen and load nothing before that.
+// With reduced motion they stay paused and keep their controls.
+(function clips() {
+  const videos = document.querySelectorAll("video.clip");
+  if (!videos.length || !("IntersectionObserver" in window)) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) e.target.play().catch(() => (e.target.controls = true));
+        else e.target.pause();
+      });
+    },
+    { threshold: 0.25 }
+  );
+  videos.forEach((v) => {
+    v.controls = false;
+    observer.observe(v);
+  });
+})();
 
 // ------------------------------------------------------------- image placeholders
 

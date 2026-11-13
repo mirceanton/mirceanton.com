@@ -1,0 +1,18 @@
+{{- /*
+  A short silent clip that loops like a GIF, at a fraction of the size.
+  {{< video src="img/demo.mp4" poster="img/demo-poster.webp" width="1600" height="656" alt="What it shows" >}}
+  src and poster are looked up in the page bundle first. width and height reserve the space.
+  The theme's script plays it while it is on screen; with reduced motion, or no script, it has controls instead.
+*/ -}}
+{{- $src := .Get "src" -}}
+{{- $poster := .Get "poster" -}}
+{{- with .Page.Resources.Get (strings.TrimPrefix "./" $src) }}{{ $src = .RelPermalink }}{{ end -}}
+{{- $lqip := "" -}}
+{{- with $poster }}{{ with $.Page.Resources.Get (strings.TrimPrefix "./" .) }}{{ $poster = .RelPermalink }}{{ end }}{{ end -}}
+<video class="clip" controls loop muted playsinline preload="none"
+  {{- with $poster }} poster="{{ . }}"{{ end }}
+  {{- with .Get "width" }} width="{{ . }}"{{ end }}
+  {{- with .Get "height" }} height="{{ . }}"{{ end }}
+  {{- with .Get "alt" }} aria-label="{{ . }}"{{ end }}>
+  <source src="{{ $src }}" type="video/{{ strings.TrimPrefix "." (path.Ext $src) }}">
+</video>

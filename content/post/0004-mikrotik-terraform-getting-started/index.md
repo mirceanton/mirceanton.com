@@ -797,4 +797,4 @@ resource "routeros_interface_list_member" "pppoe_wan" {
 
 At this point, I think I covered the basics and set up a fully functional, automated MikroTik configuration using Terraform. I can access the internet again and all of my config is defined as code. Let's run one glorious `terraform apply` command to see all resources being imported/created and/or updated:
 
-![terraform apply](./img/the-big-apply.gif)
+{{< video src="img/the-big-apply.mp4" poster="img/the-big-apply-poster.webp" width="1600" height="656" alt="terraform apply importing, creating and updating every resource" >}}

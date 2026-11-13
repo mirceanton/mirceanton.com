@@ -441,6 +441,7 @@ img[data-lqip="done"] { background-image: none !important; }
 .prose strong { font-weight: 800; }
 .prose hr { height: 0; margin: 40px 0; border: 0; border-top: 3px dashed var(--faint); }
 .prose img { display: block; margin: 0 auto; border: 3px solid var(--line); border-radius: 10px; cursor: zoom-in; }
+.prose video { display: block; width: 100%; height: auto; margin: 0 auto; background: var(--code-bg); border: 3px solid var(--line); border-radius: 10px; }
 .prose p > img + em, .prose p > img + br + em, .prose .caption {
   display: block; margin-top: 10px; text-align: center; font-size: 14px; line-height: 1.45; color: var(--muted); font-style: normal;
 }
@@ -720,7 +721,7 @@ img[data-lqip="done"] { background-image: none !important; }
   .is-flat .prose h2 { font-size: 25px; }
   .is-flat .prose h3 { font-size: 19px; }
   .is-flat .code { margin-left: -16px; margin-right: -16px; border-width: 3px 0; border-radius: 0; }
-  .is-flat .prose img { border-width: 2px; border-radius: 8px; }
+  .is-flat .prose img, .is-flat .prose video { border-width: 2px; border-radius: 8px; }
   .is-flat .post-tags { margin-top: 28px; }
   .is-flat .post-nav { gap: 0; margin-top: 24px; border-top: 3px solid var(--line); }
   .is-flat .post-nav a, .is-flat .post-nav .none { padding: 18px 16px; border: 0; border-bottom: 3px solid var(--line); border-radius: 0; box-shadow: none; text-align: left; }

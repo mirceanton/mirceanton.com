@@ -1,5 +1,9 @@
 {{- /* Images resolve from the page bundle first, then from assets/. They get real dimensions and
        lazy loading; the theme's script opens them full size on click.
+       Photos and screenshots are served as WebP copies no wider than 1600px, with an 800px one for
+       small screens and a copy of up to 2400px for the zoom view, so a huge original never reaches
+       the reader. An image that is already a WebP within 1600px is served as it is. SVG and GIF pass
+       through untouched.
        A caption comes from an {caption="..."} attribute, or from an _italic line_ right below. */ -}}
 {{- $u := urls.Parse .Destination -}}
 {{- $src := $u.String -}}
@@ -9,8 +13,29 @@
   {{- $res = or (.PageInner.Resources.Get $path) (resources.Get $path) -}}
   {{- with $res }}{{ $src = .RelPermalink }}{{ end -}}
 {{- end -}}
+{{- $shown := false -}}
+{{- $srcset := "" -}}
+{{- $zoom := "" -}}
+{{- with $res -}}
+  {{- if in (slice "jpeg" "png" "webp" "tiff" "bmp") .MediaType.SubType -}}
+    {{- $shown = . -}}
+    {{- if or (gt .Width 1600) (ne .MediaType.SubType "webp") -}}
+      {{- $shown = .Resize (printf "%dx webp q82" (math.Min .Width 1600 | int)) -}}
+    {{- end -}}
+    {{- if gt .Width 1600 -}}
+      {{- $zoom = (.Resize (printf "%dx webp q82" (math.Min .Width 2400 | int))).RelPermalink -}}
+    {{- end -}}
+    {{- if gt $shown.Width 1000 -}}
+      {{- $small := .Resize "800x webp q82" -}}
+      {{- $srcset = printf "%s 800w, %s %dw" $small.RelPermalink $shown.RelPermalink $shown.Width -}}
+    {{- end -}}
+    {{- $src = $shown.RelPermalink -}}
+  {{- end -}}
+{{- end -}}
 <img src="{{ $src }}" alt="{{ .PlainText }}"
+  {{- with $srcset }} srcset="{{ . }}" sizes="(max-width: 860px) 100vw, 800px"{{ end }}
+  {{- with $zoom }} data-zoom="{{ . }}"{{ end }}
   {{- with .Title }} title="{{ . }}"{{ end }}
-  {{- with $res }}{{ if and (ne .MediaType.SubType "svg") (ne .MediaType.SubType "svg+xml") }} width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }}{{ end }}{{ end }}
+  {{- with $shown }} width="{{ .Width }}" height="{{ .Height }}"{{ partial "lqip.html" . }}{{ end }}
   {{- range $k, $v := .Attributes }}{{ if and $v (ne $k "caption") }}{{ printf " %s=%q" $k (string $v) | safeHTMLAttr }}{{ end }}{{ end }} loading="lazy" decoding="async">
 {{- with .Attributes.caption }}<em class="caption">{{ . }}</em>{{ end -}}
