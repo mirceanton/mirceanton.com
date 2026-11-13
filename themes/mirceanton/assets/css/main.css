@@ -753,6 +753,28 @@ img[data-lqip="done"] { background-image: none !important; }
   .mbrand img { width: 32px; height: 32px; }
 }
 
+/* ---------------------------------------------------------------- without JavaScript */
+
+/* The inline script in head.html adds .js. Without it, controls that do nothing are hidden, image
+   placeholders (which a script removes) are not drawn, and phones get the menu as a plain row. */
+:root:not(.js) :is(.search, .theme-btn, .side-toggle, .code-copy, .toc-head button, .toc-reopen, [data-action="search-open"], [data-action="nav-open"]) { display: none; }
+:root:not(.js) img[data-lqip] { background-image: none !important; }
+:root:not(.js) .comments noscript p { margin: 0; color: var(--muted); }
+:root:not(.js) .comments a { font-weight: 700; }
+@media (max-width: 860px) {
+  :root:not(.js) .sidebar {
+    position: static; transform: none; visibility: visible;
+    width: auto; height: auto; padding: 8px calc(8px + var(--safe-r)) 8px calc(8px + var(--safe-l));
+    border-right: 0; border-bottom: 3px solid var(--outline);
+  }
+  :root:not(.js) .sidebar > :not(.side-nav) { display: none; }
+  :root:not(.js) .side-nav { margin-top: 0; }
+  :root:not(.js) .side-nav ul { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 2px; }
+  :root:not(.js) .nav-link { min-height: 40px; padding: 0 9px; gap: 7px; font-size: 14px; }
+  :root:not(.js) .mbar { position: static; }
+  html:not(.js) { scroll-padding-top: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .press, .sidebar, .toc-inline summary .chev, .social a, .anchor { transition: none; }
   html:focus-within { scroll-behavior: auto; }

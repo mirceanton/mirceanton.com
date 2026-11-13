@@ -39,10 +39,12 @@
 <meta name="theme-color" content="#0F1A24">
 <meta name="color-scheme" content="light dark">
 
-{{- /* Apply saved theme, sidebar and contents state before first paint */}}
+{{- /* Apply saved theme, sidebar and contents state before first paint. The "js" class tells the
+       stylesheet that scripts run; without it the controls that need them are hidden. */}}
 <script>
 (function () {
   var d = document.documentElement, g = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  d.classList.add("js");
   var t = g("theme"); if (t === "light" || t === "dark") d.dataset.theme = t;
   if (g("sidebar") === "collapsed") d.dataset.sidebar = "collapsed";
   if (g("toc") === "collapsed") d.dataset.toc = "collapsed";
