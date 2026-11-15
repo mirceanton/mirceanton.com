@@ -5,7 +5,7 @@ hugo-extended = "0.169.0"
 # Linters
 actionlint = "1"
 yamllint = "1"
-markdownlint-cli2 = "0.24.0"
+markdownlint-cli2 = "0.24.1"
 
 [settings]
 # Hold back freshly published tool releases (supply-chain protection).
