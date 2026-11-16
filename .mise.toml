@@ -1,6 +1,6 @@
 [tools]
 # Static Site Generator
-hugo-extended = "0.169.0"
+hugo-extended = "0.170.0"
 
 # Linters
 actionlint = "1"
