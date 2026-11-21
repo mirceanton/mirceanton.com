@@ -2,7 +2,8 @@
 title: Keycloak Kept Logging Me Out Every 30 Minutes
 slug: keycloak-logout-every-30-minutes
 date: "2026-11-21"
-draft: true
+image: { path: featured.webp }
+draft: false
 
 categories: [Blog Post]
 tags:
@@ -61,7 +62,7 @@ The operator detail that surprised me: when it reconciled, the logs showed it _r
 
 One caveat if you run Keycloak from Git like this: changes made in the admin UI get reverted on the next reconcile. The fix has to land in the repo, which is where it landed — a small PR, reviewed and merged like everything else.
 
-The thing I had to actually decide is that an offline token is a longer-lived credential by design. It survives the browser session, which is the whole point, and that also means revoking it isn't a matter of closing a tab — it's an offline session you go kill in Keycloak. I was fine with that for one client that only I log into, and I would think about it a lot harder before putting it on anything with real users.
+The thing I had to actually decide is that an offline token is a longer-lived credential by design. It survives the browser session, which is the whole point, and that also means revoking it isn't a matter of closing a tab — it's an offline session you go kill in Keycloak. I'm treating that as a temporary trade-off. Anyone with a user in Keycloak can log in to Hermes today, and limiting that by group is a task I've been putting off. What makes it acceptable for now is that the whole setup sits behind a VPN with a small set of users, so realistically I'm the only one logging in. The group restriction is planned, and until it lands I'd think a lot harder about offline tokens on anything with real users.
 
 ## Six days later
 
