@@ -550,7 +550,7 @@ img[data-lqip="done"] { background-image: none !important; }
 @keyframes blink { 50% { opacity: 0; } }
 
 /* Categories: one tile per category */
-.shelves { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 28px; max-width: 1040px; align-items: start; }
+.shelves { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 28px; max-width: 1040px; margin-inline: auto; align-items: start; }
 .shelf { --tone: var(--sky); display: flex; flex-direction: column; background: var(--surface); border: 3px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
 .shelf[data-tone="lavender"] { --tone: var(--lavender); }
 .shelf[data-tone="mint"] { --tone: var(--mint); }
