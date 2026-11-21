@@ -47,7 +47,7 @@ The diagnosis that cracked it was refusing to eyeball the file and instead runni
 ```
 
 > **Takeaway:** when a config value "isn't arriving", validate it with the actual consumer, not with your eyes. Parsers that fail silently will happily eat your credentials and report nothing.
-> {.prompt-info}
+{.prompt-info}
 
 ## Bug 2: credentials that authenticate (almost) nothing
 
@@ -61,7 +61,7 @@ And the kicker: the same PR that introduced the env-based auth had _removed_ the
 The fix was to restore the MCP, then delete the now-redundant `GITHUB_APP_*` keys entirely. One credential path, not two half-working ones.
 
 > **Takeaway:** "the credential is present" is not "the tool can authenticate". Enumerate the consumers of a credential — in-process client, subprocess, mounted MCP — and verify each one independently.
-> {.prompt-info}
+{.prompt-info}
 
 ## Bug 3: the CI blind spot
 
