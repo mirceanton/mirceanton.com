@@ -1,5 +1,5 @@
 ---
-title: "My Homelab Kept Logging Me Out Every 30 Minutes"
+title: Keycloak Kept Logging Me Out Every 30 Minutes
 slug: keycloak-logout-every-30-minutes
 date: "2026-11-21"
 draft: true
@@ -9,6 +9,7 @@ tags:
   - Keycloak
   - OIDC
   - OAuth
+  - SSO
   - Hermes
   - GitOps
   - Homelab
@@ -36,12 +37,12 @@ So the client was doing its job. Something server-side was killing tokens on a s
 
 ## Refresh tokens don't have a lifetime of their own
 
-It was. My Keycloak realm is managed by an operator from a Git repository, and the realm definition in Git sets exactly one thing: the realm's name. No timeout overrides, so Keycloak's defaults apply — SSO session idle timeout of 30 minutes, SSO session max lifespan of 10 hours, access tokens valid for 5 minutes.
+And it was exactly that round: a default I'd never looked at. My Keycloak realm is managed by an operator from a Git repository, and the realm definition in Git sets exactly one thing: the realm's name. No timeout overrides, so Keycloak's defaults apply — SSO session idle timeout of 30 minutes, SSO session max lifespan of 10 hours, access tokens valid for 5 minutes.
 
 The part I hadn't internalized is that in Keycloak, a refresh token has no independent lifetime. It's bound to the SSO session and dies when that session dies. Leave everything idle for 30 minutes and the session is invalidated server-side. The refresh token in my cookie was still sitting there looking perfectly valid, but the next time it was presented, Keycloak said `invalid_grant`. The client can't know the token is dead until it tries to use it, which is exactly why the phone apps kept retrying.
 
 > In Keycloak, an ordinary refresh token lives and dies with the SSO session. Idle past the session timeout and the token is revoked server-side, no matter what the client thinks it still holds.
-> {: .prompt-info }
+{.prompt-info}
 
 There was a second half to this. At login, Hermes requested the scopes `openid profile email`. That gets you an _online_ token, bound to the session. Keycloak has a whole parallel mechanism for long-lived sessions, and I wasn't asking for it.
 
@@ -60,9 +61,11 @@ The operator detail that surprised me: when it reconciled, the logs showed it _r
 
 One caveat if you run Keycloak from Git like this: changes made in the admin UI get reverted on the next reconcile. The fix has to land in the repo, which is where it landed — a small PR, reviewed and merged like everything else.
 
+The thing I had to actually decide is that an offline token is a longer-lived credential by design. It survives the browser session, which is the whole point, and that also means revoking it isn't a matter of closing a tab — it's an offline session you go kill in Keycloak. I was fine with that for one client that only I log into, and I would think about it a lot harder before putting it on anything with real users.
+
 ## Six days later
 
-The rollout itself was boring in the best way. The PR merged, Flux applied it, the client CR reported synchronized, and the new pod came up with the scopes in its environment. Existing sessions kept their online tokens until those died, so each device needed one last re-login, and then everything was on offline tokens.
+The rollout itself was uneventful. The PR merged, Flux applied it, the client CR reported synchronized, and the new pod came up with the scopes in its environment. Existing sessions kept their online tokens until those died, so each device needed one last re-login, and then everything was on offline tokens.
 
 The audit log since the merge: 952 silent refreshes, zero expired-refresh failures, zero native retry storms. Thirty-nine of those refreshes happened after idle gaps longer than 30 minutes — the old kill threshold. The longest gap between two successful silent refreshes was about 39 hours. I left things alone for a day and a half, came back, and the dashboard just worked.
 
