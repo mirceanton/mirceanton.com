@@ -121,6 +121,8 @@ The GL.iNet Comet X (GL-RM4PE) connects to four machines at once, with four HDMI
 > So take this as a reminder: if a device doesn't need the internet, don't give it any. A KVM has full control of every machine it's plugged into, so keep it on a network segment that can't reach out, and get to it over your own VPN instead of a vendor's cloud.
 {.prompt-warning}
 
+<!-- Two separate callouts: the warning, then the affiliate tip. -->
+
 > 🎁 Still want a Comet X? Get it through [my GL.iNet affiliate link](https://www.awin1.com/cread.php?awinmid=80509&awinaffid=3167224). I get a small commission at no extra cost to you.
 {.prompt-tip}
 
@@ -161,7 +163,7 @@ For now, power is a basic power strip bolted to the inside wall. I'd like to rep
 ## Printed Parts
 
 | Part | Designer | Where |
-|---|---|---|
+| --- | --- | --- |
 | Rail spacers (×6) | Me | <!-- TODO --> Coming soon |
 | Back panel (frame, 6 panels, couplers) | Me | <!-- TODO --> Coming soon |
 | Asus PN64 mount (1.66U) | Me | <!-- TODO --> Coming soon |
@@ -179,7 +181,7 @@ I'll publish my own designs as STL and 3MF files, most likely on MakerWorld, and
 ## Parts List
 
 | Part | Link |
-|---|---|
+| --- | --- |
 | IKEA EKET cabinet, 35×35×70 cm (×1, plus a square one on top) | [IKEA](https://www.ikea.com/se/en/p/eket-cabinet-w-door-and-1-shelf-white-90333938/) |
 | 10U rack rails (×2, sold singly) | [Muziker](https://www.muziker.ro/konig-meyer-28410-single-rack-rail-black) (König & Meyer 28410, the ones I used), or [Thomann](https://www.thomann.de/intl/adam_hall_61535b10_rack_strip_10u_blk.htm) (Adam Hall 61535B10, a similar one that ships internationally) |
 | Jonsbo N4 | [Jonsbo](https://www.jonsbo.com/en/products/N4Black.html) |
