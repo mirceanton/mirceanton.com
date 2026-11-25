@@ -128,7 +128,9 @@ The GL.iNet Comet X (GL-RM4PE) connects to four machines at once, with four HDMI
 
 ### Network: RB5009 + CRS310
 
-The [MikroTik RB5009](https://mikrotik.com/product/rb5009ug_s_in) is my router. Its mount is my remix of a Printables design: the original clashed with the DC terminals on the router's side, so it wouldn't sit right.
+The [MikroTik RB5009](https://mikrotik.com/product/rb5009ug_s_in) is my router. Its mount is my remix of [mseidler's Printables design](https://www.printables.com/model/1236191-mikrotik-rb5009-10-inch-rack-mount): the original clashed with the DC terminals on the router's side, so it wouldn't sit right.
+
+![The original mount on an RB5009, seen from above: the printed arm runs straight into the green DC2 terminal block on the router's side. Image: from the model's Printables page](./img/rb5009-mount-interference.webp)
 
 <!-- TODO: add a photo of the RB5009 in its printed rack ears here. -->
 
@@ -170,7 +172,7 @@ For now, power is a basic power strip bolted to the inside wall. I'd like to rep
 | Lenovo ThinkCentre Tiny mount | Tim (Timmi101) | [MakerWorld](https://makerworld.com/en/models/1945283-lenovo-thinkcentre-tiny-10-rack-mount-m720q#profileId-2280061) |
 | ZimaBoard 2 mount | DesignBot | [MakerWorld](https://makerworld.com/en/models/1927437-zimaboard-2-10-rack-pcie-dual-nvme-m-2-ssd-card#profileId-2068736) |
 | 1U 4× 2.5" bay + 3 keystones | Nautilus Forge | [MakerWorld](https://makerworld.com/en/models/2897784-10-inch-rack-1u-4x-2-5-inch-hdd-3x-keystones#profileId-3238822) |
-| RB5009 10-inch mount | Me, remixed from <!-- TODO: designer --> a Printables model | <!-- TODO --> Coming soon; original on [Printables](https://www.printables.com/model/1236191-mikrotik-rb5009-10-inch-rack-mount) |
+| RB5009 10-inch mount | Me, remixed from mseidler's Printables model | <!-- TODO --> Coming soon; original on [Printables](https://www.printables.com/model/1236191-mikrotik-rb5009-10-inch-rack-mount) |
 | MikroTik 10-inch rack ears (CRS310) | klayf | [MakerWorld](https://makerworld.com/en/models/1190849-mikrotik-10-inch-mini-rack-ears-rmk-2-10-alternati#profileId-1202558) |
 | Half-U 7-port keystone patch panel | Nautilus Forge | [MakerWorld](https://makerworld.com/en/models/2875409-10-inch-rack-patch-panel-keystone-bonanza#profileId-3210706) |
 | Height-adjustable feet | Ondra7 | [MakerWorld](https://makerworld.com/en/models/1608261-height-adjustable-leg#profileId-1696165) |
