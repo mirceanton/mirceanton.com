@@ -17,10 +17,9 @@ description: |
   How I turned an IKEA EKET into a 10-inch homelab rack: the printed spacers, the rack math I got wrong, every device inside, the magnetic back panel, and links to all the parts and models.
 ---
 
-<!-- TODO: link the video once it's up, and swap featured.webp for its thumbnail. -->
 The 19-inch rack is the default answer to "where do my servers live?", and if you have a garage or a basement to hide it in, it's great. In an apartment, it's big and it looks out of place. So I built a 10-inch mini rack into an IKEA EKET cabinet instead. All of my always-on, home-production stuff now lives in it, and the old 19-inch rack is going back to my parents' place as an on-demand colo for off-site backups and lab gear.
 
-This post goes with the YouTube video. It's less story and more reference: the numbers, every part and where to get it, the printed models, and a few things that didn't make the cut.
+This post goes with the [YouTube video](https://www.youtube.com/watch?v=8drAH3K83HU). It's less story and more reference: the numbers, every part and where to get it, the printed models, and a few things that didn't make the cut.
 
 > GL.iNet sent me the Comet X and mikrotik.ro sent me the CRS310 for free, and I get to keep them. Neither paid me, had any editorial input, or saw the video or this post before they went live. Everything else in the rack is hardware I already had.
 {.prompt-info}
@@ -209,4 +208,9 @@ In no particular order, here are some of the improvements I'd like to make to th
 
 Running your homelab in a mini rack, or planning to? Would you buy one off the shelf or build it yourself? Let me know in the comments.
 
-<!-- TODO: embed the video with the youtube shortcode once it's up. -->
+---
+
+📹 [Watch Video](https://www.youtube.com/watch?v=8drAH3K83HU)
+{.center}
+
+{{< youtube id="8drAH3K83HU" title="My homelab fits in an IKEA cabinet: a 10-inch mini rack build" >}}
