@@ -3,7 +3,7 @@ title: "My Homelab Fits in an IKEA Cabinet: A 10-inch Mini Rack Build"
 slug: ikea-eket-10-inch-mini-rack
 image: { path: featured.webp }
 date: "2026-11-25"
-draft: true
+draft: false
 
 categories: [ Blog Post ]
 tags:
