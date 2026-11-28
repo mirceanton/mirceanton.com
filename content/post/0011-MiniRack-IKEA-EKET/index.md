@@ -210,7 +210,7 @@ Running your homelab in a mini rack, or planning to? Would you buy one off the s
 
 ---
 
-📹 [Watch Video](https://www.youtube.com/watch?v=3ZUL7afVmEc)
+📹 [Watch Video](https://www.youtube.com/watch?v=SgOVmr2wSfQ)
 {.center}
 
-{{< youtube id="3ZUL7afVmEc" title="My homelab fits in an IKEA cabinet: a 10-inch mini rack build" >}}
+{{< youtube id="SgOVmr2wSfQ" title="My homelab fits in an IKEA cabinet: a 10-inch mini rack build" >}}
